@@ -11,7 +11,10 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-
+    override init() {
+        ValueTransformer.setValueTransformer(DurationValueTransformer(), forName: .durationValueTransformerName)
+        ValueTransformer.setValueTransformer(UInt64ValueTransformer(), forName: .uint64ValueTransformerName)
+    }
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application

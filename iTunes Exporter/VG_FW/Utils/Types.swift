@@ -273,3 +273,50 @@ extension FileManager {
     }
     
 }
+
+extension URL {
+    
+    func isMostRecenThan(url: URL, _ fileManager: FileManager = FileManager.default) -> Bool {
+        return self.getModificationDate(fileManager)! > url.getModificationDate(fileManager)!
+    }
+    
+    func isPathExists(_ fileManager: FileManager = FileManager.default) -> Bool {
+        return fileManager.fileExists(atPath: self.path)
+    }
+    
+    func getModificationDate(_ fileManager: FileManager = FileManager.default) -> Date? {
+        do {
+            let attr = try fileManager.attributesOfItem(atPath: self.path)
+            return attr[FileAttributeKey.modificationDate] as? Date
+        } catch {
+            return nil
+        }
+    }
+    
+    func getName() -> String {
+        let thePathComponents: [String] = self.pathComponents
+        return thePathComponents[thePathComponents.count - 1]
+    }
+    
+    func getFileExtension() -> String {
+        let theFileName: String = self.getName()
+        let theFileNameComponents: [String] = theFileName.components(separatedBy: ".")
+        let theFileExtension: String = theFileNameComponents[theFileNameComponents.count - 1]
+        return theFileExtension
+    }
+    
+    func getParentFolderName() -> String {
+        let thePathComponents: [String] = self.pathComponents
+        return thePathComponents[thePathComponents.count - 2]
+    }
+    
+    func getFileNameWithoutExtension() -> String {
+        let theFileName: String = self.getName()
+        let theFileExtension: String = self.getFileExtension()
+        let theStartIndex = theFileName.startIndex
+        let theEndIndex = theFileName.index(theFileName.endIndex, offsetBy: -(theFileExtension.count + 1))
+        let theFileNameWithoutExtension = theFileName[theStartIndex..<theEndIndex]
+        return String(theFileNameWithoutExtension)
+    }
+    
+}

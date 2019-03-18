@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ComboBoxFormView" customModule="TestForm" customModuleProvider="target">
+            <connections>
+                <outlet property="box" destination="atP-FF-p0B" id="f9l-9m-n1a"/>
+                <outlet property="comboBox" destination="MaX-wy-nPD" id="Dyi-fL-Poo"/>
+                <outlet property="contentView" destination="c22-O7-iKe" id="wCg-Yz-UKj"/>
+                <outlet property="gapConstraint" destination="pfC-HB-0xN" id="Cwe-be-Gr8"/>
+                <outlet property="label" destination="etC-4x-ixR" id="OhA-OZ-ach"/>
+                <outlet property="paddingLeftConstraint" destination="ZXO-L1-aF1" id="pad-Ib-24P"/>
+                <outlet property="paddingRightConstraint" destination="e5Z-6g-7rf" id="3KZ-Qc-gav"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="atP-FF-p0B">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="50"/>
+                    <view key="contentView" id="2iR-GL-qIu">
+                        <rect key="frame" x="1" y="1" width="478" height="48"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="etC-4x-ixR">
+                                <rect key="frame" x="10" y="15" width="37" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Label" id="Aef-B8-eOS">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MaX-wy-nPD">
+                                <rect key="frame" x="50" y="10" width="431" height="26"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="DE6-JR-hX2">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <objectValues>
+                                        <string>Item 1</string>
+                                        <string>Item 2</string>
+                                        <string>Item 3</string>
+                                    </objectValues>
+                                </comboBoxCell>
+                            </comboBox>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="MaX-wy-nPD" firstAttribute="leading" secondItem="2iR-GL-qIu" secondAttribute="leading" constant="50" id="ZXO-L1-aF1"/>
+                            <constraint firstItem="etC-4x-ixR" firstAttribute="centerY" secondItem="2iR-GL-qIu" secondAttribute="centerY" id="bRv-pO-AEk"/>
+                            <constraint firstAttribute="trailing" secondItem="MaX-wy-nPD" secondAttribute="trailing" id="e5Z-6g-7rf"/>
+                            <constraint firstItem="MaX-wy-nPD" firstAttribute="leading" secondItem="etC-4x-ixR" secondAttribute="trailing" constant="5" id="pfC-HB-0xN"/>
+                            <constraint firstItem="MaX-wy-nPD" firstAttribute="centerY" secondItem="2iR-GL-qIu" secondAttribute="centerY" id="tDq-pV-uSZ"/>
+                        </constraints>
+                    </view>
+                </box>
+            </subviews>
+            <constraints>
+                <constraint firstItem="atP-FF-p0B" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="1PZ-IZ-1Om"/>
+                <constraint firstAttribute="trailing" secondItem="atP-FF-p0B" secondAttribute="trailing" id="f2M-TU-x5a"/>
+                <constraint firstAttribute="bottom" secondItem="atP-FF-p0B" secondAttribute="bottom" id="pi8-Oj-NZj"/>
+                <constraint firstItem="atP-FF-p0B" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="qUf-ev-QKh"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

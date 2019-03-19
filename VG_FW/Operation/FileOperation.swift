@@ -102,7 +102,7 @@ class FileOperation: AsyncOperation {
     private func _keepBoth(theFileManager: FileManager, srcPath: String, dstPath: String, theFileNameIndex: Int = 1) {
         let theDestinationPathStr: String = dstPath
         let theDestinationPathURL: URL = URL(fileURLWithPath: theDestinationPathStr)
-        let theFileName: String = theDestinationPathURL.getFileName()
+        let theFileName: String = theDestinationPathURL.getName()
         let theFileNameWithoutExtension: String = theDestinationPathURL.getFileNameWithoutExtension()
         let theFileNameExtension: String = theDestinationPathURL.getFileExtension()
         let theDestinationFolderStr: String = String(theDestinationPathStr.prefix(theDestinationPathStr.count - theFileName.count))

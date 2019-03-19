@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="ComboBoxFormView" customModule="TestForm" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="VGComboBoxFormView" customModule="iTunes_Exporter" customModuleProvider="target">
             <connections>
                 <outlet property="box" destination="atP-FF-p0B" id="f9l-9m-n1a"/>
                 <outlet property="comboBox" destination="MaX-wy-nPD" id="Dyi-fL-Poo"/>

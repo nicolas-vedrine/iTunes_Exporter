@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol FormProtocol {
+protocol VGFormProtocol {
     
     var isValid: Bool? {get}
     var value: Any? {get set}
@@ -23,19 +23,19 @@ protocol FormProtocol {
     
 }
 
-protocol VGFormDelegate {
-    func validatedForm(form: VGForm, value: [String : Any])
-    func invalidatedForm(form: VGForm, errorFormItems: [VGBaseFormItem])
+protocol VGFormViewDelegate {
+    func validatedForm(form: VGFormView, value: [String : Any])
+    func invalidatedForm(form: VGFormView, errorFormItems: [VGBaseFormItem])
 }
 
-@IBDesignable class VGForm: VGBaseNSView, FormProtocol {
+@IBDesignable class VGFormView: VGBaseNSView, VGFormProtocol {
     
     var isValid: Bool?
     var value: Any?
     var isAutoClear: Bool = true
     private var _theIsAutoFill: Bool = false
     
-    var delegate: VGFormDelegate!
+    var delegate: VGFormViewDelegate!
     
     internal var theDefaultButton: NSButton!
     internal var theFormItems: [String : VGBaseFormItem] = [String : VGBaseFormItem]()
@@ -49,7 +49,7 @@ protocol VGFormDelegate {
             _theIsAutoFill = newValue
             if _theIsAutoFill {
                 for formItem: VGBaseFormItem in theFormItems.values {
-                    let componentForm: FormProtocol = formItem.componentForm
+                    let componentForm: VGFormProtocol = formItem.componentForm
                     if componentForm is VGBaseComponentFormView {
                         let componentFormView: VGBaseComponentFormView = componentForm as! VGBaseComponentFormView
                         let defaultValue: String = formItem.code
@@ -69,8 +69,8 @@ protocol VGFormDelegate {
         if componentFormView is VGBaseTextComponentFormView {
             let textComponentFormView: VGBaseTextComponentFormView = componentFormView as! VGBaseTextComponentFormView
             textComponentFormView.value = defaultValue
-        } else if componentFormView is ComboBoxFormView {
-            let comboBoxFormView: ComboBoxFormView = componentFormView as! ComboBoxFormView
+        } else if componentFormView is VGComboBoxFormView {
+            let comboBoxFormView: VGComboBoxFormView = componentFormView as! VGComboBoxFormView
             let dataSource = comboBoxFormView.dataSource
             comboBoxFormView.value = dataSource[dataSource.count - 1]
         } else if componentFormView is VGBaseGroupFormView {
@@ -81,7 +81,10 @@ protocol VGFormDelegate {
         } else if componentFormView is VGBrowsePathFormView {
             let browsePathFormView: VGBrowsePathFormView = componentFormView as! VGBrowsePathFormView
             var theURLs: [URL] = [URL]()
-            theURLs.append(FileManager.default.homeDirectoryForCurrentUser)
+            let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true)
+            let userDesktopDirectory = paths[0]
+            let userDesktopUrl: URL = URL(fileURLWithPath: userDesktopDirectory)
+            theURLs.append(userDesktopUrl)
             browsePathFormView.value = theURLs
         }
     }
@@ -89,7 +92,7 @@ protocol VGFormDelegate {
     @IBInspectable var paddingRight: CGFloat {
         set {
             for formItem: VGBaseFormItem in theFormItems.values {
-                let componentForm: FormProtocol = formItem.componentForm
+                let componentForm: VGFormProtocol = formItem.componentForm
                 if componentForm is VGBaseComponentFormView {
                     let componentFormView: VGBaseComponentFormView = componentForm as! VGBaseComponentFormView
                     componentFormView.paddingRight = newValue
@@ -105,7 +108,7 @@ protocol VGFormDelegate {
     @IBInspectable var paddingLeft: CGFloat {
         set {
             for formItem: VGBaseFormItem in theFormItems.values {
-                let componentForm: FormProtocol = formItem.componentForm
+                let componentForm: VGFormProtocol = formItem.componentForm
                 if componentForm is VGBaseComponentFormView {
                     let componentFormView: VGBaseComponentFormView = componentForm as! VGBaseComponentFormView
                     componentFormView.paddingLeft = newValue
@@ -122,7 +125,7 @@ protocol VGFormDelegate {
     @IBInspectable var gap: CGFloat {
         set {
             for formItem: VGBaseFormItem in theFormItems.values {
-                let componentForm: FormProtocol = formItem.componentForm
+                let componentForm: VGFormProtocol = formItem.componentForm
                 if componentForm is VGBaseComponentFormView {
                     let componentFormView: VGBaseComponentFormView = componentForm as! VGBaseComponentFormView
                     componentFormView.gap = newValue
@@ -152,7 +155,7 @@ protocol VGFormDelegate {
         var errorFormItems: [VGBaseFormItem] = [VGBaseFormItem]()
         
         for formItem: VGBaseFormItem in theFormItems.values {
-            let componentForm: FormProtocol = formItem.componentForm
+            let componentForm: VGFormProtocol = formItem.componentForm
             
             if componentForm is VGBaseComponentFormView {
                 let componentFormView: VGBaseComponentFormView = componentForm as! VGBaseComponentFormView
@@ -223,7 +226,7 @@ protocol VGFormDelegate {
         }
     }
     
-    func addItem(componentForm: FormProtocol, code:String, isRequired: Bool = true) {
+    func addItem(componentForm: VGFormProtocol, code:String, isRequired: Bool = true) {
         let formItem: VGBaseFormItem = VGBaseFormItem(componentForm: componentForm, code: code, isRequired: isRequired)
         theFormItems[code] = formItem
         formItem.validationMode = theValidationMode
@@ -240,9 +243,17 @@ protocol VGFormDelegate {
         return theFormItems[formItemCode]
     }
     
-    func getItem(formItemCode: String) -> FormProtocol {
+    func getItem(formItemCode: String) -> VGFormProtocol {
         let theFormItem: VGBaseFormItem = theFormItems[formItemCode]!
         return theFormItem.componentForm
+    }
+    
+    func getItems() -> [VGFormProtocol] {
+        var items = [VGFormProtocol]()
+        for formItem in theFormItems.values {
+            items.append(formItem.componentForm)
+        }
+        return items
     }
     
     var validationMode: VGFormValidationMode {
@@ -259,7 +270,7 @@ protocol VGFormDelegate {
     
 }
 
-@IBDesignable class VGBaseComponentFormView:VGBaseNSView, FormProtocol {
+@IBDesignable class VGBaseComponentFormView:VGBaseNSView, VGFormProtocol {
     
     var value: Any?
     var isValid: Bool?
@@ -442,18 +453,18 @@ enum VGComponentFormState: Int {
 
 class VGBaseFormItem {
     
-    private var _theComponentForm: FormProtocol
+    private var _theComponentForm: VGFormProtocol
     private var _theCode: String
     private var _theIsRequired: Bool
    // private var _theValidationMode: VGFormValidationMode?
     
-    init(componentForm: FormProtocol, code: String, isRequired: Bool = true) {
+    init(componentForm: VGFormProtocol, code: String, isRequired: Bool = true) {
         self._theComponentForm = componentForm
         self._theCode = code
         self._theIsRequired = isRequired
     }
     
-    var componentForm: FormProtocol {
+    var componentForm: VGFormProtocol {
         get {
             return _theComponentForm
         }

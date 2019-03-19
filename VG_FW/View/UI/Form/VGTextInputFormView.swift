@@ -8,7 +8,7 @@
 
 import Cocoa
 
-@IBDesignable class TextInputFormView: VGBaseTextComponentFormView, VGLoadableNib {
+@IBDesignable class VGTextInputFormView: VGBaseTextComponentFormView, VGLoadableNib {
     
     @IBOutlet var contentView: NSView!
     @IBOutlet weak var label: NSTextField!

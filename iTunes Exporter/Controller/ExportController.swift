@@ -10,15 +10,21 @@ import Cocoa
 
 class ExportController: BaseProjectViewController {
 
-    @IBOutlet weak var theBrowsePathTextInput: NSTextField!
-    @IBOutlet weak var theBrowseButton: NSButton!
+    //@IBOutlet weak var theBrowsePathTextInput: NSTextField!
+    //@IBOutlet weak var theBrowseButton: NSButton!
     @IBOutlet weak var theSpaceRequiredLabel: NSTextField!
     @IBOutlet weak var theProceedButton: NSButton!
     @IBOutlet weak var theFreeSpaceLabel: NSTextField!
-    @IBOutlet weak var theFileNameComboBox: NSComboBox!
-    @IBOutlet weak var theIfAlreadyExistsComboBox: NSComboBox!
+    //@IBOutlet weak var theFileNameComboBox: NSComboBox!
+    //@IBOutlet weak var theIfAlreadyExistsComboBox: NSComboBox!
+    
+    @IBOutlet var theExportFormView: ExportFormView!
+    @IBOutlet weak var theBrowsePathFormView: VGBrowsePathFormView!
+    @IBOutlet weak var theFileNameComboBoxFormView: VGComboBoxFormView!
+    @IBOutlet weak var theIfAlreadyExistsComboBoxFormView: VGComboBoxFormView!
     
     private var _theTracks: [Track]?
+    
     private var _theChoosenPath: URL?
     private var _theFilesSize: UInt64 = 0
     
@@ -34,53 +40,87 @@ class ExportController: BaseProjectViewController {
         if let theData = data {
             print("V&G_Project___buildView : ", theData)
             _theTracks = data as? [Track]
-            theProceedButton.isEnabled = false
-            _buildFileNameComboBox()
-            _buildIfAlreadyExistsComboBox()
+            _buildFormView()
             _setSpaceRequired()
-            _buildBrowse()
+            //_buildBrowse()
         }
     }
     
-    private func _buildBrowse() {
+    private func _buildFormView() {
+        theExportFormView.delegate = self
         
+        theBrowsePathFormView.browsePathFormType = .folder
+        theBrowsePathFormView.textLabel = "Export folder* :"
+        theBrowsePathFormView.browseButton.title = "Parcourir..."
+        theBrowsePathFormView.delegate = self
+        
+        theFileNameComboBoxFormView.textLabel = "File name* :"
+        theFileNameComboBoxFormView.dataSource = _getFileNameComboBoxFormViewDataSource()
+        
+        theIfAlreadyExistsComboBoxFormView.textLabel = "If already exists* :"
+        theIfAlreadyExistsComboBoxFormView.dataSource = _getIfAlreadyExistsComboBoxFormViewDataSource()
+        
+        theExportFormView.addItem(componentForm: theBrowsePathFormView, code: FormItemCode.exportTo.rawValue)
+        theExportFormView.addItem(componentForm: theFileNameComboBoxFormView, code: FormItemCode.fileName.rawValue)
+        theExportFormView.addItem(componentForm: theIfAlreadyExistsComboBoxFormView, code: FormItemCode.ifAlreadyExists.rawValue)
+        
+        for item in theExportFormView.getItems() {
+            let componentFormView: VGBaseComponentFormView = item as! VGBaseComponentFormView
+            componentFormView.superview?.wantsLayer = true
+            componentFormView.layer?.masksToBounds = false
+            //dump(componentFormView.constraints)
+            if let leading = componentFormView.getConstraint(byIdentifier: "leading") {
+                leading.constant = 0
+            }
+        }
+        
+        /*theExportFormView.paddingRight = 5
+        theExportFormView.paddingLeft = 100*/
     }
     
-    private func _buildFileNameComboBox() {
-        var theDataSource: [VGBaseFormObject] = [VGBaseFormObject]()
+    /*private func _buildBrowse() {
         
-        let fileName: VGBaseFormObject = VGBaseFormObject(label: "<nom de fichier>", data: FileNameComboBoxType.fileName)
+    }*/
+    
+    private func _getFileNameComboBoxFormViewDataSource() -> [VGBaseDataFormStruct] {
+        var theDataSource: [VGBaseDataFormStruct] = [VGBaseDataFormStruct]()
+        
+        let fileName = VGBaseDataFormStruct(label: "<nom de fichier>", data: FileNameComboBoxType.fileName)
         theDataSource.append(fileName)
         
-        let artistSepAlbumSlashFileName: VGBaseFormObject = VGBaseFormObject(label: "<artist> - <album> / <file name>", data: FileNameComboBoxType.artistSepAlbumSlashFileName)
+        let artistSepAlbumSlashFileName = VGBaseDataFormStruct(label: "<artist> - <album> / <file name>", data: FileNameComboBoxType.artistSepAlbumSlashFileName)
         theDataSource.append(artistSepAlbumSlashFileName)
         
-        let artistSlashAlbumSlashFileName: VGBaseFormObject = VGBaseFormObject(label: "<artist> / <album> / <file name>", data: FileNameComboBoxType.artistSlashAlbumSlashFileName)
+        let artistSlashAlbumSlashFileName = VGBaseDataFormStruct(label: "<artist> / <album> / <file name>", data: FileNameComboBoxType.artistSlashAlbumSlashFileName)
         theDataSource.append(artistSlashAlbumSlashFileName)
         
-        let albumSlashFileName: VGBaseFormObject = VGBaseFormObject(label: "<album> / <file name>", data: FileNameComboBoxType.albumSlashFileName)
+        let albumSlashFileName = VGBaseDataFormStruct(label: "<album> / <file name>", data: FileNameComboBoxType.albumSlashFileName)
         theDataSource.append(albumSlashFileName)
         
-        let artistSlashFileName: VGBaseFormObject = VGBaseFormObject(label: "<artist> / <file name>", data: FileNameComboBoxType.artistSlashFileName)
+        let artistSlashFileName = VGBaseDataFormStruct(label: "<artist> / <file name>", data: FileNameComboBoxType.artistSlashFileName)
         theDataSource.append(artistSlashFileName)
         
-        _theFileNameComboBoxDataSource = NSMutableArray(array: theDataSource)
+        //_theFileNameComboBoxDataSource = NSMutableArray(array: theDataSource)
         
-        _setComboBox(theComboBox: theFileNameComboBox)
+        //_setComboBox(theComboBox: theFileNameComboBox)
+        
+        return theDataSource
     }
     
-    private func _buildIfAlreadyExistsComboBox() {
-        var theDataSource: [VGBaseFormObject] = [VGBaseFormObject]()
+    private func _getIfAlreadyExistsComboBoxFormViewDataSource() -> [VGBaseDataFormStruct] {
+        var theDataSource: [VGBaseDataFormStruct] = [VGBaseDataFormStruct]()
         
-        let overwrite: VGBaseFormObject = VGBaseFormObject(label: "overwrite", data: IfAlreadyExistsComboBoxType.overwrite)
+        let overwrite = VGBaseDataFormStruct(label: "overwrite", data: IfAlreadyExistsComboBoxType.overwrite)
         theDataSource.append(overwrite)
         
-        let keepBoth: VGBaseFormObject = VGBaseFormObject(label: "keep both", data: IfAlreadyExistsComboBoxType.keepBoth)
+        let keepBoth = VGBaseDataFormStruct(label: "keep both", data: IfAlreadyExistsComboBoxType.keepBoth)
         theDataSource.append(keepBoth)
         
-        _theIfAlreayExistsComboBoxDataSource = NSMutableArray(array: theDataSource)
+        //_theIfAlreayExistsComboBoxDataSource = NSMutableArray(array: theDataSource)
         
-        _setComboBox(theComboBox: theIfAlreadyExistsComboBox)
+        //_setComboBox(theComboBox: theIfAlreadyExistsComboBox)
+        
+        return theDataSource
     }
     
     private func _setComboBox(theComboBox: NSComboBox) {
@@ -120,7 +160,7 @@ class ExportController: BaseProjectViewController {
         
         _theChoosenPath = theBrowsePanel.url!
         if let theChoosenPath = _theChoosenPath {
-            theBrowsePathTextInput.stringValue = theChoosenPath.absoluteString
+            //theBrowsePathTextInput.stringValue = theChoosenPath.absoluteString
             _setFreeSpace(thePath: theChoosenPath)
             if FileManager.hasEnoughSpace(thePath: theChoosenPath, theSize: _theFilesSize) {
                 theProceedButton.isEnabled = true
@@ -132,8 +172,8 @@ class ExportController: BaseProjectViewController {
     
     
     @IBAction func theProceedAction(_ sender: Any) {
-        let theChosenIfAlreadyExistsType: IfAlreadyExistsComboBoxType = _getChosenIfAlreadyExists()
-        
+        //let theChosenIfAlreadyExistsType: IfAlreadyExistsComboBoxType = _getChosenIfAlreadyExists()
+        theExportFormView.check()
     }
     
     private func _getSourcePath(theTrack: Track) -> String {
@@ -142,7 +182,7 @@ class ExportController: BaseProjectViewController {
         return theSourceURL.path
     }
     
-    private func _getDestinationPath(theTrack: Track) -> String {
+    /*private func _getDestinationPath(theTrack: Track) -> String {
         let theChosenFileNameType: FileNameComboBoxType = _getChosenFileName()
         let theChosenPath: String = (_theChoosenPath?.path)! + "/"
         let theITTrack: ITLibMediaItem = theTrack.theITTrack
@@ -172,23 +212,52 @@ class ExportController: BaseProjectViewController {
             theDestinationPath += theArtistName + "/" + theFileName
         }
         return theDestinationPath
-    }
+    }*/
     
-    private func _getChosenFileName() -> FileNameComboBoxType {
-        let theItem: VGBaseFormObject = _theFileNameComboBoxDataSource[theFileNameComboBox.indexOfSelectedItem] as! VGBaseFormObject
+    /*private func _getChosenFileName() -> FileNameComboBoxType {
+        let theItem: VGBaseDataFormStruct = _theFileNameComboBoxDataSource[theFileNameComboBox.indexOfSelectedItem] as! VGBaseDataFormStruct
         return theItem.data as! FileNameComboBoxType
-    }
+    }*/
     
-    private func _getChosenIfAlreadyExists() -> IfAlreadyExistsComboBoxType {
-        let theItem: VGBaseFormObject = _theIfAlreayExistsComboBoxDataSource[theIfAlreadyExistsComboBox.indexOfSelectedItem] as! VGBaseFormObject
+    /*private func _getChosenIfAlreadyExists() -> IfAlreadyExistsComboBoxType {
+        let theItem: VGBaseDataFormStruct = _theIfAlreayExistsComboBoxDataSource[theIfAlreadyExistsComboBox.indexOfSelectedItem] as! VGBaseFormObject
         return theItem.data as! IfAlreadyExistsComboBoxType
+    }*/
+    
+}
+
+extension ExportController: VGBrowsePathFormViewDelegate {
+    
+    func browse(browsePathFormView: VGBrowsePathFormView) {
+        let theBrowsePanel: NSOpenPanel = NSOpenPanel()
+        theBrowsePanel.delegate = self as? NSOpenSavePanelDelegate
+        theBrowsePanel.title = "Choose your export folder..."
+        theBrowsePanel.allowsMultipleSelection = false
+        let canChooseFiles: Bool = false
+        theBrowsePanel.canChooseFiles = canChooseFiles
+        theBrowsePanel.canChooseDirectories = !canChooseFiles
+        
+        if theBrowsePanel.runModal() == NSApplication.ModalResponse.OK {
+            browsePathFormView.value = [theBrowsePanel.url]
+            print("V&G_Project___browse : ", self, browsePathFormView.value)
+        }
     }
     
 }
 
+extension ExportController: VGFormViewDelegate {
+    func validatedForm(form: VGFormView, value: [String : Any]) {
+        print("V&G_Project___validatedForm : ", self, value)
+    }
+    
+    func invalidatedForm(form: VGFormView, errorFormItems: [VGBaseFormItem]) {
+        print("V&G_Project___invalidatedForm : ", self, errorFormItems)
+    }
+}
+
 extension ExportController: NSComboBoxDelegate, NSComboBoxDataSource {
     
-    func numberOfItems(in comboBox: NSComboBox) -> Int {
+    /*func numberOfItems(in comboBox: NSComboBox) -> Int {
         var theCount: Int?
         if comboBox == theFileNameComboBox {
             theCount = _theFileNameComboBoxDataSource.count
@@ -196,9 +265,9 @@ extension ExportController: NSComboBoxDelegate, NSComboBoxDataSource {
                 theCount = _theIfAlreayExistsComboBoxDataSource.count
         }
         return theCount!
-    }
+    }*/
     
-    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
+    /*func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         var theItem: VGBaseFormObject?
         if comboBox == theFileNameComboBox {
             theItem = _theFileNameComboBoxDataSource[index] as? VGBaseFormObject
@@ -206,25 +275,15 @@ extension ExportController: NSComboBoxDelegate, NSComboBoxDataSource {
             theItem = _theIfAlreayExistsComboBoxDataSource[index] as? VGBaseFormObject
         }
         return theItem!.label
-    }
-    
-    /*func comboBoxSelectionDidChange(_ notification: Notification) {
-        let theComboBox: NSComboBox = notification.object as! NSComboBox
-        let selectedIndex: Int = theComboBox.indexOfSelectedItem
-        var theItem: VGBaseFormObject
-        if theComboBox == theFileNameComboBox {
-            theItem = self._theFileNameComboBoxDataSource[selectedIndex] as! VGBaseFormObject
-            _theChosenFileNameType = theItem.data as? FileNameComboBoxType
-        } else if theComboBox == theIfAlreadyExistsComboBox {
-            theItem = self._theIfAlreayExistsComboBoxDataSource[selectedIndex] as! VGBaseFormObject
-            _theChosenIfAlreadyExistsType = theItem.data as? IfAlreadyExistsComboBoxType
-        }
     }*/
     
 }
 
-
-
+enum FormItemCode: String {
+    case exportTo = "exportTo"
+    case fileName = "fileName"
+    case ifAlreadyExists = "ifAlreadyExists"
+}
 
 enum FileNameComboBoxType: String {
     case fileName = "file_name"

@@ -8,7 +8,7 @@
 
 import Cocoa
 
-@IBDesignable class ComboBoxFormView: VGBaseUIComponentWrapper, VGLoadableNib {
+@IBDesignable class VGComboBoxFormView: VGBaseUIComponentWrapper, VGLoadableNib {
     
     @IBOutlet var contentView: NSView!
     @IBOutlet weak var label: NSTextField!
@@ -88,7 +88,7 @@ import Cocoa
     
 }
 
-extension ComboBoxFormView: NSComboBoxDelegate, NSComboBoxDataSource {
+extension VGComboBoxFormView: NSComboBoxDelegate, NSComboBoxDataSource {
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
         return theDataSource!.count

@@ -320,3 +320,17 @@ extension URL {
     }
     
 }
+
+extension NSView {
+    
+    func getConstraint(byIdentifier identifier: String) -> NSLayoutConstraint? {
+        for constraint in constraints {
+            print("V&G_FW___getConstraint : ", self, constraint.identifier)
+            if constraint.identifier == identifier {
+                return constraint
+            }
+        }
+        return nil
+    }
+    
+}

@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="TextInputFormView" customModule="TestForm" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="VGTextInputFormView" customModule="iTunes_Exporter" customModuleProvider="target">
             <connections>
                 <outlet property="box" destination="soM-PR-Vs9" id="m0p-9U-LiG"/>
                 <outlet property="contentView" destination="c22-O7-iKe" id="rtY-vh-cQN"/>

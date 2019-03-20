@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="VGBrowsePathFormView" customModule="TestForm" customModuleProvider="target">
+            <connections>
+                <outlet property="box" destination="auw-KX-gOy" id="qW3-f1-eaD"/>
+                <outlet property="browseButton" destination="vsQ-34-xby" id="xGT-Fg-glb"/>
+                <outlet property="contentView" destination="c22-O7-iKe" id="oni-PR-gDq"/>
+                <outlet property="gapConstraint1" destination="ytE-bz-09t" id="tnX-14-x4M"/>
+                <outlet property="gapConstraint2" destination="dmG-5i-MwW" id="Fgu-FM-chI"/>
+                <outlet property="label" destination="iln-36-uCX" id="eKC-Bf-XC2"/>
+                <outlet property="paddingLeftConstraint" destination="WaP-iv-Gqk" id="Qg2-qb-WpO"/>
+                <outlet property="paddingRightConstraint" destination="ci8-aX-pLb" id="d3O-gL-0Np"/>
+                <outlet property="pathTextInput" destination="xkJ-iF-ll2" id="vZm-vC-KyQ"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="50"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <box boxType="custom" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="auw-KX-gOy">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="50"/>
+                    <view key="contentView" id="j5l-xK-hQc">
+                        <rect key="frame" x="1" y="1" width="478" height="48"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iln-36-uCX">
+                                <rect key="frame" x="-40" y="15" width="37" height="17"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Label" id="OxF-74-6gS">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xkJ-iF-ll2">
+                                <rect key="frame" x="0.0" y="13" width="400" height="22"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="f1w-fU-DgH">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vsQ-34-xby">
+                                <rect key="frame" x="399" y="7" width="85" height="32"/>
+                                <buttonCell key="cell" type="push" title="Browse" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bgQ-h6-0V7">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="browseAction:" target="-2" id="Tgd-0a-B54"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="vsQ-34-xby" firstAttribute="centerY" secondItem="j5l-xK-hQc" secondAttribute="centerY" id="Flr-KH-bdE"/>
+                            <constraint firstItem="iln-36-uCX" firstAttribute="centerY" secondItem="j5l-xK-hQc" secondAttribute="centerY" id="OXO-wN-fAR"/>
+                            <constraint firstItem="xkJ-iF-ll2" firstAttribute="leading" secondItem="j5l-xK-hQc" secondAttribute="leading" id="WaP-iv-Gqk"/>
+                            <constraint firstAttribute="trailing" secondItem="vsQ-34-xby" secondAttribute="trailing" id="ci8-aX-pLb"/>
+                            <constraint firstItem="vsQ-34-xby" firstAttribute="leading" secondItem="xkJ-iF-ll2" secondAttribute="trailing" constant="5" id="dmG-5i-MwW"/>
+                            <constraint firstItem="xkJ-iF-ll2" firstAttribute="centerY" secondItem="j5l-xK-hQc" secondAttribute="centerY" id="u4p-Ht-7ye"/>
+                            <constraint firstItem="xkJ-iF-ll2" firstAttribute="leading" secondItem="iln-36-uCX" secondAttribute="trailing" constant="5" id="ytE-bz-09t"/>
+                        </constraints>
+                    </view>
+                </box>
+            </subviews>
+            <constraints>
+                <constraint firstItem="auw-KX-gOy" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="IK6-bY-4Ew"/>
+                <constraint firstItem="auw-KX-gOy" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="Nby-sh-vpl"/>
+                <constraint firstAttribute="bottom" secondItem="auw-KX-gOy" secondAttribute="bottom" id="bcy-ZN-feG"/>
+                <constraint firstAttribute="trailing" secondItem="auw-KX-gOy" secondAttribute="trailing" id="nrp-gO-aYV"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

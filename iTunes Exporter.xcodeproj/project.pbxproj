@@ -20,10 +20,10 @@
 		8B43835322175ECB0040D2EB /* NotificationNameExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43835222175ECB0040D2EB /* NotificationNameExtension.swift */; };
 		8B4B487C21FFC007000AA5C2 /* iTunesLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4B487B21FFC007000AA5C2 /* iTunesLibrary.framework */; };
 		8B506E6A221C575C006882F0 /* UInt64ValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B506E69221C575C006882F0 /* UInt64ValueTransformer.swift */; };
+		8B5084212240519A001A9A6D /* ExportFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5084202240519A001A9A6D /* ExportFormView.swift */; };
 		8B7DC666221DEA15004856F7 /* ExportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC665221DEA15004856F7 /* ExportController.swift */; };
 		8B7DC668221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */; };
 		8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */; };
-		8BB254982208D0C20063C8B6 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB254972208D0C20063C8B6 /* Types.swift */; };
 		8BD228E02218BB2C00A7ABA3 /* VGBaseNSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD228DF2218BB2C00A7ABA3 /* VGBaseNSViewController.swift */; };
 		8BE2D75E21FA8A9900E12848 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D75D21FA8A9900E12848 /* AppDelegate.swift */; };
 		8BE2D76021FA8A9900E12848 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D75F21FA8A9900E12848 /* ViewController.swift */; };
@@ -34,7 +34,17 @@
 		8BE2D77421FB74F900E12848 /* iTunesObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77321FB74F900E12848 /* iTunesObjects.swift */; };
 		8BE2D77821FB751F00E12848 /* PlaylistImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */; };
 		8BE2D77921FB751F00E12848 /* PlaylistTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */; };
-		8BF7EEB6221F210700192B71 /* VGBaseForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF7EEB5221F210700192B71 /* VGBaseForm.swift */; };
+		8BFDB40C22404369008E8FED /* VGBrowsePathFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40422404369008E8FED /* VGBrowsePathFormView.swift */; };
+		8BFDB40E22404369008E8FED /* VGComboBoxFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */; };
+		8BFDB40F22404369008E8FED /* VGComboBoxFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */; };
+		8BFDB41022404369008E8FED /* VGBrowsePathFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */; };
+		8BFDB41122404369008E8FED /* VGForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40922404369008E8FED /* VGForm.swift */; };
+		8BFDB41222404369008E8FED /* VGTextInputFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */; };
+		8BFDB41322404369008E8FED /* VGTextInputFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */; };
+		8BFDB418224043F5008E8FED /* FilesOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */; };
+		8BFDB419224043F5008E8FED /* FileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB416224043F5008E8FED /* FileOperation.swift */; };
+		8BFDB41A224043F5008E8FED /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB417224043F5008E8FED /* AsyncOperation.swift */; };
+		8BFDB41C2240444D008E8FED /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB41B2240444D008E8FED /* Types.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,10 +62,10 @@
 		8B4B487A21FFBFB2000AA5C2 /* iTunes-Exporter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "iTunes-Exporter-Bridging-Header.h"; path = "iTunes Exporter/iTunes-Exporter-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B4B487B21FFC007000AA5C2 /* iTunesLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iTunesLibrary.framework; path = System/Library/Frameworks/iTunesLibrary.framework; sourceTree = SDKROOT; };
 		8B506E69221C575C006882F0 /* UInt64ValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt64ValueTransformer.swift; sourceTree = "<group>"; };
+		8B5084202240519A001A9A6D /* ExportFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportFormView.swift; sourceTree = "<group>"; };
 		8B7DC665221DEA15004856F7 /* ExportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportController.swift; sourceTree = "<group>"; };
 		8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardSegueIdentifierExtension.swift; sourceTree = "<group>"; };
 		8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProjectViewController.swift; sourceTree = "<group>"; };
-		8BB254972208D0C20063C8B6 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		8BD228DF2218BB2C00A7ABA3 /* VGBaseNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGBaseNSViewController.swift; sourceTree = "<group>"; };
 		8BE2D75A21FA8A9900E12848 /* iTunes Exporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iTunes Exporter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE2D75D21FA8A9900E12848 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,7 +79,17 @@
 		8BE2D77321FB74F900E12848 /* iTunesObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesObjects.swift; sourceTree = "<group>"; };
 		8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistImageCell.swift; sourceTree = "<group>"; };
 		8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistTableCellView.swift; sourceTree = "<group>"; };
-		8BF7EEB5221F210700192B71 /* VGBaseForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGBaseForm.swift; sourceTree = "<group>"; };
+		8BFDB40422404369008E8FED /* VGBrowsePathFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGBrowsePathFormView.swift; sourceTree = "<group>"; };
+		8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGComboBoxFormView.swift; sourceTree = "<group>"; };
+		8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGComboBoxFormView.xib; sourceTree = "<group>"; };
+		8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGBrowsePathFormView.xib; sourceTree = "<group>"; };
+		8BFDB40922404369008E8FED /* VGForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGForm.swift; sourceTree = "<group>"; };
+		8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGTextInputFormView.swift; sourceTree = "<group>"; };
+		8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGTextInputFormView.xib; sourceTree = "<group>"; };
+		8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesOperationQueue.swift; sourceTree = "<group>"; };
+		8BFDB416224043F5008E8FED /* FileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileOperation.swift; sourceTree = "<group>"; };
+		8BFDB417224043F5008E8FED /* AsyncOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
+		8BFDB41B2240444D008E8FED /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,8 +108,7 @@
 		8B3CCB35221B40EC00BD7EC1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				8B3CCB36221B418400BD7EC1 /* NSSearchFieldFilterCell.swift */,
-				8BF7EEB5221F210700192B71 /* VGBaseForm.swift */,
+				8BFDB40322404369008E8FED /* Form */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -114,6 +133,8 @@
 		8B3CCB3C221B750800BD7EC1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8B50841F2240518C001A9A6D /* Form */,
+				8B3CCB36221B418400BD7EC1 /* NSSearchFieldFilterCell.swift */,
 				8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */,
 				8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */,
 				8B3CCB3D221B756600BD7EC1 /* TrackListCell.swift */,
@@ -124,9 +145,10 @@
 		8B43834A2215F9630040D2EB /* VG_FW */ = {
 			isa = PBXGroup;
 			children = (
-				8B3CCB38221B5A3000BD7EC1 /* Data */,
-				8BB254962208D0B20063C8B6 /* Utils */,
 				8BD228DE2218BAF700A7ABA3 /* Controller */,
+				8B3CCB38221B5A3000BD7EC1 /* Data */,
+				8BFDB414224043F5008E8FED /* Operation */,
+				8BB254962208D0B20063C8B6 /* Utils */,
 				8B43834B2215F9700040D2EB /* View */,
 			);
 			path = VG_FW;
@@ -140,6 +162,14 @@
 				8B43835022160C7D0040D2EB /* VGLoadableNib.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		8B50841F2240518C001A9A6D /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				8B5084202240519A001A9A6D /* ExportFormView.swift */,
+			);
+			path = Form;
 			sourceTree = "<group>";
 		};
 		8B7DC669221DF9F7004856F7 /* base */ = {
@@ -163,7 +193,7 @@
 		8BB254962208D0B20063C8B6 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				8BB254972208D0C20063C8B6 /* Types.swift */,
+				8BFDB41B2240444D008E8FED /* Types.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -179,10 +209,11 @@
 		8BE2D75121FA8A9900E12848 = {
 			isa = PBXGroup;
 			children = (
-				8B4B487A21FFBFB2000AA5C2 /* iTunes-Exporter-Bridging-Header.h */,
-				8BE2D75C21FA8A9900E12848 /* iTunes Exporter */,
-				8BE2D75B21FA8A9900E12848 /* Products */,
 				8BE2D76D21FB74AC00E12848 /* Frameworks */,
+				8BE2D75C21FA8A9900E12848 /* iTunes Exporter */,
+				8B4B487A21FFBFB2000AA5C2 /* iTunes-Exporter-Bridging-Header.h */,
+				8BE2D75B21FA8A9900E12848 /* Products */,
+				8B43834A2215F9630040D2EB /* VG_FW */,
 			);
 			sourceTree = "<group>";
 		};
@@ -207,7 +238,6 @@
 				8BE2D77221FB74F900E12848 /* Model */,
 				8B43835222175ECB0040D2EB /* NotificationNameExtension.swift */,
 				8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */,
-				8B43834A2215F9630040D2EB /* VG_FW */,
 				8BE2D77521FB751400E12848 /* View */,
 			);
 			path = "iTunes Exporter";
@@ -241,6 +271,30 @@
 				8B3CCB33221B15AA00BD7EC1 /* AppInfosView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		8BFDB40322404369008E8FED /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */,
+				8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */,
+				8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */,
+				8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */,
+				8BFDB40422404369008E8FED /* VGBrowsePathFormView.swift */,
+				8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */,
+				8BFDB40922404369008E8FED /* VGForm.swift */,
+			);
+			path = Form;
+			sourceTree = "<group>";
+		};
+		8BFDB414224043F5008E8FED /* Operation */ = {
+			isa = PBXGroup;
+			children = (
+				8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */,
+				8BFDB416224043F5008E8FED /* FileOperation.swift */,
+				8BFDB417224043F5008E8FED /* AsyncOperation.swift */,
+			);
+			path = Operation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -306,9 +360,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BFDB40F22404369008E8FED /* VGComboBoxFormView.xib in Resources */,
 				8B0DD5DA2215C14300146683 /* TrackListView.xib in Resources */,
+				8BFDB41022404369008E8FED /* VGBrowsePathFormView.xib in Resources */,
 				8B3CCB32221B159800BD7EC1 /* AppInfosView.xib in Resources */,
 				8BE2D76221FA8A9B00E12848 /* Assets.xcassets in Resources */,
+				8BFDB41322404369008E8FED /* VGTextInputFormView.xib in Resources */,
 				8BE2D76521FA8A9B00E12848 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -320,27 +377,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BFDB41222404369008E8FED /* VGTextInputFormView.swift in Sources */,
 				8B7DC668221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift in Sources */,
+				8BFDB41C2240444D008E8FED /* Types.swift in Sources */,
 				8B0DD5DC2215C1A400146683 /* TrackListView.swift in Sources */,
 				8B43834D2215FA490040D2EB /* VGBaseNSView.swift in Sources */,
 				8BE2D77821FB751F00E12848 /* PlaylistImageCell.swift in Sources */,
 				8BD228E02218BB2C00A7ABA3 /* VGBaseNSViewController.swift in Sources */,
+				8B5084212240519A001A9A6D /* ExportFormView.swift in Sources */,
 				8B0DD5D42214EA6200146683 /* TopBarView.swift in Sources */,
 				8BE2D77421FB74F900E12848 /* iTunesObjects.swift in Sources */,
+				8BFDB418224043F5008E8FED /* FilesOperationQueue.swift in Sources */,
+				8BFDB40E22404369008E8FED /* VGComboBoxFormView.swift in Sources */,
 				8B506E6A221C575C006882F0 /* UInt64ValueTransformer.swift in Sources */,
 				8B7DC666221DEA15004856F7 /* ExportController.swift in Sources */,
-				8BB254982208D0C20063C8B6 /* Types.swift in Sources */,
+				8BFDB41122404369008E8FED /* VGForm.swift in Sources */,
 				8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */,
 				8BE2D76021FA8A9900E12848 /* ViewController.swift in Sources */,
 				8B3CCB37221B418500BD7EC1 /* NSSearchFieldFilterCell.swift in Sources */,
 				8BE2D77921FB751F00E12848 /* PlaylistTableCellView.swift in Sources */,
+				8BFDB40C22404369008E8FED /* VGBrowsePathFormView.swift in Sources */,
 				8B3CCB3B221B5AA300BD7EC1 /* DurationValueTransformer.swift in Sources */,
-				8BF7EEB6221F210700192B71 /* VGBaseForm.swift in Sources */,
+				8BFDB419224043F5008E8FED /* FileOperation.swift in Sources */,
 				8B3CCB34221B15AA00BD7EC1 /* AppInfosView.swift in Sources */,
 				8B43835322175ECB0040D2EB /* NotificationNameExtension.swift in Sources */,
 				8BE2D75E21FA8A9900E12848 /* AppDelegate.swift in Sources */,
 				8B3CCB3E221B756600BD7EC1 /* TrackListCell.swift in Sources */,
 				8B43835122160C7D0040D2EB /* VGLoadableNib.swift in Sources */,
+				8BFDB41A224043F5008E8FED /* AsyncOperation.swift in Sources */,
 				8BE2D77121FB74EA00E12848 /* iTunesBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

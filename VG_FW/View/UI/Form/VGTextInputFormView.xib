@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="VGTextInputFormView" customModule="iTunes_Exporter" customModuleProvider="target">
+            <connections>
+                <outlet property="box" destination="soM-PR-Vs9" id="m0p-9U-LiG"/>
+                <outlet property="contentView" destination="c22-O7-iKe" id="rtY-vh-cQN"/>
+                <outlet property="gapConstraint" destination="yvy-E4-glW" id="jLf-vr-pV7"/>
+                <outlet property="label" destination="B3M-E6-8ZS" id="B54-rE-Zt1"/>
+                <outlet property="paddingLeftConstraint" destination="iHP-1T-qIg" id="dKb-z3-bhO"/>
+                <outlet property="paddingRightConstraint" destination="vYa-1T-E0B" id="HC8-19-xBK"/>
+                <outlet property="textInput" destination="F5c-1n-dUG" id="hzD-5K-sa7"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="49"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <box boxType="custom" borderType="line" cornerRadius="1" translatesAutoresizingMaskIntoConstraints="NO" id="soM-PR-Vs9">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="49"/>
+                    <view key="contentView" id="S0b-4O-fFN">
+                        <rect key="frame" x="1" y="1" width="478" height="47"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="B3M-E6-8ZS">
+                                <rect key="frame" x="10" y="15" width="37" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" alignment="right" title="Label" id="JAA-DJ-jEX">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="F5c-1n-dUG">
+                                <rect key="frame" x="50" y="13" width="428" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="Ig2-PY-5gK"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Pje-3I-k4K">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="B3M-E6-8ZS" firstAttribute="centerY" secondItem="S0b-4O-fFN" secondAttribute="centerY" id="1dr-Yj-IwH"/>
+                            <constraint firstItem="F5c-1n-dUG" firstAttribute="centerY" secondItem="B3M-E6-8ZS" secondAttribute="centerY" id="KfT-Tf-pmo"/>
+                            <constraint firstItem="F5c-1n-dUG" firstAttribute="leading" secondItem="S0b-4O-fFN" secondAttribute="leading" constant="50" id="iHP-1T-qIg"/>
+                            <constraint firstAttribute="trailing" secondItem="F5c-1n-dUG" secondAttribute="trailing" id="vYa-1T-E0B"/>
+                            <constraint firstItem="F5c-1n-dUG" firstAttribute="leading" secondItem="B3M-E6-8ZS" secondAttribute="trailing" constant="5" id="yvy-E4-glW"/>
+                        </constraints>
+                    </view>
+                    <color key="borderColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </box>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="soM-PR-Vs9" secondAttribute="trailing" id="1Np-1G-Icd"/>
+                <constraint firstItem="soM-PR-Vs9" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="5VX-HH-hs3"/>
+                <constraint firstItem="soM-PR-Vs9" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="g7P-ZY-e2c"/>
+                <constraint firstAttribute="bottom" secondItem="soM-PR-Vs9" secondAttribute="bottom" id="xEX-NY-m2a"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="42.5"/>
+        </customView>
+    </objects>
+</document>

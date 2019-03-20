@@ -42,7 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iTunes Exporter/Model/iTunesObjects.swift"
+<<<<<<< HEAD
             timestampString = "574807327.354032"
+=======
+            timestampString = "574650294.912558"
+>>>>>>> modulesFromTestsBranch
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "409"
@@ -58,7 +62,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iTunes Exporter/Model/iTunesObjects.swift"
+<<<<<<< HEAD
             timestampString = "574807327.3543971"
+=======
+            timestampString = "574650294.912896"
+>>>>>>> modulesFromTestsBranch
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "279"
@@ -74,7 +82,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iTunes Exporter/Model/iTunesObjects.swift"
+<<<<<<< HEAD
             timestampString = "574807327.354624"
+=======
+            timestampString = "574650294.9131041"
+>>>>>>> modulesFromTestsBranch
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "333"
@@ -138,11 +150,15 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iTunes Exporter/Controller/ViewController.swift"
+<<<<<<< HEAD
             timestampString = "574807327.354982"
+=======
+            timestampString = "574806147.162739"
+>>>>>>> modulesFromTestsBranch
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "209"
+            endingLineNumber = "209"
             landmarkName = "ViewController"
             landmarkType = "21">
          </BreakpointContent>
@@ -154,11 +170,15 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iTunes Exporter/Controller/ViewController.swift"
+<<<<<<< HEAD
             timestampString = "574807327.355299"
+=======
+            timestampString = "574806147.163036"
+>>>>>>> modulesFromTestsBranch
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "235"
-            endingLineNumber = "235"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
             landmarkName = "outlineView(_:shouldExpandItem:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -170,7 +190,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iTunes Exporter/Controller/ViewController.swift"
+<<<<<<< HEAD
             timestampString = "574807327.355511"
+=======
+            timestampString = "574806147.163255"
+>>>>>>> modulesFromTestsBranch
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
@@ -209,6 +233,38 @@
             endingLineNumber = "140"
             landmarkName = "TrackListView"
             landmarkType = "21">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iTunes Exporter/Controller/ExportController.swift"
+            timestampString = "574806147.163533"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "_buildFormView()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VG_FW/Utils/Types.swift"
+            timestampString = "574806147.16427"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "328"
+            endingLineNumber = "328"
+            landmarkName = "getConstraint(byIdentifier:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

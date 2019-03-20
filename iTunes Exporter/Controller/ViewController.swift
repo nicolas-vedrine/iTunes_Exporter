@@ -163,11 +163,17 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         if (segue.identifier == NSStoryboardSegue.EXPORT_SEGUE) {
             if let exportVC = segue.destinationController as? ExportController {
                 exportVC.data = theAddedTracksListView.tracks
+                exportVC.onValidateForm = { (formResult: [String: Any]) -> () in
+                    self._exportFiles(formResult: formResult)
+                }
             }
         }
     }
     
-
+    private func _exportFiles(formResult: [String: Any]) {
+        print("V&G_Project____exportFiles : ", formResult)
+    }
+    
 }
 
 extension ViewController {

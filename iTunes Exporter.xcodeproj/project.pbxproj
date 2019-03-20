@@ -38,7 +38,7 @@
 		8BFDB40E22404369008E8FED /* VGComboBoxFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */; };
 		8BFDB40F22404369008E8FED /* VGComboBoxFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */; };
 		8BFDB41022404369008E8FED /* VGBrowsePathFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */; };
-		8BFDB41122404369008E8FED /* VGFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40922404369008E8FED /* VGFormView.swift */; };
+		8BFDB41122404369008E8FED /* VGForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40922404369008E8FED /* VGForm.swift */; };
 		8BFDB41222404369008E8FED /* VGTextInputFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */; };
 		8BFDB41322404369008E8FED /* VGTextInputFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */; };
 		8BFDB418224043F5008E8FED /* FilesOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */; };
@@ -83,7 +83,7 @@
 		8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGComboBoxFormView.swift; sourceTree = "<group>"; };
 		8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGComboBoxFormView.xib; sourceTree = "<group>"; };
 		8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGBrowsePathFormView.xib; sourceTree = "<group>"; };
-		8BFDB40922404369008E8FED /* VGFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGFormView.swift; sourceTree = "<group>"; };
+		8BFDB40922404369008E8FED /* VGForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGForm.swift; sourceTree = "<group>"; };
 		8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGTextInputFormView.swift; sourceTree = "<group>"; };
 		8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGTextInputFormView.xib; sourceTree = "<group>"; };
 		8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesOperationQueue.swift; sourceTree = "<group>"; };
@@ -282,7 +282,7 @@
 				8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */,
 				8BFDB40422404369008E8FED /* VGBrowsePathFormView.swift */,
 				8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */,
-				8BFDB40922404369008E8FED /* VGFormView.swift */,
+				8BFDB40922404369008E8FED /* VGForm.swift */,
 			);
 			path = Form;
 			sourceTree = "<group>";
@@ -391,7 +391,7 @@
 				8BFDB40E22404369008E8FED /* VGComboBoxFormView.swift in Sources */,
 				8B506E6A221C575C006882F0 /* UInt64ValueTransformer.swift in Sources */,
 				8B7DC666221DEA15004856F7 /* ExportController.swift in Sources */,
-				8BFDB41122404369008E8FED /* VGFormView.swift in Sources */,
+				8BFDB41122404369008E8FED /* VGForm.swift in Sources */,
 				8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */,
 				8BE2D76021FA8A9900E12848 /* ViewController.swift in Sources */,
 				8B3CCB37221B418500BD7EC1 /* NSSearchFieldFilterCell.swift in Sources */,

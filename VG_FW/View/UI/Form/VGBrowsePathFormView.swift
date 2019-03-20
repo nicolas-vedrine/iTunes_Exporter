@@ -21,7 +21,9 @@ import Cocoa
     @IBOutlet weak var browseButton: NSButton!
     
     internal var thePathsBrowsed: [URL]?
+    
     var browsePathFormType: VGBrowsePathFormType = VGBrowsePathFormType.file
+    var browsePathFormStyle: VGBrowsePathFormStyle = VGBrowsePathFormStyle.short
     
     var delegate: VGBrowsePathFormViewDelegate!
     var multipleText: String = "Multiple selection... Roll over for more details."
@@ -72,6 +74,16 @@ import Cocoa
         }
     }
     
+    var freeSpace: UInt64? {
+        get {
+            if (thePathsBrowsed?.count)! == 1 {
+                let theFreeSpace: UInt64 = UInt64(FileManager.getFreeSpace(thePath: thePathsBrowsed![0])!)
+                return theFreeSpace
+            }
+            return nil
+        }
+    }
+    
     private func _setInfos() {
         var pathTextInputStr: String = ""
         var toolTipStr: String = ""
@@ -85,7 +97,8 @@ import Cocoa
             }
         } else if (thePathsBrowsed?.count)! == 1 {
             let thePathURL = thePathsBrowsed![0]
-            pathTextInputStr = browsePathFormType == VGBrowsePathFormType.file ? thePathURL.getName() : thePathURL.getName()
+            let theName: String = browsePathFormStyle == VGBrowsePathFormStyle.short ? thePathURL.getName() : thePathURL.path
+            pathTextInputStr = theName
             toolTipStr = thePathsBrowsed![0].path
         }
         if pathTextInputStr == multipleText {
@@ -115,4 +128,9 @@ protocol VGBrowsePathFormViewDelegate {
 enum VGBrowsePathFormType: String {
     case file = "file"
     case folder = "folder"
+}
+
+enum VGBrowsePathFormStyle: Int {
+    case short = 0
+    case long = 1
 }

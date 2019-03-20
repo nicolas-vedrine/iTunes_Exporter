@@ -32,9 +32,8 @@ protocol VGFormViewDelegate {
     
     var isValid: Bool?
     var value: Any?
-    var isAutoClear: Bool = true
-    private var _theIsAutoFill: Bool = false
-    
+    var isAutoClear: Bool = false
+    var isAutoDisable: Bool = true
     var delegate: VGFormViewDelegate!
     
     internal var theDefaultButton: NSButton!
@@ -43,6 +42,8 @@ protocol VGFormViewDelegate {
     internal var thePaddingLeft: CGFloat = 0.0
     internal var thePaddingRight: CGFloat = 0.0
     internal var theGap: CGFloat = 5
+    
+    private var _theIsAutoFill: Bool = false
     
     @IBInspectable var isAutoFill: Bool {
         set {
@@ -140,7 +141,7 @@ protocol VGFormViewDelegate {
     
     var defaultButton: NSButton {
         set {
-            self.theDefaultButton = defaultButton
+            self.theDefaultButton = newValue
             //self._defaultButton?.targe
         }
         get {
@@ -197,11 +198,24 @@ protocol VGFormViewDelegate {
             if isAutoClear {
                 clear()
             }
+            if isAutoDisable {
+                theDefaultButton.isEnabled = false
+            }
         } else {
             delegate.invalidatedForm(form: self, errorFormItems: errorFormItems)
             for formItem: VGBaseFormItem in theFormItems.values {
                 print("V&G_FW___check :: error with : ", self, formItem.code)
             }
+        }
+    }
+    
+    var formResult: [String: Any]? {
+        get {
+            let theValue: [String: Any] = value as! [String : Any]
+            if theValue != nil {
+                return theValue
+            }
+            return nil
         }
     }
     

@@ -9,6 +9,8 @@
 import Cocoa
 
 class VGBaseNSView: NSView {
+    
+    internal var theState: String?
 
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -30,6 +32,15 @@ class VGBaseNSView: NSView {
     
     internal func buildView() -> Void {
         print("V&G_FW___buildView : ", self)
+    }
+    
+    var state: String {
+        set {
+            theState = newValue
+        }
+        get {
+            return theState!
+        }
     }
     
 }

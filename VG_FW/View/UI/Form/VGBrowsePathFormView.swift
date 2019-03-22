@@ -97,7 +97,7 @@ import Cocoa
             }
         } else if (thePathsBrowsed?.count)! == 1 {
             let thePathURL = thePathsBrowsed![0]
-            let theName: String = browsePathFormStyle == VGBrowsePathFormStyle.short ? thePathURL.getName() : thePathURL.path
+            let theName: String = browsePathFormStyle == VGBrowsePathFormStyle.short ? thePathURL.getName()! : thePathURL.path
             pathTextInputStr = theName
             toolTipStr = thePathsBrowsed![0].path
         }

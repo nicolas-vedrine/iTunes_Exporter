@@ -18,17 +18,8 @@ class ExportController: BaseProjectViewController {
     @IBOutlet weak var theFileNameComboBoxFormView: VGComboBoxFormView!
     @IBOutlet weak var theIfAlreadyExistsComboBoxFormView: VGComboBoxFormView!
     
-    
     private var _theTracks: [Track]?
-    
-    //private var _theChoosenPath: URL?
     private var _theFilesSize: UInt64 = 0
-    
-    private var _theFileNameComboBoxDataSource: NSMutableArray = []
-    //private var _theChosenFileNameType: FileNameComboBoxType?
-    
-    private var _theIfAlreayExistsComboBoxDataSource: NSMutableArray = []
-    //private var _theChosenIfAlreadyExistsType: IfAlreadyExistsComboBoxType?
     
     var onValidateForm: ((_ formResult: [String: Any]) -> ())?
     
@@ -40,7 +31,6 @@ class ExportController: BaseProjectViewController {
             _theTracks = data as? [Track]
             _buildFormView()
             _setSpaceRequired()
-            //_buildBrowse()
         }
     }
     
@@ -79,59 +69,35 @@ class ExportController: BaseProjectViewController {
         /*theExportFormView.paddingRight = 5
         theExportFormView.paddingLeft = 100*/
         theExportFormView.defaultButton = theProceedButton
-        theExportFormView.isAutoFill = true
+        var theBrowsePathFormViewValue = [URL]()
+        let thePathTo: URL = URL(fileURLWithPath: "/Volumes/DATA/conmeubonailleuco/Temporaire/Zik/Temp")
+        theBrowsePathFormViewValue.append(thePathTo)
+        theBrowsePathFormView.value = theBrowsePathFormViewValue
+        
+        theFileNameComboBoxFormView.value = theFileNameComboBoxFormView.dataSource[0]
+        
+        theIfAlreadyExistsComboBoxFormView.value = theIfAlreadyExistsComboBoxFormView.dataSource[0]
+        //theExportFormView.isAutoFill = true
     }
     
     private func _getFileNameComboBoxFormViewDataSource() -> [VGBaseDataFormStruct] {
-        var theDataSource: [VGBaseDataFormStruct] = [VGBaseDataFormStruct]()
-        
-        let fileName = VGBaseDataFormStruct(label: "<nom de fichier>", data: FileNameComboBoxType.fileName)
-        theDataSource.append(fileName)
-        
-        let artistSepAlbumSlashFileName = VGBaseDataFormStruct(label: "<artist> - <album> / <file name>", data: FileNameComboBoxType.artistSepAlbumSlashFileName)
-        theDataSource.append(artistSepAlbumSlashFileName)
-        
-        let artistSlashAlbumSlashFileName = VGBaseDataFormStruct(label: "<artist> / <album> / <file name>", data: FileNameComboBoxType.artistSlashAlbumSlashFileName)
-        theDataSource.append(artistSlashAlbumSlashFileName)
-        
-        let albumSlashFileName = VGBaseDataFormStruct(label: "<album> / <file name>", data: FileNameComboBoxType.albumSlashFileName)
-        theDataSource.append(albumSlashFileName)
-        
-        let artistSlashFileName = VGBaseDataFormStruct(label: "<artist> / <file name>", data: FileNameComboBoxType.artistSlashFileName)
-        theDataSource.append(artistSlashFileName)
-        
+        let theDataSource = DataSources.getFileNameDataSource()
         return theDataSource
     }
     
     private func _getIfAlreadyExistsComboBoxFormViewDataSource() -> [VGBaseDataFormStruct] {
-        var theDataSource = [VGBaseDataFormStruct]()
-        
-        let overwrite = VGBaseDataFormStruct(label: "overwrite", data: IfFileAlreadyExistsType.overwrite)
-        theDataSource.append(overwrite)
-        
-        let overwriteOnlyIfMostRecent = VGBaseDataFormStruct(label: "overwrite if most recent", data: IfFileAlreadyExistsType.overwriteOnlyIfMostRecent)
-        theDataSource.append(overwriteOnlyIfMostRecent)
-        
-        let ignore = VGBaseDataFormStruct(label: "ignore", data: IfFileAlreadyExistsType.ignore)
-        theDataSource.append(ignore)
-        
-        let keepBoth = VGBaseDataFormStruct(label: "keep both", data: IfFileAlreadyExistsType.keepBoth)
-        theDataSource.append(keepBoth)
-        
-        let ask = VGBaseDataFormStruct(label: "ask...", data: IfFileAlreadyExistsType.ask)
-        theDataSource.append(ask)
-        
+        let theDataSource = DataSources.getIfAlreadyExistsDataSource()
         return theDataSource
     }
     
-    private func _setComboBox(theComboBox: NSComboBox) {
+    /*private func _setComboBox(theComboBox: NSComboBox) {
         theComboBox.usesDataSource = true
         theComboBox.delegate = self
         theComboBox.dataSource = self
         
         theComboBox.isEditable = false
         theComboBox.selectItem(at: 0)
-    }
+    }*/
     
     private func _setSpaceRequired() {
         _theFilesSize = _getFilesSize()
@@ -295,17 +261,10 @@ enum FormItemCode: String {
     case ifAlreadyExists = "ifAlreadyExists"
 }
 
-enum FileNameComboBoxType: String {
+enum FileNameType: String {
     case fileName = "file_name"
     case artistSepAlbumSlashFileName = "artist-album/file_name"
     case artistSlashAlbumSlashFileName = "<artist>/<album>/<file_name>"
     case albumSlashFileName = "<album>/<file name>"
     case artistSlashFileName = "<artist>/<file name>"
-}
-
-enum IfAlreadyExistsComboBoxType: String {
-    case overwrite = "overwrite"
-    case keepBoth = "keep_both"
-    case ignore = "ignore"
-    case ignoreOnlyIfMoreRecent = "ignoreOnlyIfMoreRecent"
 }

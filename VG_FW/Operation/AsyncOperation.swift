@@ -61,11 +61,17 @@ class AsyncOperation: Operation {
     }*/
     
     func execute() {
+        print("V&G_FW___execute : ", self)
     }
     
     override func start() {
         isExecuting = true
         execute()
+        isExecuting = false
+        isFinished = true
+    }
+    
+    internal func finish() {
         isExecuting = false
         isFinished = true
     }

@@ -16,6 +16,10 @@ import Cocoa
     @IBOutlet weak var playlistNameLabel: NSTextField!
     @IBOutlet weak var durationLabel: NSTextField!
     @IBOutlet weak var sizeLabel: NSTextField!
+    @IBOutlet weak var trackNameLabel: NSTextField!
+    @IBOutlet weak var statusLabel: NSTextField!
+    
+    public static var exportingStatus: String = "Exporting..."
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -27,6 +31,11 @@ import Cocoa
             durationLabel.isHidden = true
             nItemsLabel.isHidden = true
             sizeLabel.isHidden = true
+            trackNameLabel.isHidden = true
+            statusLabel.isHidden = true
+            
+            //state = AppInfosViewState.playListInfo.rawValue
+            theState = AppInfosViewState.playListInfo.rawValue
         }
     }
     
@@ -59,4 +68,48 @@ import Cocoa
         sizeLabel.stringValue = "Taille : " + size.toMegaBytes()
     }
     
+    func setTrackName(theTrackName: String) {
+        trackNameLabel.stringValue = theTrackName
+    }
+    
+    func setStatus(theStatus: String) {
+        statusLabel.isHidden = false
+        statusLabel.stringValue = theStatus
+    }
+    
+    override var state: String {
+        set {
+            theState = newValue
+            switch newValue {
+            case AppInfosViewState.playListInfo.rawValue:
+                print("V&G_Project___<#name#> : ", self)
+                nItemsLabel.isHidden = false
+                durationLabel.isHidden = false
+                playlistNameLabel.isHidden = false
+                sizeLabel.isHidden = false
+                trackNameLabel.isHidden = true
+                statusLabel.isHidden = true
+                progressBar.isHidden = true
+            case AppInfosViewState.exporting.rawValue:
+                print("V&G_Project___<#name#> : ", self)
+                nItemsLabel.isHidden = true
+                durationLabel.isHidden = true
+                playlistNameLabel.isHidden = true
+                sizeLabel.isHidden = true
+                trackNameLabel.isHidden = false
+                statusLabel.isHidden = false
+                progressBar.isHidden = false
+            default:
+                print("V&G_Project___state default : ", self)
+            }
+        }
+        get {
+            return theState!
+        }
+    }
+}
+
+enum AppInfosViewState: String {
+    case playListInfo = "playListInfo"
+    case exporting = "exporting"
 }

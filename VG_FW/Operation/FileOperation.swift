@@ -20,9 +20,21 @@ class FileOperation: AsyncOperation {
         self.srcPath = srcPath
         self.dstPath = dstPath
         self.ifFileAlreadyExistsType = ifFileAlreadyExistsType
+        
+        super.init()
+        
+        self.fileManager.delegate = self
+    }
+    
+    override func start() {
+        isExecuting = true
+        execute()
+        /*isExecuting = false
+        isFinished = true*/
     }
     
     override func execute() {
+        super.execute()
         print("V&G_FW___execute : ", self, srcPath, dstPath)
         
         copyFile()
@@ -30,9 +42,6 @@ class FileOperation: AsyncOperation {
     
     func copyFile() {
         if !isCancelled {
-            /*let theFileURL: URL = URL(fileURLWithPath: srcPath)
-             let theSourcePathStr: String = theFileURL.path*/
-            //let theSourcePathURL: URL = URL(fileURLWithPath: srcPath)
             let theDestinationPathURL: URL = URL(fileURLWithPath: dstPath)
             let theSplittedDestinationPath: [String] = dstPath.components(separatedBy: "/")
             let theFileName: String = theSplittedDestinationPath[theSplittedDestinationPath.count - 1]
@@ -42,13 +51,13 @@ class FileOperation: AsyncOperation {
             if isTheFileExists {
                 switch ifFileAlreadyExistsType {
                 case .overwrite:
-                    _overwrite(theFileManager: fileManager, srcPath: srcPath, dstPath: dstPath)
+                    _overwrite()
                 case .overwriteOnlyIfMostRecent:
-                    _overwriteOnlyIfMostRecent(theFileManager: fileManager, srcPath: srcPath, dstPath: dstPath)
+                    _overwriteOnlyIfMostRecent()
                 case .keepBoth:
-                    _keepBoth(theFileManager: fileManager, srcPath: srcPath, dstPath: dstPath)
+                    _keepBoth()
                 case .ask:
-                    print("V&G_FW___<#name#> : ", self)
+                    print("V&G_FW___ask : ", self)
                 default:
                     _ignore()
                 }
@@ -84,25 +93,25 @@ class FileOperation: AsyncOperation {
         }
     }
     
-    private func _overwrite(theFileManager: FileManager, srcPath: String, dstPath: String) {
-        _replaceItemAtPath(theFileManager: theFileManager, srcPath: srcPath, dstPath: dstPath)
+    private func _overwrite() {
+        _replaceItem()
     }
     
-    private func _overwriteOnlyIfMostRecent(theFileManager: FileManager, srcPath: String, dstPath: String) {
+    private func _overwriteOnlyIfMostRecent() {
         let theSourcePathURL: URL = URL(fileURLWithPath: srcPath)
         let theDestinationPathURL: URL = URL(fileURLWithPath: dstPath)
         if theSourcePathURL.isMostRecenThan(url: theDestinationPathURL) {
             print("V&G_FW____overwriteOnlyIfMostRecent", "isMostRecenThan")
-            _replaceItemAtPath(theFileManager: theFileManager, srcPath: srcPath, dstPath: dstPath)
+            _replaceItem()
         } else {
             _ignore()
         }
     }
     
-    private func _keepBoth(theFileManager: FileManager, srcPath: String, dstPath: String, theFileNameIndex: Int = 1) {
+    private func _keepBoth(theFileNameIndex: Int = 1) {
         let theDestinationPathStr: String = dstPath
         let theDestinationPathURL: URL = URL(fileURLWithPath: theDestinationPathStr)
-        let theFileName: String = theDestinationPathURL.getName()
+        let theFileName: String = theDestinationPathURL.getName()!
         let theFileNameWithoutExtension: String = theDestinationPathURL.getFileNameWithoutExtension()
         let theFileNameExtension: String = theDestinationPathURL.getFileExtension()
         let theDestinationFolderStr: String = String(theDestinationPathStr.prefix(theDestinationPathStr.count - theFileName.count))
@@ -110,25 +119,28 @@ class FileOperation: AsyncOperation {
         let theNewDestinationPathStr: String = theDestinationFolderStr + theFileNameWithoutExtension + " " + String(theIndex) + "." + theFileNameExtension
         do {
             print("V&G_FW____keepBoth : ", srcPath, theNewDestinationPathStr)
-            try theFileManager.copyItem(atPath: srcPath, toPath: "/" + theNewDestinationPathStr)
+            try fileManager.copyItem(atPath: srcPath, toPath: "/" + theNewDestinationPathStr)
+            finish()
         } catch let error {
             print("V&G_FW___keepBoth error : ", error.localizedDescription)
-            _keepBoth(theFileManager: theFileManager, srcPath: srcPath, dstPath: dstPath, theFileNameIndex: theIndex + 1)
+            _keepBoth(theFileNameIndex: theIndex + 1)
         }
     }
     
     private func _ignore() {
         print("V&G_FW____ignore : ", "do nothing")
+        finish()
     }
     
-    private func _replaceItemAtPath(theFileManager: FileManager, srcPath: String, dstPath: String) {
+    private func _replaceItem() {
         do {
-            try theFileManager.removeItem(atPath: dstPath)
+            try fileManager.removeItem(atPath: dstPath)
         } catch let error {
             print("V&G_FW____replaceItemAtPath : ", error.localizedDescription)
         }
         do {
-            try theFileManager.copyItem(atPath: srcPath, toPath: dstPath)
+            try fileManager.copyItem(atPath: srcPath, toPath: dstPath)
+            finish()
         } catch let error {
             print("V&G_FW____replaceItemAtPath : ", error.localizedDescription)
         }
@@ -138,6 +150,15 @@ class FileOperation: AsyncOperation {
         // stop fileManager copy...
         
         super.cancel()
+    }
+    
+}
+
+extension FileOperation: FileManagerDelegate {
+    
+    func fileManager(_ fileManager: FileManager, shouldProceedAfterError error: Error, copyingItemAt srcURL: URL, to dstURL: URL) -> Bool {
+        print("V&G_FW___shouldProceedAfterError : ", self, error)
+        return true
     }
     
 }

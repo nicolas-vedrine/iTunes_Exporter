@@ -21,6 +21,8 @@
 		8B4B487C21FFC007000AA5C2 /* iTunesLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4B487B21FFC007000AA5C2 /* iTunesLibrary.framework */; };
 		8B506E6A221C575C006882F0 /* UInt64ValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B506E69221C575C006882F0 /* UInt64ValueTransformer.swift */; };
 		8B5084212240519A001A9A6D /* ExportFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5084202240519A001A9A6D /* ExportFormView.swift */; };
+		8B6F3D7E2242F87C00286C86 /* DataSources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F3D7D2242F87C00286C86 /* DataSources.swift */; };
+		8B6F3D802244191900286C86 /* ExportButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6F3D7F2244191900286C86 /* ExportButton.swift */; };
 		8B7DC666221DEA15004856F7 /* ExportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC665221DEA15004856F7 /* ExportController.swift */; };
 		8B7DC668221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */; };
 		8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */; };
@@ -63,6 +65,8 @@
 		8B4B487B21FFC007000AA5C2 /* iTunesLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iTunesLibrary.framework; path = System/Library/Frameworks/iTunesLibrary.framework; sourceTree = SDKROOT; };
 		8B506E69221C575C006882F0 /* UInt64ValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UInt64ValueTransformer.swift; sourceTree = "<group>"; };
 		8B5084202240519A001A9A6D /* ExportFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportFormView.swift; sourceTree = "<group>"; };
+		8B6F3D7D2242F87C00286C86 /* DataSources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSources.swift; sourceTree = "<group>"; };
+		8B6F3D7F2244191900286C86 /* ExportButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportButton.swift; sourceTree = "<group>"; };
 		8B7DC665221DEA15004856F7 /* ExportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportController.swift; sourceTree = "<group>"; };
 		8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardSegueIdentifierExtension.swift; sourceTree = "<group>"; };
 		8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProjectViewController.swift; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 		8B43834A2215F9630040D2EB /* VG_FW */ = {
 			isa = PBXGroup;
 			children = (
+				8B6F3D7C2242F80700286C86 /* Model */,
 				8BD228DE2218BAF700A7ABA3 /* Controller */,
 				8B3CCB38221B5A3000BD7EC1 /* Data */,
 				8BFDB414224043F5008E8FED /* Operation */,
@@ -170,6 +175,14 @@
 				8B5084202240519A001A9A6D /* ExportFormView.swift */,
 			);
 			path = Form;
+			sourceTree = "<group>";
+		};
+		8B6F3D7C2242F80700286C86 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8BE2D77321FB74F900E12848 /* iTunesObjects.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		8B7DC669221DF9F7004856F7 /* base */ = {
@@ -255,7 +268,7 @@
 		8BE2D77221FB74F900E12848 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				8BE2D77321FB74F900E12848 /* iTunesObjects.swift */,
+				8B6F3D7D2242F87C00286C86 /* DataSources.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -269,6 +282,7 @@
 				8B0DD5DB2215C1A400146683 /* TrackListView.swift */,
 				8B3CCB31221B159800BD7EC1 /* AppInfosView.xib */,
 				8B3CCB33221B15AA00BD7EC1 /* AppInfosView.swift */,
+				8B6F3D7F2244191900286C86 /* ExportButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -387,6 +401,7 @@
 				8B5084212240519A001A9A6D /* ExportFormView.swift in Sources */,
 				8B0DD5D42214EA6200146683 /* TopBarView.swift in Sources */,
 				8BE2D77421FB74F900E12848 /* iTunesObjects.swift in Sources */,
+				8B6F3D7E2242F87C00286C86 /* DataSources.swift in Sources */,
 				8BFDB418224043F5008E8FED /* FilesOperationQueue.swift in Sources */,
 				8BFDB40E22404369008E8FED /* VGComboBoxFormView.swift in Sources */,
 				8B506E6A221C575C006882F0 /* UInt64ValueTransformer.swift in Sources */,
@@ -404,6 +419,7 @@
 				8BE2D75E21FA8A9900E12848 /* AppDelegate.swift in Sources */,
 				8B3CCB3E221B756600BD7EC1 /* TrackListCell.swift in Sources */,
 				8B43835122160C7D0040D2EB /* VGLoadableNib.swift in Sources */,
+				8B6F3D802244191900286C86 /* ExportButton.swift in Sources */,
 				8BFDB41A224043F5008E8FED /* AsyncOperation.swift in Sources */,
 				8BE2D77121FB74EA00E12848 /* iTunesBridge.swift in Sources */,
 			);

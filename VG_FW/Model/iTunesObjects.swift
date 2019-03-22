@@ -62,7 +62,7 @@ class Playlist: NSObject {
         get {
             var theTracks: [Track] = [Track]()
             let theITTracks: [ITLibMediaItem] = theITPlaylist.items
-            let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: iTunesModel.ITSortKind.artistAndThenAlbum)})
+            let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: ITSortKind.artistAndThenAlbum)})
             for theITTrack in theITTracksSorted {
                 let theTrack: Track = Track(theITTrack: theITTrack)
                 theTracks.append(theTrack)
@@ -333,10 +333,20 @@ class iTunesModel {
         return theArtists
     }
     
-    enum ITSortKind: Int {
-        case artist = 0
-        case album = 1
-        case artistAndThenAlbum = 2
+    public static func getAlbumTitle(theITTrack: ITLibMediaItem) -> String {
+        var theAlbumTitle: String = ""
+        if let theITAlbumName = theITTrack.album.title {
+            theAlbumTitle = theITAlbumName
+        }
+        return theAlbumTitle
+    }
+    
+    public static func getArtistName(theITTrack: ITLibMediaItem) -> String {
+        var theArtistName: String = ""
+        if let theITArtistName = theITTrack.artist?.name {
+            theArtistName = theITArtistName
+        }
+        return theArtistName
     }
     
     public static func sortITTrack(ITTrack1: ITLibMediaItem, ITTrack2: ITLibMediaItem, kind: ITSortKind) -> Bool {
@@ -374,12 +384,7 @@ class iTunesModel {
             if let param44 = ITTrack2.album.title {
                 param4 = param44
             }
-            
             return (param1, param3) < (param2, param4)
-            
-        default:
-            param1 = (ITTrack1.artist?.name)!
-            param2 = (ITTrack2.artist?.name)!
         }
         if param1 != nil && param2 != nil {
             return param1.localizedCaseInsensitiveCompare((param2)) == ComparisonResult.orderedAscending
@@ -442,6 +447,54 @@ class iTunesModel {
         return statutInfos
     }
     
+    static func getFormattedTrackName(theITTrack: ITLibMediaItem, theFormattedTrackNameStyle: FormattedTrackNameStyle = .trackNameArtistNameAlbumName, theSeparator: String = " - ") -> String {
+        let theTrackName: String = theITTrack.title
+        let theArtistName: String = getArtistName(theITTrack: theITTrack)
+        let theAlbumTitle: String = getAlbumTitle(theITTrack: theITTrack)
+        var theFormattedTrackName: String = ""
+        switch theFormattedTrackNameStyle {
+        case .trackNameArtistNameAlbumName:
+            theFormattedTrackName = theTrackName + theSeparator + theArtistName + theSeparator + theAlbumTitle
+        default:
+            print("V&G_Project___<#name#> : ", self)
+        }
+        return theFormattedTrackName
+    }
+    
+    /*
+ 
+ to getFormatedTrackName(theTrack, theStyle)
+ tell application "iTunes"
+ try
+ set trackName to name of theTrack
+ set artistName to artist of theTrack
+ set albumName to album of theTrack
+ if theStyle is _formatedTrackNameTrackNameArtistNameAlbumName_ then
+ if (albumName = "") then
+ set str to ("\"" & trackName & "\"" & " by " & artistName & " in unknown album")
+ else
+ set str to ("\"" & trackName & "\"" & " by " & artistName & " in " & albumName)
+ end if
+ end if
+ on error
+ display dialog "error with the method getFormatedTrackName()"
+ end try
+ end tell
+ return str
+ end getFormatedTrackName
+ */
+ 
+    
+}
+
+enum FormattedTrackNameStyle: Int {
+    case trackNameArtistNameAlbumName = 0
+}
+
+enum ITSortKind: Int {
+    case artist = 0
+    case album = 1
+    case artistAndThenAlbum = 2
 }
 
 struct StatutInfos {

@@ -293,13 +293,18 @@ extension URL {
         }
     }
     
-    func getName() -> String {
+    func getName() -> String? {
         let thePathComponents: [String] = self.pathComponents
-        return thePathComponents[thePathComponents.count - 1]
+        print("V&G_FW___getName : ", self, thePathComponents)
+        if thePathComponents.count > 0 {
+            let theName = thePathComponents[thePathComponents.count - 1]
+            return theName
+        }
+        return nil
     }
     
     func getFileExtension() -> String {
-        let theFileName: String = self.getName()
+        let theFileName: String = self.getName()!
         let theFileNameComponents: [String] = theFileName.components(separatedBy: ".")
         let theFileExtension: String = theFileNameComponents[theFileNameComponents.count - 1]
         return theFileExtension
@@ -311,7 +316,7 @@ extension URL {
     }
     
     func getFileNameWithoutExtension() -> String {
-        let theFileName: String = self.getName()
+        let theFileName: String = self.getName()!
         let theFileExtension: String = self.getFileExtension()
         let theStartIndex = theFileName.startIndex
         let theEndIndex = theFileName.index(theFileName.endIndex, offsetBy: -(theFileExtension.count + 1))

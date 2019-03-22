@@ -20,6 +20,7 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     @IBOutlet weak var theExportButton: NSButton!
     @IBOutlet weak var theStatutInfosLabel: NSTextField!
     @IBOutlet weak var theAppInfosView: AppInfosView!
+    @IBOutlet weak var theMenuBox: NSBox!
     
 //    lazy var exportController: NSViewController = {
 //        return self.storyboard!.instantiateController(withIdentifier: "ExportController")
@@ -29,6 +30,8 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     private var _lib: ITLibrary?
     private var _thePlaylistsGroups: [PlaylistGroup]?
     private var _theArtistsTree: [Artist]?
+    
+    private var _theCopyFilesOperationQueue: CopyFilesOperationQueue?
     
     override func buildView() {
         do {
@@ -154,8 +157,16 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     }
     
     @IBAction func exportAction(_ sender: Any) {
-        if theAddedTracksListView.tracks.count > 0 {
-            self.performSegue(withIdentifier: NSStoryboardSegue.EXPORT_SEGUE, sender: self)
+        let theExportButton: NSButton = sender as! NSButton
+        if theAppInfosView.state == AppInfosViewState.playListInfo.rawValue {
+            theExportButton.state = NSControl.StateValue.off
+            if theAddedTracksListView.tracks.count > 0 {
+                self.performSegue(withIdentifier: NSStoryboardSegue.EXPORT_SEGUE, sender: self)
+            }
+        } else {
+            _theCopyFilesOperationQueue?.cancelAllOperations()
+            theExportButton.state = NSControl.StateValue.off
+            theAppInfosView.state = AppInfosViewState.playListInfo.rawValue
         }
     }
     
@@ -172,7 +183,168 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     
     private func _exportFiles(formResult: [String: Any]) {
         print("V&G_Project____exportFiles : ", formResult)
+        _theCopyFilesOperationQueue = CopyFilesOperationQueue()
+        //_theCopyFilesOperationQueue?.qualityOfService = .userInitiated
+        _theCopyFilesOperationQueue?.name = "exportFiles"
+        var dp: FileOperation?
+        let fm: FileManager = FileManager.default
+        let theTracksList = theAddedTracksListView.tracks
+        theAppInfosView.state = AppInfosViewState.exporting.rawValue
+        theAppInfosView.setStatus(theStatus: AppInfosView.exportingStatus)
+        theExportButton.state = NSControl.StateValue.on
+        //theMenuBox.su
         
+        let exportToArray: [URL] = formResult[FormItemCode.exportTo.rawValue] as! [URL]
+        let exportTo: URL = exportToArray[0]
+        let theChosenIfFileAlreadyExistsType: IfFileAlreadyExistsType = formResult[FormItemCode.ifAlreadyExists.rawValue] as! IfFileAlreadyExistsType
+        let theFileNameType: FileNameType = formResult[FormItemCode.fileName.rawValue] as! FileNameType
+        for i in 0...theTracksList.count - 1 {
+            let theTrack: Track = theTracksList[i]
+            let file: URL = theTrack.location!
+            let theSourcePathStr: String = file.path
+            let theDestinationPattern: String = _getDestinationPattern(theTrack: theTrack, fileNameType: theFileNameType)
+            let theDestinationPathStr: String = exportTo.path + "/" + theDestinationPattern
+            let theCopyFileOperation: FileOperation = FileOperation(fileManager: fm, srcPath: theSourcePathStr, dstPath: theDestinationPathStr, ifFileAlreadyExistsType: theChosenIfFileAlreadyExistsType)
+            theCopyFileOperation.index = i
+            theCopyFileOperation.addObserver(self, forKeyPath: Operation.FINISHED, options: .new, context: nil)
+            theCopyFileOperation.addObserver(self, forKeyPath: Operation.EXECUTING, options: .new, context: nil)
+            theCopyFileOperation.addObserver(self, forKeyPath: Operation.CANCELLED, options: .new, context: nil)
+            theCopyFileOperation.operationQueue = _theCopyFilesOperationQueue
+            if dp != nil {
+                theCopyFileOperation.addDependency(dp!)
+            }
+            _theCopyFilesOperationQueue!.addOperation(theCopyFileOperation)
+            dp = theCopyFileOperation
+        }
+    }
+    
+    private func _getDestinationPattern(theTrack: Track, fileNameType: FileNameType) -> String {
+        var theDestinationPattern: String = ""
+        let theFileName: String = (theTrack.location?.getName())!
+        switch fileNameType {
+        case FileNameType.fileName:
+            theDestinationPattern = theFileName
+        case FileNameType.albumSlashFileName:
+            theDestinationPattern = theTrack.album + "/" + theFileName
+        case FileNameType.artistSepAlbumSlashFileName:
+            theDestinationPattern = theTrack.artist + " - " + theTrack.album + "/" + theFileName
+        case FileNameType.artistSlashAlbumSlashFileName:
+            theDestinationPattern = theTrack.artist + "/" + theTrack.album + "/" + theFileName
+        case FileNameType.artistSlashFileName:
+            theDestinationPattern = theTrack.artist + "/" + theFileName
+        }
+        return theDestinationPattern
+    }
+    
+    
+}
+
+extension ViewController: NSUserNotificationCenterDelegate {
+    
+    private func _notif() {
+        let notification = NSUserNotification()
+        // All these values are optional
+        notification.title = "Test of notification"
+        notification.subtitle = "Subtitle of notifications"
+        notification.informativeText = "Main informative text"
+        //notification.contentImage = contentImage
+        notification.soundName = NSUserNotificationDefaultSoundName
+        
+        let notificationCenter = NSUserNotificationCenter.default
+        notificationCenter.delegate = self
+        
+        notificationCenter.deliver(notification)
+        print("V&G_Project___showNotification : ", self)
+    }
+    
+    func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
+        return true
+    }
+    
+}
+
+extension ViewController {
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        let key = keyPath!
+        let theCopyFileOperation: FileOperation = object as! FileOperation
+        let operationQueue: CopyFilesOperationQueue = theCopyFileOperation.operationQueue! as! CopyFilesOperationQueue
+        let current: Double = Double(theCopyFileOperation.index! + 1)
+        let total: Double = Double(operationQueue.count)
+        let theSrcPathURL: URL = URL(fileURLWithPath: theCopyFileOperation.srcPath)
+        let theDstPathURL: URL = URL(fileURLWithPath: theCopyFileOperation.dstPath)
+        switch key {
+        case Operation.FINISHED:
+            let opQueue = OperationQueue.main
+            print("V&G_Project___observeValue : ", self, opQueue.qualityOfService)
+            DispatchQueue.main.sync { [unowned self] in
+               if current == total {
+                    self.theExportButton.state = NSControl.StateValue.off
+                    self.theAppInfosView.state = AppInfosViewState.playListInfo.rawValue
+                    if !theCopyFileOperation.isCancelled {
+                        self._notif()
+                    }
+                }
+            }
+            theCopyFileOperation.removeObserver(self, forKeyPath: Operation.FINISHED, context: nil)
+        case Operation.EXECUTING:
+            DispatchQueue.main.sync { [unowned self] in
+                if theCopyFileOperation.ifFileAlreadyExistsType == IfFileAlreadyExistsType.ask {
+                    let theData = self._ask(copyFileOperation: theCopyFileOperation)
+                    theCopyFileOperation.ifFileAlreadyExistsType = theData
+                    theCopyFileOperation.copyFile()
+                } else {
+                    self.theAppInfosView.setProgress(current: current, total: total)
+                    if let theFileName: String = theDstPathURL.getName() {
+                        let theName: String = String(Int(current)) + " / " + String(Int(total)) + " - " + theFileName
+                        self.theAppInfosView.setTrackName(theTrackName: theName)
+                    } else {
+                        print("V&G_Project___observeValue problem cancel : ", theCopyFileOperation)
+                        theCopyFileOperation.cancel()
+                        return
+                    }
+                }
+            }
+            theCopyFileOperation.removeObserver(self, forKeyPath: Operation.EXECUTING, context: nil)
+        case Operation.CANCELLED:
+            print("V&G_FW___observeValue : ", self, Operation.CANCELLED)
+            theCopyFileOperation.removeObserver(self, forKeyPath: Operation.FINISHED, context: nil)
+            theCopyFileOperation.removeObserver(self, forKeyPath: Operation.EXECUTING, context: nil)
+            theCopyFileOperation.removeObserver(self, forKeyPath: Operation.CANCELLED, context: nil)
+        default:
+             print("V&G_FW___observeValue : ", self)
+        }
+    }
+    
+    private func _ask(copyFileOperation: FileOperation) -> IfFileAlreadyExistsType {
+        let theSourceURL: URL = URL(fileURLWithPath: copyFileOperation.srcPath)
+        let theDestinationFolderURL: URL = URL(fileURLWithPath: copyFileOperation.dstPath)
+        let alert = NSAlert()
+        alert.messageText = "Le fichier " + theSourceURL.getName()! + " already exists in " + theDestinationFolderURL.getName()!
+        let theIfAlreadyExistsDataSource = DataSources.getIfAlreadyExistsDataSource()
+        for i in 0...theIfAlreadyExistsDataSource.count - 1 {
+            let theItem: VGBaseDataFormStruct = theIfAlreadyExistsDataSource[i]
+            let theData: IfFileAlreadyExistsType = theItem.data as! IfFileAlreadyExistsType
+            if theData != IfFileAlreadyExistsType.ask {
+                let btn = alert.addButton(withTitle: theItem.label)
+            }
+        }
+        alert.showsSuppressionButton = true
+        alert.suppressionButton?.title = "remember..."
+        let result = alert.runModal()
+        
+        let isChecked: Bool = alert.suppressionButton?.state == NSControl.StateValue.on ? true : false
+        print("V&G_Project____ask : ", isChecked, result)
+        let theIndex: Int = result.rawValue - 1000
+        let theObj: VGBaseDataFormStruct = theIfAlreadyExistsDataSource[theIndex]
+        let theData: IfFileAlreadyExistsType = theObj.data as! IfFileAlreadyExistsType
+        if isChecked {
+            for i in 0...(_theCopyFilesOperationQueue?.operationCount)! - 1 {
+                let theCopyFileOperation: FileOperation = _theCopyFilesOperationQueue?.operations[i] as! FileOperation
+                theCopyFileOperation.ifFileAlreadyExistsType = theData
+            }
+        }
+        return theData
     }
     
 }

@@ -30,7 +30,7 @@ protocol VGFormViewDelegate {
 
 @IBDesignable class VGFormView: VGBaseNSView, VGFormProtocol {
     
-    var isValid: Bool?
+    var isValid: Bool? = false
     var value: Any?
     var isAutoClear: Bool = false
     var isAutoDisable: Bool = true

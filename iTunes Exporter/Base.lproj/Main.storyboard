@@ -918,13 +918,13 @@ Gw
                                     <rect key="frame" x="1" y="1" width="1356" height="60"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mdC-e9-NoT">
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mdC-e9-NoT" customClass="ExportButton" customModule="iTunes_Exporter" customModuleProvider="target">
                                             <rect key="frame" x="76" y="0.0" width="62" height="60"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="60" id="Qzj-1E-QD6"/>
                                                 <constraint firstAttribute="width" constant="62" id="eHZ-B6-rgr"/>
                                             </constraints>
-                                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="btn_play" imagePosition="only" alignment="center" inset="2" id="2Iu-xk-sFe">
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="btn_play" imagePosition="only" alignment="center" inset="2" id="2Iu-xk-sFe">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -1225,6 +1225,7 @@ Gw
                         <outlet property="theAppInfosView" destination="Bnz-Yr-hXG" id="jBt-4C-B0P"/>
                         <outlet property="theArrayController" destination="M8V-rF-Dhi" id="jwN-eH-Uk7"/>
                         <outlet property="theExportButton" destination="mdC-e9-NoT" id="MNx-u0-RWm"/>
+                        <outlet property="theMenuBox" destination="6s2-0n-rA2" id="wpL-N4-Pmq"/>
                         <outlet property="theOutlineView" destination="2sP-yT-sX9" id="PQv-Za-NZD"/>
                         <outlet property="thePlaylistTracksListView" destination="9eL-LK-PaA" id="7Bt-Ys-zei"/>
                         <outlet property="theSegmentedControl" destination="4dH-wi-ukD" id="NDK-hR-F34"/>

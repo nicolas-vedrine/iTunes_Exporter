@@ -183,9 +183,10 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     
     private func _exportFiles(formResult: [String: Any]) {
         print("V&G_Project____exportFiles : ", formResult)
-        _theCopyFilesOperationQueue = CopyFilesOperationQueue()
+        let theCopyFilesOperationQueue = CopyFilesOperationQueue()
+        theCopyFilesOperationQueue.maxConcurrentOperationCount = 1
         //_theCopyFilesOperationQueue?.qualityOfService = .userInitiated
-        _theCopyFilesOperationQueue?.name = "exportFiles"
+        theCopyFilesOperationQueue.name = "exportFiles"
         var dp: FileOperation?
         let fm: FileManager = FileManager.default
         let theTracksList = theAddedTracksListView.tracks
@@ -206,14 +207,14 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
             let theDestinationPathStr: String = exportTo.path + "/" + theDestinationPattern
             let theCopyFileOperation: FileOperation = FileOperation(fileManager: fm, srcPath: theSourcePathStr, dstPath: theDestinationPathStr, ifFileAlreadyExistsType: theChosenIfFileAlreadyExistsType)
             theCopyFileOperation.index = i
-            theCopyFileOperation.addObserver(self, forKeyPath: Operation.FINISHED, options: .new, context: nil)
-            theCopyFileOperation.addObserver(self, forKeyPath: Operation.EXECUTING, options: .new, context: nil)
-            theCopyFileOperation.addObserver(self, forKeyPath: Operation.CANCELLED, options: .new, context: nil)
-            theCopyFileOperation.operationQueue = _theCopyFilesOperationQueue
+            /*theCopyFileOperation.addObserver(self, forKeyPath: Operation.FINISHED, options: .new, context: nil)
+            theCopyFileOperation.addObserver(self, forKeyPath: Operation.EXECUTING, options: .new, context: nil)*/
+            //theCopyFileOperation.addObserver(self, forKeyPath: Operation.CANCELLED, options: .new, context: nil)
+            theCopyFileOperation.operationQueue = theCopyFilesOperationQueue
             if dp != nil {
                 theCopyFileOperation.addDependency(dp!)
             }
-            _theCopyFilesOperationQueue!.addOperation(theCopyFileOperation)
+            theCopyFilesOperationQueue.addOperation(theCopyFileOperation)
             dp = theCopyFileOperation
         }
     }
@@ -273,10 +274,11 @@ extension ViewController {
         let total: Double = Double(operationQueue.count)
         let theSrcPathURL: URL = URL(fileURLWithPath: theCopyFileOperation.srcPath)
         let theDstPathURL: URL = URL(fileURLWithPath: theCopyFileOperation.dstPath)
+        print("V&G_Project___observeValue : ", self, key)
         switch key {
         case Operation.FINISHED:
             let opQueue = OperationQueue.main
-            print("V&G_Project___observeValue : ", self, opQueue.qualityOfService)
+            //print("V&G_Project___observeValue : ", self, opQueue.qualityOfService)
             DispatchQueue.main.sync { [unowned self] in
                if current == total {
                     self.theExportButton.state = NSControl.StateValue.off
@@ -292,14 +294,14 @@ extension ViewController {
                 if theCopyFileOperation.ifFileAlreadyExistsType == IfFileAlreadyExistsType.ask {
                     let theData = self._ask(copyFileOperation: theCopyFileOperation)
                     theCopyFileOperation.ifFileAlreadyExistsType = theData
-                    theCopyFileOperation.copyFile()
+                    theCopyFileOperation.main()
                 } else {
                     self.theAppInfosView.setProgress(current: current, total: total)
                     if let theFileName: String = theDstPathURL.getName() {
                         let theName: String = String(Int(current)) + " / " + String(Int(total)) + " - " + theFileName
                         self.theAppInfosView.setTrackName(theTrackName: theName)
                     } else {
-                        print("V&G_Project___observeValue problem cancel : ", theCopyFileOperation)
+                        //print("V&G_Project___observeValue problem cancel : ", theCopyFileOperation)
                         theCopyFileOperation.cancel()
                         return
                     }
@@ -307,7 +309,7 @@ extension ViewController {
             }
             theCopyFileOperation.removeObserver(self, forKeyPath: Operation.EXECUTING, context: nil)
         case Operation.CANCELLED:
-            print("V&G_FW___observeValue : ", self, Operation.CANCELLED)
+            //print("V&G_FW___observeValue : ", self, Operation.CANCELLED)
             theCopyFileOperation.removeObserver(self, forKeyPath: Operation.FINISHED, context: nil)
             theCopyFileOperation.removeObserver(self, forKeyPath: Operation.EXECUTING, context: nil)
             theCopyFileOperation.removeObserver(self, forKeyPath: Operation.CANCELLED, context: nil)

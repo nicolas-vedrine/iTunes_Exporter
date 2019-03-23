@@ -13,7 +13,8 @@ class FileOperation: AsyncOperation {
     let fileManager: FileManager
     let srcPath: String
     let dstPath: String
-    var ifFileAlreadyExistsType: IfFileAlreadyExistsType    
+    var ifFileAlreadyExistsType: IfFileAlreadyExistsType
+    var error: Error?
     
     init(fileManager: FileManager, srcPath: String, dstPath: String, ifFileAlreadyExistsType: IfFileAlreadyExistsType = IfFileAlreadyExistsType.overwrite) {
         self.fileManager = fileManager
@@ -26,21 +27,16 @@ class FileOperation: AsyncOperation {
         self.fileManager.delegate = self
     }
     
-    override func start() {
+    /*override func start() {
         isExecuting = true
         execute()
         /*isExecuting = false
         isFinished = true*/
-    }
+    }*/
     
-    override func execute() {
-        super.execute()
+    override func main() {
         print("V&G_FW___execute : ", self, srcPath, dstPath)
         
-        copyFile()
-    }
-    
-    func copyFile() {
         if !isCancelled {
             let theDestinationPathURL: URL = URL(fileURLWithPath: dstPath)
             let theSplittedDestinationPath: [String] = dstPath.components(separatedBy: "/")
@@ -64,30 +60,30 @@ class FileOperation: AsyncOperation {
             } else {
                 let isTheFolderExists: Bool = theDestinationFolderURL.isPathExists()
                 if isTheFolderExists {
-                    _copyFileAtPath(theFileManager: fileManager, srcPath: srcPath, dstPath: dstPath)
+                    _copyFile()
                 } else {
-                    _createDirectory(theFileManager: fileManager, atPath: theDestinationFolderStr)
-                    _copyFileAtPath(theFileManager: fileManager, srcPath: srcPath, dstPath: dstPath)
+                    _createDirectory(atPath: theDestinationFolderStr)
+                    _copyFile()
                 }
             }
         }
     }
     
-    private func _copyFileAtPath(theFileManager: FileManager, srcPath: String, dstPath: String) {
+    private func _copyFile() {
         do {
-            try theFileManager.copyItem(atPath: srcPath, toPath: dstPath)
+            try fileManager.copyItem(atPath: srcPath, toPath: dstPath)
         } catch let error {
             print("V&G_FW____copyFileAtPath : ", error.localizedDescription)
         }
     }
     
-    private func _createDirectory(theFileManager: FileManager, atPath: String) {
+    private func _createDirectory(atPath: String) {
         let theDestinationPathStr: String = atPath
         let theSplittedDestinationPath: [String] = theDestinationPathStr.components(separatedBy: "/")
         let theFileName: String = theSplittedDestinationPath[theSplittedDestinationPath.count - 1]
         let theDestinationFolderStr: String = String(theDestinationPathStr.prefix(theDestinationPathStr.count - theFileName.count))
         do {
-            try theFileManager.createDirectory(atPath: theDestinationFolderStr, withIntermediateDirectories: true, attributes: nil)
+            try fileManager.createDirectory(atPath: theDestinationFolderStr, withIntermediateDirectories: true, attributes: nil)
         } catch let error {
             print("V&G_FW____createDirectory : ", error.localizedDescription)
         }
@@ -158,7 +154,8 @@ extension FileOperation: FileManagerDelegate {
     
     func fileManager(_ fileManager: FileManager, shouldProceedAfterError error: Error, copyingItemAt srcURL: URL, to dstURL: URL) -> Bool {
         print("V&G_FW___shouldProceedAfterError : ", self, error)
-        return true
+        self.error = error
+        return false
     }
     
 }

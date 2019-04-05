@@ -34,7 +34,6 @@ import Cocoa
             trackNameLabel.isHidden = true
             statusLabel.isHidden = true
             
-            //state = AppInfosViewState.playListInfo.rawValue
             theState = AppInfosViewState.playListInfo.rawValue
         }
     }
@@ -42,7 +41,7 @@ import Cocoa
     func setProgress(current: Double, total: Double) {
         let percent: Double = current / total * 100
         self.progressBar.doubleValue = percent
-        print("V&G_Project___<#name#> : ", current, total, Double(current / total * 100))
+        //print("V&G_Project___setProgress : ", current, total, Double(current / total * 100))
     }
     
     func setPlaylistDuration(duration: Int) {
@@ -82,7 +81,7 @@ import Cocoa
             theState = newValue
             switch newValue {
             case AppInfosViewState.playListInfo.rawValue:
-                print("V&G_Project___<#name#> : ", self)
+                //print("V&G_Project___<#name#> : ", self)
                 nItemsLabel.isHidden = false
                 durationLabel.isHidden = false
                 playlistNameLabel.isHidden = false
@@ -91,7 +90,7 @@ import Cocoa
                 statusLabel.isHidden = true
                 progressBar.isHidden = true
             case AppInfosViewState.exporting.rawValue:
-                print("V&G_Project___<#name#> : ", self)
+                //print("V&G_Project___<#name#> : ", self)
                 nItemsLabel.isHidden = true
                 durationLabel.isHidden = true
                 playlistNameLabel.isHidden = true

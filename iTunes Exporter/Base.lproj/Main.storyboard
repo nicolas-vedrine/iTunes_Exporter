@@ -706,30 +706,31 @@
         <scene sceneID="dxj-IG-rmK">
             <objects>
                 <viewController storyboardIdentifier="ExportController" id="6sS-KT-wY3" customClass="ExportController" customModule="iTunes_Exporter" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="n9F-XO-8jT" customClass="ExportFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="872" height="550"/>
+                    <view key="view" id="n9F-XO-8jT" customClass="ExportFormView" customModule="iTunes_Exporter" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="456"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView distribution="fillEqually" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SYP-w8-J6m">
-                                <rect key="frame" x="20" y="0.0" width="2424" height="408"/>
+                                <rect key="frame" x="10" y="10" width="780" height="436"/>
                                 <subviews>
                                     <box title="Export to:" translatesAutoresizingMaskIntoConstraints="NO" id="Ogg-q9-Ijn">
-                                        <rect key="frame" x="-3" y="235" width="2430" height="173"/>
+                                        <rect key="frame" x="-3" y="263" width="786" height="173"/>
                                         <view key="contentView" id="hsN-MW-2CH">
-                                            <rect key="frame" x="2" y="2" width="2426" height="156"/>
+                                            <rect key="frame" x="2" y="2" width="782" height="156"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehy-U5-A7S">
-                                                    <rect key="frame" x="0.0" y="0.0" width="2426" height="156"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="782" height="156"/>
                                                     <subviews>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="0Nb-BF-t0f" customClass="VGBrowsePathFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                                                            <rect key="frame" x="200" y="66" width="2026" height="80"/>
+                                                            <rect key="frame" x="141" y="66" width="500" height="80"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="80" id="XaE-fP-Uas"/>
+                                                                <constraint firstAttribute="height" constant="80" id="Hxn-Vv-3Wc"/>
+                                                                <constraint firstAttribute="width" constant="500" id="cSf-Yz-WXY"/>
                                                             </constraints>
                                                         </customView>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SpJ-Bh-dGi">
-                                                            <rect key="frame" x="-2" y="41" width="2430" height="17"/>
+                                                            <rect key="frame" x="-2" y="41" width="786" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="space required" id="pgp-VV-t5Z">
                                                                 <font key="font" usesAppearanceFont="YES"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -737,7 +738,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aum-iI-heK">
-                                                            <rect key="frame" x="-2" y="16" width="2430" height="17"/>
+                                                            <rect key="frame" x="-2" y="16" width="786" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="free space" id="V6I-yM-XOv">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -747,11 +748,9 @@
                                                     </subviews>
                                                     <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="10" bottom="16"/>
                                                     <constraints>
-                                                        <constraint firstItem="0Nb-BF-t0f" firstAttribute="top" secondItem="ehy-U5-A7S" secondAttribute="top" constant="10" id="Kpg-4b-DFQ"/>
-                                                        <constraint firstItem="0Nb-BF-t0f" firstAttribute="leading" secondItem="ehy-U5-A7S" secondAttribute="leading" constant="200" identifier="leading" id="QBT-uU-tPV"/>
-                                                        <constraint firstAttribute="trailing" secondItem="0Nb-BF-t0f" secondAttribute="trailing" constant="200" id="imw-zt-ya5"/>
-                                                        <constraint firstItem="SpJ-Bh-dGi" firstAttribute="centerX" secondItem="ehy-U5-A7S" secondAttribute="centerX" id="mew-GE-jMq"/>
-                                                        <constraint firstItem="aum-iI-heK" firstAttribute="centerX" secondItem="ehy-U5-A7S" secondAttribute="centerX" id="rRy-vb-4Bz"/>
+                                                        <constraint firstItem="aum-iI-heK" firstAttribute="centerX" secondItem="ehy-U5-A7S" secondAttribute="centerX" id="AnW-Yq-pM2"/>
+                                                        <constraint firstItem="0Nb-BF-t0f" firstAttribute="centerX" secondItem="ehy-U5-A7S" secondAttribute="centerX" id="DDv-fe-6rA"/>
+                                                        <constraint firstItem="SpJ-Bh-dGi" firstAttribute="centerX" secondItem="ehy-U5-A7S" secondAttribute="centerX" id="kdZ-Cq-c0S"/>
                                                     </constraints>
                                                     <visibilityPriorities>
                                                         <integer value="1000"/>
@@ -766,42 +765,41 @@
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="ehy-U5-A7S" secondAttribute="bottom" id="Fof-B6-I7R"/>
-                                                <constraint firstItem="ehy-U5-A7S" firstAttribute="top" secondItem="hsN-MW-2CH" secondAttribute="top" id="Rkc-kS-Csc"/>
-                                                <constraint firstAttribute="trailing" secondItem="ehy-U5-A7S" secondAttribute="trailing" id="YRW-YR-12X"/>
-                                                <constraint firstItem="ehy-U5-A7S" firstAttribute="leading" secondItem="hsN-MW-2CH" secondAttribute="leading" id="zYB-54-9co"/>
+                                                <constraint firstItem="ehy-U5-A7S" firstAttribute="leading" secondItem="hsN-MW-2CH" secondAttribute="leading" id="6xV-ME-06O"/>
+                                                <constraint firstItem="ehy-U5-A7S" firstAttribute="top" secondItem="hsN-MW-2CH" secondAttribute="top" id="WIQ-dU-Dt0"/>
+                                                <constraint firstAttribute="bottom" secondItem="ehy-U5-A7S" secondAttribute="bottom" id="skt-xZ-arM"/>
+                                                <constraint firstAttribute="trailing" secondItem="ehy-U5-A7S" secondAttribute="trailing" id="umT-eX-kfE"/>
                                             </constraints>
                                         </view>
                                     </box>
                                     <box title="File name format:" translatesAutoresizingMaskIntoConstraints="NO" id="chb-HY-nuC">
-                                        <rect key="frame" x="-3" y="46" width="2430" height="185"/>
+                                        <rect key="frame" x="-3" y="54" width="786" height="205"/>
                                         <view key="contentView" id="Zha-na-IVf">
-                                            <rect key="frame" x="2" y="2" width="2426" height="168"/>
+                                            <rect key="frame" x="2" y="2" width="782" height="188"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lSF-Q0-fA9">
-                                                    <rect key="frame" x="0.0" y="0.0" width="2426" height="168"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="782" height="188"/>
                                                     <subviews>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="oat-jS-znY" customClass="VGComboBoxFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                                                            <rect key="frame" x="200" y="88" width="2026" height="80"/>
+                                                            <rect key="frame" x="141" y="98" width="500" height="80"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="80" id="Fce-Zh-UhF"/>
+                                                                <constraint firstAttribute="width" constant="500" id="Mfc-WY-ImX"/>
+                                                                <constraint firstAttribute="height" constant="80" id="WzK-R9-BMr"/>
                                                             </constraints>
                                                         </customView>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="GbH-Mb-XnR" customClass="VGComboBoxFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                                                            <rect key="frame" x="200" y="0.0" width="2026" height="80"/>
+                                                            <rect key="frame" x="141" y="10" width="500" height="80"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="80" id="jeJ-D9-dJ5"/>
+                                                                <constraint firstAttribute="width" constant="500" id="JDK-Um-487"/>
+                                                                <constraint firstAttribute="height" constant="80" id="eeZ-x8-5if"/>
                                                             </constraints>
                                                         </customView>
                                                     </subviews>
+                                                    <edgeInsets key="edgeInsets" left="0.0" right="0.0" top="10" bottom="10"/>
                                                     <constraints>
-                                                        <constraint firstItem="oat-jS-znY" firstAttribute="leading" secondItem="lSF-Q0-fA9" secondAttribute="leading" constant="200" id="08t-C1-lZn"/>
-                                                        <constraint firstItem="oat-jS-znY" firstAttribute="top" secondItem="lSF-Q0-fA9" secondAttribute="top" id="KOL-LQ-huY"/>
-                                                        <constraint firstItem="GbH-Mb-XnR" firstAttribute="leading" secondItem="lSF-Q0-fA9" secondAttribute="leading" constant="200" id="oO1-G5-XSo"/>
-                                                        <constraint firstAttribute="bottom" secondItem="GbH-Mb-XnR" secondAttribute="bottom" id="qd8-kF-iSS"/>
-                                                        <constraint firstAttribute="trailing" secondItem="GbH-Mb-XnR" secondAttribute="trailing" constant="200" id="ufj-Sz-Exz"/>
-                                                        <constraint firstAttribute="trailing" secondItem="oat-jS-znY" secondAttribute="trailing" constant="200" id="xKX-Gf-3kt"/>
+                                                        <constraint firstItem="oat-jS-znY" firstAttribute="centerX" secondItem="lSF-Q0-fA9" secondAttribute="centerX" id="IKh-Uc-O4e"/>
+                                                        <constraint firstItem="GbH-Mb-XnR" firstAttribute="centerX" secondItem="lSF-Q0-fA9" secondAttribute="centerX" id="bpT-bz-sBB"/>
                                                     </constraints>
                                                     <visibilityPriorities>
                                                         <integer value="1000"/>
@@ -814,18 +812,18 @@
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="lSF-Q0-fA9" firstAttribute="leading" secondItem="Zha-na-IVf" secondAttribute="leading" id="GOl-VM-V7U"/>
-                                                <constraint firstItem="lSF-Q0-fA9" firstAttribute="top" secondItem="Zha-na-IVf" secondAttribute="top" id="bet-8P-Z5S"/>
-                                                <constraint firstAttribute="bottom" secondItem="lSF-Q0-fA9" secondAttribute="bottom" id="wCY-pF-5NL"/>
-                                                <constraint firstAttribute="trailing" secondItem="lSF-Q0-fA9" secondAttribute="trailing" id="wfp-y3-ef3"/>
+                                                <constraint firstAttribute="bottom" secondItem="lSF-Q0-fA9" secondAttribute="bottom" id="HG1-ZF-uOe"/>
+                                                <constraint firstItem="lSF-Q0-fA9" firstAttribute="top" secondItem="Zha-na-IVf" secondAttribute="top" id="bSd-g2-Zdt"/>
+                                                <constraint firstItem="lSF-Q0-fA9" firstAttribute="leading" secondItem="Zha-na-IVf" secondAttribute="leading" id="gEQ-Oc-Cnm"/>
+                                                <constraint firstAttribute="trailing" secondItem="lSF-Q0-fA9" secondAttribute="trailing" id="jWx-s6-fwb"/>
                                             </constraints>
                                         </view>
                                     </box>
                                     <stackView distribution="fillEqually" orientation="horizontal" alignment="centerY" spacing="80" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xD5-kP-ynN">
-                                        <rect key="frame" x="1012" y="0.0" width="400" height="50"/>
+                                        <rect key="frame" x="90" y="0.0" width="600" height="50"/>
                                         <subviews>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iaE-gQ-Wrn">
-                                                <rect key="frame" x="-6" y="8" width="172" height="32"/>
+                                                <rect key="frame" x="-6" y="8" width="272" height="32"/>
                                                 <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xr7-qf-HxH">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -838,7 +836,7 @@ Gw
                                                 </connections>
                                             </button>
                                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9fe-s3-vbt">
-                                                <rect key="frame" x="234" y="8" width="172" height="32"/>
+                                                <rect key="frame" x="334" y="8" width="272" height="32"/>
                                                 <buttonCell key="cell" type="push" title="Proceed" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gOD-Bs-3Ne">
                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="system"/>
@@ -849,8 +847,8 @@ Gw
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="9e3-ze-7yj"/>
-                                            <constraint firstAttribute="width" constant="400" id="yXx-Jx-h0n"/>
+                                            <constraint firstAttribute="width" constant="600" id="2Qb-V2-G9I"/>
+                                            <constraint firstAttribute="height" constant="50" id="idC-ce-McA"/>
                                         </constraints>
                                         <visibilityPriorities>
                                             <integer value="1000"/>
@@ -863,13 +861,13 @@ Gw
                                     </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Ogg-q9-Ijn" firstAttribute="leading" secondItem="SYP-w8-J6m" secondAttribute="leading" id="6cz-71-QWH"/>
-                                    <constraint firstAttribute="trailing" secondItem="chb-HY-nuC" secondAttribute="trailing" id="8AO-6t-teA"/>
-                                    <constraint firstItem="chb-HY-nuC" firstAttribute="leading" secondItem="SYP-w8-J6m" secondAttribute="leading" id="Utu-Cj-qXO"/>
-                                    <constraint firstItem="Ogg-q9-Ijn" firstAttribute="top" secondItem="SYP-w8-J6m" secondAttribute="top" id="dii-IB-zDW"/>
-                                    <constraint firstItem="xD5-kP-ynN" firstAttribute="centerX" secondItem="SYP-w8-J6m" secondAttribute="centerX" id="kqQ-vU-5hn"/>
-                                    <constraint firstItem="xD5-kP-ynN" firstAttribute="top" secondItem="chb-HY-nuC" secondAttribute="bottom" id="wQz-p8-5fK"/>
-                                    <constraint firstAttribute="trailing" secondItem="Ogg-q9-Ijn" secondAttribute="trailing" id="zvo-9C-Xnm"/>
+                                    <constraint firstItem="Ogg-q9-Ijn" firstAttribute="leading" secondItem="SYP-w8-J6m" secondAttribute="leading" id="9Eo-39-P6o"/>
+                                    <constraint firstItem="chb-HY-nuC" firstAttribute="leading" secondItem="SYP-w8-J6m" secondAttribute="leading" id="9zt-E2-eD3"/>
+                                    <constraint firstItem="xD5-kP-ynN" firstAttribute="centerX" secondItem="SYP-w8-J6m" secondAttribute="centerX" id="FHg-BW-ojG"/>
+                                    <constraint firstAttribute="trailing" secondItem="chb-HY-nuC" secondAttribute="trailing" id="Put-zj-qgF"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ogg-q9-Ijn" secondAttribute="trailing" id="cSn-h6-Zcw"/>
+                                    <constraint firstItem="chb-HY-nuC" firstAttribute="leading" secondItem="SYP-w8-J6m" secondAttribute="leading" id="fQm-zh-lAY"/>
+                                    <constraint firstAttribute="trailing" secondItem="chb-HY-nuC" secondAttribute="trailing" id="z68-y3-qlA"/>
                                 </constraints>
                                 <visibilityPriorities>
                                     <integer value="1000"/>
@@ -884,10 +882,10 @@ Gw
                             </stackView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="SYP-w8-J6m" firstAttribute="top" secondItem="n9F-XO-8jT" secondAttribute="top" constant="20" symbolic="YES" id="8Gy-Nd-8Ps"/>
-                            <constraint firstAttribute="trailing" secondItem="SYP-w8-J6m" secondAttribute="trailing" id="B3X-y9-hbi"/>
-                            <constraint firstItem="SYP-w8-J6m" firstAttribute="leading" secondItem="n9F-XO-8jT" secondAttribute="leading" constant="20" symbolic="YES" id="U0X-R2-5TI"/>
-                            <constraint firstAttribute="bottom" secondItem="SYP-w8-J6m" secondAttribute="bottom" id="v1I-vX-yRV"/>
+                            <constraint firstItem="SYP-w8-J6m" firstAttribute="top" secondItem="n9F-XO-8jT" secondAttribute="top" constant="10" id="eEZ-3k-ecT"/>
+                            <constraint firstAttribute="trailing" secondItem="SYP-w8-J6m" secondAttribute="trailing" constant="10" id="fCD-TW-Ml3"/>
+                            <constraint firstItem="SYP-w8-J6m" firstAttribute="leading" secondItem="n9F-XO-8jT" secondAttribute="leading" constant="10" id="k2I-Jb-Mvi"/>
+                            <constraint firstAttribute="bottom" secondItem="SYP-w8-J6m" secondAttribute="bottom" constant="10" id="wPa-Kk-ldK"/>
                         </constraints>
                     </view>
                     <connections>

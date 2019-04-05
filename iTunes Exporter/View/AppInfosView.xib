@@ -63,8 +63,11 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JKF-zx-Lda">
-                    <rect key="frame" x="326" y="8" width="41" height="17"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Label" id="1Fs-kP-6bg">
+                    <rect key="frame" x="44" y="8" width="604" height="17"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="600" id="P0x-DX-Lho"/>
+                    </constraints>
+                    <textFieldCell key="cell" lineBreakMode="truncatingMiddle" alignment="center" title="Label" id="1Fs-kP-6bg">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

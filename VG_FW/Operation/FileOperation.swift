@@ -8,13 +8,20 @@
 
 import Foundation
 
-class FileOperation: AsyncOperation {
+class FileOperation: VGOperation {
     
     let fileManager: FileManager
     let srcPath: String
     let dstPath: String
     var ifFileAlreadyExistsType: IfFileAlreadyExistsType
-    var error: Error?
+    
+    internal var theError: Error?
+    
+    var error: Error {
+        get {
+            return theError!
+        }
+    }
     
     init(fileManager: FileManager, srcPath: String, dstPath: String, ifFileAlreadyExistsType: IfFileAlreadyExistsType = IfFileAlreadyExistsType.overwrite) {
         self.fileManager = fileManager
@@ -27,15 +34,8 @@ class FileOperation: AsyncOperation {
         self.fileManager.delegate = self
     }
     
-    /*override func start() {
-        isExecuting = true
-        execute()
-        /*isExecuting = false
-        isFinished = true*/
-    }*/
-    
     override func main() {
-        print("V&G_FW___execute : ", self, srcPath, dstPath)
+        print("V&G_FW___main : ", self, srcPath, dstPath, isCancelled)
         
         if !isCancelled {
             let theDestinationPathURL: URL = URL(fileURLWithPath: dstPath)
@@ -52,26 +52,25 @@ class FileOperation: AsyncOperation {
                     _overwriteOnlyIfMostRecent()
                 case .keepBoth:
                     _keepBoth()
-                case .ask:
-                    print("V&G_FW___ask : ", self)
                 default:
                     _ignore()
                 }
             } else {
                 let isTheFolderExists: Bool = theDestinationFolderURL.isPathExists()
                 if isTheFolderExists {
-                    _copyFile()
+                    _copyItem(toPath: dstPath)
                 } else {
                     _createDirectory(atPath: theDestinationFolderStr)
-                    _copyFile()
+                    _copyItem(toPath: dstPath)
                 }
             }
         }
     }
     
-    private func _copyFile() {
+    private func _copyItem(toPath: String) {
         do {
-            try fileManager.copyItem(atPath: srcPath, toPath: dstPath)
+            try fileManager.copyItem(atPath: srcPath, toPath: toPath)
+            finish()
         } catch let error {
             print("V&G_FW____copyFileAtPath : ", error.localizedDescription)
         }
@@ -86,6 +85,7 @@ class FileOperation: AsyncOperation {
             try fileManager.createDirectory(atPath: theDestinationFolderStr, withIntermediateDirectories: true, attributes: nil)
         } catch let error {
             print("V&G_FW____createDirectory : ", error.localizedDescription)
+            finish()
         }
     }
     
@@ -111,16 +111,21 @@ class FileOperation: AsyncOperation {
         let theFileNameWithoutExtension: String = theDestinationPathURL.getFileNameWithoutExtension()
         let theFileNameExtension: String = theDestinationPathURL.getFileExtension()
         let theDestinationFolderStr: String = String(theDestinationPathStr.prefix(theDestinationPathStr.count - theFileName.count))
-        let theIndex: Int = theFileNameIndex
-        let theNewDestinationPathStr: String = theDestinationFolderStr + theFileNameWithoutExtension + " " + String(theIndex) + "." + theFileNameExtension
-        do {
+        let theNewDestinationPathStr: String = theDestinationFolderStr + theFileNameWithoutExtension + " (" + String(theFileNameIndex) + ")." + theFileNameExtension
+        let theNewDestinationPathUrl: URL = URL(fileURLWithPath: theNewDestinationPathStr)
+        if theNewDestinationPathUrl.isPathExists() {
+            _keepBoth(theFileNameIndex: theFileNameIndex + 1)
+        } else {
+            _copyItem(toPath: theNewDestinationPathStr)
+        }
+        /*do {
             print("V&G_FW____keepBoth : ", srcPath, theNewDestinationPathStr)
             try fileManager.copyItem(atPath: srcPath, toPath: "/" + theNewDestinationPathStr)
             finish()
         } catch let error {
             print("V&G_FW___keepBoth error : ", error.localizedDescription)
             _keepBoth(theFileNameIndex: theIndex + 1)
-        }
+        }*/
     }
     
     private func _ignore() {
@@ -134,16 +139,11 @@ class FileOperation: AsyncOperation {
         } catch let error {
             print("V&G_FW____replaceItemAtPath : ", error.localizedDescription)
         }
-        do {
-            try fileManager.copyItem(atPath: srcPath, toPath: dstPath)
-            finish()
-        } catch let error {
-            print("V&G_FW____replaceItemAtPath : ", error.localizedDescription)
-        }
+        _copyItem(toPath: dstPath)
     }
     
     override func cancel() {
-        // stop fileManager copy...
+        // TODO : stop fileManager copy...
         
         super.cancel()
     }
@@ -154,8 +154,8 @@ extension FileOperation: FileManagerDelegate {
     
     func fileManager(_ fileManager: FileManager, shouldProceedAfterError error: Error, copyingItemAt srcURL: URL, to dstURL: URL) -> Bool {
         print("V&G_FW___shouldProceedAfterError : ", self, error)
-        self.error = error
-        return false
+        self.theError = error
+        return true
     }
     
 }

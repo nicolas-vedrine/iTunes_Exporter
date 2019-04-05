@@ -26,6 +26,19 @@
 		8B7DC666221DEA15004856F7 /* ExportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC665221DEA15004856F7 /* ExportController.swift */; };
 		8B7DC668221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */; };
 		8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */; };
+		8BAE61E122527B07007C13FE /* VGBrowsePathFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61DA22527B07007C13FE /* VGBrowsePathFormView.swift */; };
+		8BAE61E222527B07007C13FE /* VGComboBoxFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAE61DB22527B07007C13FE /* VGComboBoxFormView.xib */; };
+		8BAE61E322527B07007C13FE /* VGBrowsePathFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAE61DC22527B07007C13FE /* VGBrowsePathFormView.xib */; };
+		8BAE61E422527B07007C13FE /* VGForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61DD22527B07007C13FE /* VGForm.swift */; };
+		8BAE61E522527B07007C13FE /* VGComboBoxFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61DE22527B07007C13FE /* VGComboBoxFormView.swift */; };
+		8BAE61E622527B07007C13FE /* VGTextInputFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAE61DF22527B07007C13FE /* VGTextInputFormView.xib */; };
+		8BAE61E722527B07007C13FE /* VGTextInputFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61E022527B07007C13FE /* VGTextInputFormView.swift */; };
+		8BAE61ED22527CE2007C13FE /* VGOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61E922527CE2007C13FE /* VGOperation.swift */; };
+		8BAE61EE22527CE2007C13FE /* FilesOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61EA22527CE2007C13FE /* FilesOperationQueue.swift */; };
+		8BAE61EF22527CE2007C13FE /* FileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61EB22527CE2007C13FE /* FileOperation.swift */; };
+		8BCDFC7F2257A251007E263A /* VGBaseTracksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCDFC7C2257A251007E263A /* VGBaseTracksListView.swift */; };
+		8BCDFC802257A251007E263A /* iTunesTracksListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BCDFC7D2257A251007E263A /* iTunesTracksListView.xib */; };
+		8BCDFC812257A251007E263A /* iTunesTracksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCDFC7E2257A251007E263A /* iTunesTracksListView.swift */; };
 		8BD228E02218BB2C00A7ABA3 /* VGBaseNSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD228DF2218BB2C00A7ABA3 /* VGBaseNSViewController.swift */; };
 		8BE2D75E21FA8A9900E12848 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D75D21FA8A9900E12848 /* AppDelegate.swift */; };
 		8BE2D76021FA8A9900E12848 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D75F21FA8A9900E12848 /* ViewController.swift */; };
@@ -36,16 +49,6 @@
 		8BE2D77421FB74F900E12848 /* iTunesObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77321FB74F900E12848 /* iTunesObjects.swift */; };
 		8BE2D77821FB751F00E12848 /* PlaylistImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */; };
 		8BE2D77921FB751F00E12848 /* PlaylistTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */; };
-		8BFDB40C22404369008E8FED /* VGBrowsePathFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40422404369008E8FED /* VGBrowsePathFormView.swift */; };
-		8BFDB40E22404369008E8FED /* VGComboBoxFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */; };
-		8BFDB40F22404369008E8FED /* VGComboBoxFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */; };
-		8BFDB41022404369008E8FED /* VGBrowsePathFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */; };
-		8BFDB41122404369008E8FED /* VGForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40922404369008E8FED /* VGForm.swift */; };
-		8BFDB41222404369008E8FED /* VGTextInputFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */; };
-		8BFDB41322404369008E8FED /* VGTextInputFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */; };
-		8BFDB418224043F5008E8FED /* FilesOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */; };
-		8BFDB419224043F5008E8FED /* FileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB416224043F5008E8FED /* FileOperation.swift */; };
-		8BFDB41A224043F5008E8FED /* AsyncOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB417224043F5008E8FED /* AsyncOperation.swift */; };
 		8BFDB41C2240444D008E8FED /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB41B2240444D008E8FED /* Types.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +73,19 @@
 		8B7DC665221DEA15004856F7 /* ExportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportController.swift; sourceTree = "<group>"; };
 		8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardSegueIdentifierExtension.swift; sourceTree = "<group>"; };
 		8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProjectViewController.swift; sourceTree = "<group>"; };
+		8BAE61DA22527B07007C13FE /* VGBrowsePathFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGBrowsePathFormView.swift; sourceTree = "<group>"; };
+		8BAE61DB22527B07007C13FE /* VGComboBoxFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGComboBoxFormView.xib; sourceTree = "<group>"; };
+		8BAE61DC22527B07007C13FE /* VGBrowsePathFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGBrowsePathFormView.xib; sourceTree = "<group>"; };
+		8BAE61DD22527B07007C13FE /* VGForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGForm.swift; sourceTree = "<group>"; };
+		8BAE61DE22527B07007C13FE /* VGComboBoxFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGComboBoxFormView.swift; sourceTree = "<group>"; };
+		8BAE61DF22527B07007C13FE /* VGTextInputFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGTextInputFormView.xib; sourceTree = "<group>"; };
+		8BAE61E022527B07007C13FE /* VGTextInputFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGTextInputFormView.swift; sourceTree = "<group>"; };
+		8BAE61E922527CE2007C13FE /* VGOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGOperation.swift; sourceTree = "<group>"; };
+		8BAE61EA22527CE2007C13FE /* FilesOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesOperationQueue.swift; sourceTree = "<group>"; };
+		8BAE61EB22527CE2007C13FE /* FileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileOperation.swift; sourceTree = "<group>"; };
+		8BCDFC7C2257A251007E263A /* VGBaseTracksListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGBaseTracksListView.swift; sourceTree = "<group>"; };
+		8BCDFC7D2257A251007E263A /* iTunesTracksListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iTunesTracksListView.xib; sourceTree = "<group>"; };
+		8BCDFC7E2257A251007E263A /* iTunesTracksListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesTracksListView.swift; sourceTree = "<group>"; };
 		8BD228DF2218BB2C00A7ABA3 /* VGBaseNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGBaseNSViewController.swift; sourceTree = "<group>"; };
 		8BE2D75A21FA8A9900E12848 /* iTunes Exporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iTunes Exporter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE2D75D21FA8A9900E12848 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -83,16 +99,6 @@
 		8BE2D77321FB74F900E12848 /* iTunesObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesObjects.swift; sourceTree = "<group>"; };
 		8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistImageCell.swift; sourceTree = "<group>"; };
 		8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistTableCellView.swift; sourceTree = "<group>"; };
-		8BFDB40422404369008E8FED /* VGBrowsePathFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGBrowsePathFormView.swift; sourceTree = "<group>"; };
-		8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGComboBoxFormView.swift; sourceTree = "<group>"; };
-		8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGComboBoxFormView.xib; sourceTree = "<group>"; };
-		8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGBrowsePathFormView.xib; sourceTree = "<group>"; };
-		8BFDB40922404369008E8FED /* VGForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGForm.swift; sourceTree = "<group>"; };
-		8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGTextInputFormView.swift; sourceTree = "<group>"; };
-		8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGTextInputFormView.xib; sourceTree = "<group>"; };
-		8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesOperationQueue.swift; sourceTree = "<group>"; };
-		8BFDB416224043F5008E8FED /* FileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileOperation.swift; sourceTree = "<group>"; };
-		8BFDB417224043F5008E8FED /* AsyncOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncOperation.swift; sourceTree = "<group>"; };
 		8BFDB41B2240444D008E8FED /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,7 +118,8 @@
 		8B3CCB35221B40EC00BD7EC1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				8BFDB40322404369008E8FED /* Form */,
+				8BCDFC7B2257A251007E263A /* List */,
+				8BAE61D922527B07007C13FE /* Form */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -149,10 +156,10 @@
 		8B43834A2215F9630040D2EB /* VG_FW */ = {
 			isa = PBXGroup;
 			children = (
-				8B6F3D7C2242F80700286C86 /* Model */,
 				8BD228DE2218BAF700A7ABA3 /* Controller */,
 				8B3CCB38221B5A3000BD7EC1 /* Data */,
-				8BFDB414224043F5008E8FED /* Operation */,
+				8B6F3D7C2242F80700286C86 /* Model */,
+				8BAE61E822527CE2007C13FE /* Operation */,
 				8BB254962208D0B20063C8B6 /* Utils */,
 				8B43834B2215F9700040D2EB /* View */,
 			);
@@ -193,6 +200,30 @@
 			path = base;
 			sourceTree = "<group>";
 		};
+		8BAE61D922527B07007C13FE /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				8BAE61DA22527B07007C13FE /* VGBrowsePathFormView.swift */,
+				8BAE61DC22527B07007C13FE /* VGBrowsePathFormView.xib */,
+				8BAE61DE22527B07007C13FE /* VGComboBoxFormView.swift */,
+				8BAE61DB22527B07007C13FE /* VGComboBoxFormView.xib */,
+				8BAE61DD22527B07007C13FE /* VGForm.swift */,
+				8BAE61E022527B07007C13FE /* VGTextInputFormView.swift */,
+				8BAE61DF22527B07007C13FE /* VGTextInputFormView.xib */,
+			);
+			path = Form;
+			sourceTree = "<group>";
+		};
+		8BAE61E822527CE2007C13FE /* Operation */ = {
+			isa = PBXGroup;
+			children = (
+				8BAE61E922527CE2007C13FE /* VGOperation.swift */,
+				8BAE61EA22527CE2007C13FE /* FilesOperationQueue.swift */,
+				8BAE61EB22527CE2007C13FE /* FileOperation.swift */,
+			);
+			path = Operation;
+			sourceTree = "<group>";
+		};
 		8BB2549522049E250063C8B6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -209,6 +240,16 @@
 				8BFDB41B2240444D008E8FED /* Types.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		8BCDFC7B2257A251007E263A /* List */ = {
+			isa = PBXGroup;
+			children = (
+				8BCDFC7C2257A251007E263A /* VGBaseTracksListView.swift */,
+				8BCDFC7D2257A251007E263A /* iTunesTracksListView.xib */,
+				8BCDFC7E2257A251007E263A /* iTunesTracksListView.swift */,
+			);
+			path = List;
 			sourceTree = "<group>";
 		};
 		8BD228DE2218BAF700A7ABA3 /* Controller */ = {
@@ -287,30 +328,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		8BFDB40322404369008E8FED /* Form */ = {
-			isa = PBXGroup;
-			children = (
-				8BFDB40622404369008E8FED /* VGComboBoxFormView.swift */,
-				8BFDB40722404369008E8FED /* VGComboBoxFormView.xib */,
-				8BFDB40A22404369008E8FED /* VGTextInputFormView.swift */,
-				8BFDB40B22404369008E8FED /* VGTextInputFormView.xib */,
-				8BFDB40422404369008E8FED /* VGBrowsePathFormView.swift */,
-				8BFDB40822404369008E8FED /* VGBrowsePathFormView.xib */,
-				8BFDB40922404369008E8FED /* VGForm.swift */,
-			);
-			path = Form;
-			sourceTree = "<group>";
-		};
-		8BFDB414224043F5008E8FED /* Operation */ = {
-			isa = PBXGroup;
-			children = (
-				8BFDB415224043F5008E8FED /* FilesOperationQueue.swift */,
-				8BFDB416224043F5008E8FED /* FileOperation.swift */,
-				8BFDB417224043F5008E8FED /* AsyncOperation.swift */,
-			);
-			path = Operation;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -374,12 +391,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BFDB40F22404369008E8FED /* VGComboBoxFormView.xib in Resources */,
+				8BCDFC802257A251007E263A /* iTunesTracksListView.xib in Resources */,
+				8BAE61E622527B07007C13FE /* VGTextInputFormView.xib in Resources */,
 				8B0DD5DA2215C14300146683 /* TrackListView.xib in Resources */,
-				8BFDB41022404369008E8FED /* VGBrowsePathFormView.xib in Resources */,
 				8B3CCB32221B159800BD7EC1 /* AppInfosView.xib in Resources */,
+				8BAE61E322527B07007C13FE /* VGBrowsePathFormView.xib in Resources */,
+				8BAE61E222527B07007C13FE /* VGComboBoxFormView.xib in Resources */,
 				8BE2D76221FA8A9B00E12848 /* Assets.xcassets in Resources */,
-				8BFDB41322404369008E8FED /* VGTextInputFormView.xib in Resources */,
 				8BE2D76521FA8A9B00E12848 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,36 +409,38 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BFDB41222404369008E8FED /* VGTextInputFormView.swift in Sources */,
 				8B7DC668221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift in Sources */,
 				8BFDB41C2240444D008E8FED /* Types.swift in Sources */,
+				8BAE61E122527B07007C13FE /* VGBrowsePathFormView.swift in Sources */,
+				8BCDFC812257A251007E263A /* iTunesTracksListView.swift in Sources */,
+				8BAE61ED22527CE2007C13FE /* VGOperation.swift in Sources */,
 				8B0DD5DC2215C1A400146683 /* TrackListView.swift in Sources */,
 				8B43834D2215FA490040D2EB /* VGBaseNSView.swift in Sources */,
 				8BE2D77821FB751F00E12848 /* PlaylistImageCell.swift in Sources */,
+				8BAE61EE22527CE2007C13FE /* FilesOperationQueue.swift in Sources */,
 				8BD228E02218BB2C00A7ABA3 /* VGBaseNSViewController.swift in Sources */,
 				8B5084212240519A001A9A6D /* ExportFormView.swift in Sources */,
 				8B0DD5D42214EA6200146683 /* TopBarView.swift in Sources */,
 				8BE2D77421FB74F900E12848 /* iTunesObjects.swift in Sources */,
+				8BCDFC7F2257A251007E263A /* VGBaseTracksListView.swift in Sources */,
 				8B6F3D7E2242F87C00286C86 /* DataSources.swift in Sources */,
-				8BFDB418224043F5008E8FED /* FilesOperationQueue.swift in Sources */,
-				8BFDB40E22404369008E8FED /* VGComboBoxFormView.swift in Sources */,
 				8B506E6A221C575C006882F0 /* UInt64ValueTransformer.swift in Sources */,
 				8B7DC666221DEA15004856F7 /* ExportController.swift in Sources */,
-				8BFDB41122404369008E8FED /* VGForm.swift in Sources */,
 				8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */,
 				8BE2D76021FA8A9900E12848 /* ViewController.swift in Sources */,
 				8B3CCB37221B418500BD7EC1 /* NSSearchFieldFilterCell.swift in Sources */,
 				8BE2D77921FB751F00E12848 /* PlaylistTableCellView.swift in Sources */,
-				8BFDB40C22404369008E8FED /* VGBrowsePathFormView.swift in Sources */,
+				8BAE61E522527B07007C13FE /* VGComboBoxFormView.swift in Sources */,
+				8BAE61E722527B07007C13FE /* VGTextInputFormView.swift in Sources */,
+				8BAE61EF22527CE2007C13FE /* FileOperation.swift in Sources */,
 				8B3CCB3B221B5AA300BD7EC1 /* DurationValueTransformer.swift in Sources */,
-				8BFDB419224043F5008E8FED /* FileOperation.swift in Sources */,
 				8B3CCB34221B15AA00BD7EC1 /* AppInfosView.swift in Sources */,
 				8B43835322175ECB0040D2EB /* NotificationNameExtension.swift in Sources */,
 				8BE2D75E21FA8A9900E12848 /* AppDelegate.swift in Sources */,
 				8B3CCB3E221B756600BD7EC1 /* TrackListCell.swift in Sources */,
 				8B43835122160C7D0040D2EB /* VGLoadableNib.swift in Sources */,
 				8B6F3D802244191900286C86 /* ExportButton.swift in Sources */,
-				8BFDB41A224043F5008E8FED /* AsyncOperation.swift in Sources */,
+				8BAE61E422527B07007C13FE /* VGForm.swift in Sources */,
 				8BE2D77121FB74EA00E12848 /* iTunesBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

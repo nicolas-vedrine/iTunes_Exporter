@@ -60,14 +60,7 @@ class Playlist: NSObject {
     
     var tracks: [Track] {
         get {
-            var theTracks: [Track] = [Track]()
-            let theITTracks: [ITLibMediaItem] = theITPlaylist.items
-            let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: ITSortKind.artistAndThenAlbum)})
-            for theITTrack in theITTracksSorted {
-                let theTrack: Track = Track(theITTrack: theITTrack)
-                theTracks.append(theTrack)
-            }
-            return theTracks
+            return iTunesModel.getTracksFromITTracks(theITTracks: theITPlaylist.items)
         }
     }
     
@@ -151,20 +144,19 @@ class Track: NSObject {
     @objc dynamic var duration: Int = 0
     @objc dynamic var size: UInt64 = 0
     @objc dynamic var location: URL?
-    private(set) var theITTrack: ITLibMediaItem
+    //private(set) var theITTrack: ITLibMediaItem
     
     init(theITTrack: ITLibMediaItem) {
-        if let theArtistName = theITTrack.artist?.name {
-            self.artist = theArtistName
-        }
+        self.artist = iTunesModel.getArtistName(theITTrack: theITTrack)
+        self.artist = ""
         self.name = theITTrack.title
         if let theAlbumName = theITTrack.album.title {
             self.album = theAlbumName
         }
-        self.duration = theITTrack.totalTime
-        self.size = theITTrack.fileSize
+        //self.duration = theITTrack.totalTime
+        //self.size = theITTrack.fileSize
         self.location = theITTrack.location
-        self.theITTrack = theITTrack
+        //self.theITTrack = theITTrack
     }
     
 }
@@ -327,7 +319,8 @@ class iTunesModel {
                     theArtists.append(theArtist)
                 }
                 
-                NotificationCenter.default.post(name: .ARTIST_TREE_LOADING, object: ArtistTreeObject(track: theTrack, current: i + 1, total: theLenght))
+                let theCurrent: Int = i + 1
+                //NotificationCenter.default.post(name: .ARTIST_TREE_LOADING, object: ArtistTreeObject(track: theTrack, current: theCurrent, total: theLenght))
         }
         
         return theArtists
@@ -344,7 +337,7 @@ class iTunesModel {
     public static func getArtistName(theITTrack: ITLibMediaItem) -> String {
         var theArtistName: String = ""
         if let theITArtistName = theITTrack.artist?.name {
-            theArtistName = theITArtistName
+            theArtistName = theITArtistName.replacingHTMLEntities!
         }
         return theArtistName
     }
@@ -456,9 +449,44 @@ class iTunesModel {
         case .trackNameArtistNameAlbumName:
             theFormattedTrackName = theTrackName + theSeparator + theArtistName + theSeparator + theAlbumTitle
         default:
-            print("V&G_Project___<#name#> : ", self)
+            print("V&G_Project___getFormattedTrackName : ", self)
         }
         return theFormattedTrackName
+    }
+    
+    static func getDestinationPattern(theTrack: Track, fileNameType: iTunesExportFileNameType) -> String {
+        var theDestinationPattern: String = ""
+        let theFileName: String = (theTrack.location?.getName())!
+        let theAlbumName = theTrack.album
+        //let theAlbumName = "album_name"
+        let theArtistName = theTrack.artist
+        //let theArtistName = "artist_name"
+        switch fileNameType {
+        case iTunesExportFileNameType.fileName:
+            theDestinationPattern = theFileName
+        case iTunesExportFileNameType.albumSlashFileName:
+            theDestinationPattern = theAlbumName + "/" + theFileName
+        case iTunesExportFileNameType.artistSepAlbumSlashFileName:
+            theDestinationPattern = theArtistName + " - " + theAlbumName + "/" + theFileName
+        case iTunesExportFileNameType.artistSlashAlbumSlashFileName:
+            theDestinationPattern = theArtistName + "/" + theAlbumName + "/" + theFileName
+        case iTunesExportFileNameType.artistSlashFileName:
+            theDestinationPattern = theArtistName + "/" + theFileName
+        }
+        return theDestinationPattern
+    }
+    
+    static func getTracksFromITTracks(theITTracks: [ITLibMediaItem], theITSortKind: ITSortKind = ITSortKind.artistAndThenAlbum) -> [Track] {
+        var theTracks: [Track] = [Track]()
+        let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
+        let theCount = theITTracksSorted.count - 1
+        for i in 0...theCount {
+            let theITTrack = theITTracksSorted[i]
+            let theTrack: Track = Track(theITTrack: theITTrack)
+            theTracks.append(theTrack)
+            print("V&G_FW___getTracksFromITTracks : ", i, theCount)
+        }
+        return theTracks
     }
     
     /*
@@ -501,6 +529,14 @@ struct StatutInfos {
     var count: Int = 0
     var duration: Int = 0
     var size: UInt64 = 0
+}
+
+enum iTunesExportFileNameType: String {
+    case fileName = "file_name"
+    case artistSepAlbumSlashFileName = "artist-album/file_name"
+    case artistSlashAlbumSlashFileName = "<artist>/<album>/<file_name>"
+    case albumSlashFileName = "<album>/<file name>"
+    case artistSlashFileName = "<artist>/<file name>"
 }
 
 

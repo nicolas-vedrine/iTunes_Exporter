@@ -8,14 +8,25 @@
 
 import Foundation
 
-class CopyFilesOperationQueue: OperationQueue {
+class VGOperationQueue: OperationQueue {
     
     var count: Int = 0
+    var isCancelled: Bool = false
     
     override func addOperation(_ op: Operation) {
         super.addOperation(op)
         
         count = operations.count
     }
+    
+    override func cancelAllOperations() {
+        super.cancelAllOperations()
+        
+        isCancelled = true
+    }
+    
+}
+
+class FileOperationQueue: VGOperationQueue {
     
 }

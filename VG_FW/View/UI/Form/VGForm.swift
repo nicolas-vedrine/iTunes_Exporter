@@ -141,15 +141,16 @@ protocol VGFormViewDelegate {
     
     var defaultButton: NSButton {
         set {
-            self.theDefaultButton = newValue
-            //self._defaultButton?.targe
+            theDefaultButton = newValue
+            theDefaultButton.target = self
+            theDefaultButton.action = #selector(self.check)
         }
         get {
             return self.theDefaultButton!
         }
     }
     
-    func check() {
+    @objc func check() {
         self.isValid = true
         var theData: [String: Any] = [String : Any]()
         
@@ -194,7 +195,9 @@ protocol VGFormViewDelegate {
         if self.isValid! {
             print("V&G_FW___check : ", self, value)
             value = theData
-            delegate.validatedForm(form: self, value: theData)
+            if delegate != nil {
+                delegate.validatedForm(form: self, value: theData)
+            }
             if isAutoClear {
                 clear()
             }
@@ -202,7 +205,9 @@ protocol VGFormViewDelegate {
                 theDefaultButton.isEnabled = false
             }
         } else {
-            delegate.invalidatedForm(form: self, errorFormItems: errorFormItems)
+            if delegate != nil {
+                delegate.invalidatedForm(form: self, errorFormItems: errorFormItems)
+            }
             for formItem: VGBaseFormItem in theFormItems.values {
                 print("V&G_FW___check :: error with : ", self, formItem.code)
             }
@@ -247,6 +252,8 @@ protocol VGFormViewDelegate {
         
         if componentForm is VGBaseComponentFormView {
             let componentFormView: VGBaseComponentFormView = componentForm as! VGBaseComponentFormView
+            componentFormView.code = code
+            componentFormView.initValue()
             componentFormView.paddingRight = thePaddingRight
             componentFormView.paddingLeft = thePaddingLeft
             componentFormView.gap = theGap
@@ -286,9 +293,10 @@ protocol VGFormViewDelegate {
 
 @IBDesignable class VGBaseComponentFormView:VGBaseNSView, VGFormProtocol {
     
-    var value: Any?
+    //var value: Any?
     var isValid: Bool?
     
+    internal var theValue: Any?
     internal var theLabel: NSTextField?
     internal var theCurrentState: VGComponentFormState?
     internal var theValidationMode: VGFormValidationMode?
@@ -297,6 +305,8 @@ protocol VGFormViewDelegate {
     internal var theGap: CGFloat = 5.0
     internal var theGapConstraints: [NSLayoutConstraint] = [NSLayoutConstraint]()
     internal var theBox: NSBox?
+    internal var theCode: String?
+    internal var isSetUserDefaultsValue: Bool = false
     
     internal func initBounds(isVisible: Bool = true) {
         wantsLayer = true
@@ -307,6 +317,103 @@ protocol VGFormViewDelegate {
         
         theBox!.contentView!.wantsLayer = true
         theBox!.contentView!.layer?.masksToBounds = false
+    }
+    
+    internal func initValue() {
+        if let myCode = theCode {
+            let userDefaults = UserDefaults.standard
+            //let defaultValue = userDefaults.object(forKey: myCode)
+            //print("V&G_FW___initValue : ", defaultValue)
+            if let defaultValue = userDefaults.object(forKey: myCode) {
+                if !isSetUserDefaultsValue {
+                    userDefaults.removeObject(forKey: myCode)
+                    return
+                }
+                
+                let typeOf = type(of: defaultValue)
+                let obj: AnyObject = defaultValue as AnyObject
+                print("V&G_FW___initValue : ", self, typeOf, defaultValue)
+                //print("V&G_FW___initValue : ", self, obj is NSNumber)
+                //value = defaultValue
+                /*if defaultValue is Array<Any> {
+                    value = userDefaults.array(forKey: myCode)
+                } else if defaultValue is Dictionary<String, Any> {
+                    value = userDefaults.dictionary(forKey: myCode)
+                } else if defaultValue is String {
+                    let str: String = defaultValue as! String
+                    if str.contains("://") {
+                        value = userDefaults.url(forKey: myCode)
+                    } else {
+                        value = userDefaults.string(forKey: myCode)
+                    }
+                } else if defaultValue is Data {
+                    value = userDefaults.data(forKey: myCode)
+                } else if defaultValue is Bool {
+                    value = userDefaults.bool(forKey: myCode)
+                } else if defaultValue is Int {
+                    value = userDefaults.integer(forKey: myCode)
+                } else if defaultValue is Float {
+                    value = userDefaults.float(forKey: myCode)
+                } else if defaultValue is Double {
+                    value = userDefaults.double(forKey: myCode)
+                } else if defaultValue is URL {
+                    value = userDefaults.url(forKey: myCode)
+                } else if defaultValue is NSNumber {
+                    value = userDefaults.integer(forKey: myCode)
+                }*/
+                
+                if obj is NSNumber {
+                    value = userDefaults.integer(forKey: myCode)
+                } else if obj is NSString {
+                    let str: String = obj as! String
+                    if str.contains("://") {
+                        value = userDefaults.url(forKey: myCode)
+                    } else {
+                        value = userDefaults.string(forKey: myCode)
+                    }
+                }
+            }
+        }
+    }
+    
+    var value: Any? {
+        set {
+            theValue = newValue
+            if isSetUserDefaultsValue {
+                let userDefaults = UserDefaults.standard
+                let theType = type(of: theValue)
+                print("V&G_FW___value : ", self, theType)
+                if let myCode = theCode {
+                    if theValue is Array<Any> {
+                        userDefaults.set(theValue as! Array<Any>, forKey: myCode)
+                    } else if theValue is Dictionary<String, Any> {
+                        userDefaults.set(theValue as! Dictionary<String, Any>, forKey: myCode)
+                    } else if theValue is String {
+                        userDefaults.set(theValue as! String, forKey: myCode)
+                    } else if theValue is Data {
+                        userDefaults.set(theValue as! Data, forKey: myCode)
+                    } else if theValue is Bool {
+                        userDefaults.set(theValue as! Bool, forKey: myCode)
+                    } else if theValue is Int {
+                        userDefaults.set(theValue as! Int, forKey: myCode)
+                    } else if theValue is Float {
+                        userDefaults.set(theValue as! Float, forKey: myCode)
+                    } else if theValue is Double {
+                        userDefaults.set(theValue as! Double, forKey: myCode)
+                    } else if theValue is URL {
+                        let theURL: URL = theValue as! URL
+                        userDefaults.set(theURL, forKey: myCode)
+                    } /*else {
+                        let theObj: Any = theValue as Any
+                        userDefaults.set(theObj, forKey: myCode)
+                    }*/
+                }
+                print("V&G_FW___value : ", self, theValue)
+            }
+        }
+        get {
+            return theValue
+        }
     }
     
     var paddingRight: CGFloat {
@@ -353,16 +460,25 @@ protocol VGFormViewDelegate {
             self.theValidationMode = newValue
         }
         get {
-            if let theValidationModeTest = theValidationMode {
+            if theValidationMode != nil {
                 return self.theValidationMode!
             }
             return nil
         }
     }
     
+    var code: String {
+        set {
+            theCode = newValue
+        }
+        get {
+            return theCode!
+        }
+    }
+    
     var currentState: VGComponentFormState? {
         get {
-            if let theCurrentStateTest = theCurrentState {
+            if theCurrentState != nil {
                 return self.theCurrentState!
             }
             return nil
@@ -640,7 +756,7 @@ class TextComponentGroupFromView: GroupFormView {
     
 }
 
-struct VGBaseDataFormStruct {
+class VGBaseDataForm: NSObject {
     
     let label: String
     let data: Any?

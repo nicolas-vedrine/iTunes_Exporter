@@ -33,6 +33,17 @@ extension String {
         return date
     }
     
+    var replacingHTMLEntities: String? {
+        do {
+            return try NSAttributedString(data: Data(utf8), options: [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue
+                ], documentAttributes: nil).string
+        } catch {
+            return nil
+        }
+    }
+    
 }
 
 extension UInt64 {
@@ -295,7 +306,7 @@ extension URL {
     
     func getName() -> String? {
         let thePathComponents: [String] = self.pathComponents
-        print("V&G_FW___getName : ", self, thePathComponents)
+        //print("V&G_FW___getName : ", self, thePathComponents)
         if thePathComponents.count > 0 {
             let theName = thePathComponents[thePathComponents.count - 1]
             return theName

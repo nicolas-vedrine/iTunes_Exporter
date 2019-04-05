@@ -48,21 +48,21 @@ import Cocoa
         comboBox.isEditable = false
     }
     
-    var dataSource: [VGBaseDataFormStruct] {
+    var dataSource: [VGBaseDataForm] {
         set {
             theDataSource = NSMutableArray(array: newValue)
             comboBox.usesDataSource = true
             comboBox.delegate = self
         }
         get {
-            return theDataSource!.copy() as! [VGBaseDataFormStruct]
+            return theDataSource!.copy() as! [VGBaseDataForm]
         }
     }
     
     override var value: Any? {
         get {
             let theIndex: Int = comboBox.indexOfSelectedItem
-            if theIndex > -1, let theItem: VGBaseDataFormStruct = theDataSource![theIndex] as? VGBaseDataFormStruct {
+            if theIndex > -1, let theItem: VGBaseDataForm = theDataSource![theIndex] as? VGBaseDataForm {
                 return theItem.data
             } else {
                 return nil
@@ -73,10 +73,19 @@ import Cocoa
                 if comboBox.dataSource == nil {
                     setComboBox()
                 }
-                let theDataFormStruct: VGBaseDataFormStruct = newValue as! VGBaseDataFormStruct
-                let theIndex: Int = dataSource.index(where: {$0.label == theDataFormStruct.label})!
-                comboBox.selectItem(at: theIndex)
-                super.value = theDataFormStruct.data
+                var theDataFormStruct: VGBaseDataForm
+                var theIndex: Int
+                if newValue is VGBaseDataForm {
+                    theDataFormStruct = newValue as! VGBaseDataForm
+                    theIndex = dataSource.index(where: {$0.label == theDataFormStruct.label})!
+                    comboBox.selectItem(at: theIndex)
+                    super.value = theIndex
+                } else if newValue is Int {
+                    theIndex = newValue as! Int
+                    theDataFormStruct = theDataSource![theIndex] as! VGBaseDataForm
+                    comboBox.selectItem(at: theIndex)
+                    super.value = theIndex
+                }
                 print("V&G_FW___value : ", self, value)
             } else {
                 if comboBox.indexOfSelectedItem > -1 {
@@ -95,7 +104,7 @@ extension VGComboBoxFormView: NSComboBoxDelegate, NSComboBoxDataSource {
     }
     
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        let theItem = theDataSource![index] as? VGBaseDataFormStruct
+        let theItem = theDataSource![index] as? VGBaseDataForm
         return theItem!.label
     }
     
@@ -103,6 +112,16 @@ extension VGComboBoxFormView: NSComboBoxDelegate, NSComboBoxDataSource {
         let theComboBox: NSComboBox = notification.object as! NSComboBox
         if theComboBox == comboBox && theComboBox.dataSource == nil  {
             setComboBox()
+        }
+    }
+    
+    func comboBoxSelectionDidChange(_ notification: Notification) {
+        let cbo: NSComboBox = notification.object as! NSComboBox
+        if cbo == comboBox {
+            let theIndex: Int = comboBox.indexOfSelectedItem
+            if theIndex > -1, let theItem: VGBaseDataForm = theDataSource![theIndex] as? VGBaseDataForm {
+                super.value = theIndex
+            }
         }
     }
     

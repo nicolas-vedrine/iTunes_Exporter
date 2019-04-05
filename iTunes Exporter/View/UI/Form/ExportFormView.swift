@@ -13,3 +13,9 @@ class ExportFormView: VGFormView {
     
     
 }
+
+enum FormItemCode: String {
+    case exportTo = "exportTo"
+    case fileName = "fileName"
+    case ifAlreadyExists = "ifAlreadyExists"
+}

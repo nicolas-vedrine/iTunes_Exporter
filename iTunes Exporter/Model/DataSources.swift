@@ -10,44 +10,44 @@ import Foundation
 
 class DataSources {
     
-    static func getFileNameDataSource() -> [VGBaseDataFormStruct] {
-        var theDataSource: [VGBaseDataFormStruct] = [VGBaseDataFormStruct]()
+    static func getFileNameDataSource() -> [VGBaseDataForm] {
+        var theDataSource: [VGBaseDataForm] = [VGBaseDataForm]()
         
-        let fileName = VGBaseDataFormStruct(label: "<nom de fichier>", data: FileNameType.fileName)
+        let fileName = VGBaseDataForm(label: "<nom de fichier>", data: iTunesExportFileNameType.fileName)
         theDataSource.append(fileName)
         
-        let artistSepAlbumSlashFileName = VGBaseDataFormStruct(label: "<artist> - <album> / <file name>", data: FileNameType.artistSepAlbumSlashFileName)
+        let artistSepAlbumSlashFileName = VGBaseDataForm(label: "<artist> - <album> / <file name>", data: iTunesExportFileNameType.artistSepAlbumSlashFileName)
         theDataSource.append(artistSepAlbumSlashFileName)
         
-        let artistSlashAlbumSlashFileName = VGBaseDataFormStruct(label: "<artist> / <album> / <file name>", data: FileNameType.artistSlashAlbumSlashFileName)
+        let artistSlashAlbumSlashFileName = VGBaseDataForm(label: "<artist> / <album> / <file name>", data: iTunesExportFileNameType.artistSlashAlbumSlashFileName)
         theDataSource.append(artistSlashAlbumSlashFileName)
         
-        let albumSlashFileName = VGBaseDataFormStruct(label: "<album> / <file name>", data: FileNameType.albumSlashFileName)
+        let albumSlashFileName = VGBaseDataForm(label: "<album> / <file name>", data: iTunesExportFileNameType.albumSlashFileName)
         theDataSource.append(albumSlashFileName)
         
-        let artistSlashFileName = VGBaseDataFormStruct(label: "<artist> / <file name>", data: FileNameType.artistSlashFileName)
+        let artistSlashFileName = VGBaseDataForm(label: "<artist> / <file name>", data: iTunesExportFileNameType.artistSlashFileName)
         theDataSource.append(artistSlashFileName)
         
         return theDataSource
     }
     
-    static func getIfAlreadyExistsDataSource() -> [VGBaseDataFormStruct] {
-        var theDataSource = [VGBaseDataFormStruct]()
+    static func getIfAlreadyExistsDataSource() -> [VGBaseDataForm] {
+        var theDataSource = [VGBaseDataForm]()
         
-        let overwrite = VGBaseDataFormStruct(label: "overwrite", data: IfFileAlreadyExistsType.overwrite)
+        let overwrite = VGBaseDataForm(label: "overwrite", data: IfFileAlreadyExistsType.overwrite)
         theDataSource.append(overwrite)
         
-        let overwriteOnlyIfMostRecent = VGBaseDataFormStruct(label: "overwrite if most recent", data: IfFileAlreadyExistsType.overwriteOnlyIfMostRecent)
+        let overwriteOnlyIfMostRecent = VGBaseDataForm(label: "overwrite if most recent", data: IfFileAlreadyExistsType.overwriteOnlyIfMostRecent)
         theDataSource.append(overwriteOnlyIfMostRecent)
         
-        let ignore = VGBaseDataFormStruct(label: "ignore", data: IfFileAlreadyExistsType.ignore)
+        let ignore = VGBaseDataForm(label: "ignore", data: IfFileAlreadyExistsType.ignore)
         theDataSource.append(ignore)
         
-        let keepBoth = VGBaseDataFormStruct(label: "keep both", data: IfFileAlreadyExistsType.keepBoth)
+        let keepBoth = VGBaseDataForm(label: "keep both", data: IfFileAlreadyExistsType.keepBoth)
         theDataSource.append(keepBoth)
         
-        let ask = VGBaseDataFormStruct(label: "ask...", data: IfFileAlreadyExistsType.ask)
-        theDataSource.append(ask)
+        /*let ask = VGBaseDataForm(label: "ask...", data: IfFileAlreadyExistsType.ask)
+        theDataSource.append(ask)*/
         
         return theDataSource
     }

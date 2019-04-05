@@ -26,6 +26,8 @@ import Cocoa
     var browsePathFormStyle: VGBrowsePathFormStyle = VGBrowsePathFormStyle.short
     
     var delegate: VGBrowsePathFormViewDelegate!
+    
+    var allowsMultipleSelection: Bool = false
     var multipleText: String = "Multiple selection... Roll over for more details."
     
     override func draw(_ dirtyRect: NSRect) {
@@ -50,6 +52,7 @@ import Cocoa
         theGapConstraints.append(gapConstraint1)
         theGapConstraints.append(gapConstraint2)
         
+        isSetUserDefaultsValue = true
         initBounds()
         validate()
     }
@@ -57,8 +60,22 @@ import Cocoa
     override var value: Any? {
         set {
             if newValue != nil {
-                thePathsBrowsed = newValue as! [URL]
+                if newValue is URL {
+                    thePathsBrowsed = [URL]()
+                    let theURL: URL = newValue as! URL
+                    thePathsBrowsed?.append(theURL)
+                } else if newValue is [URL] {
+                    thePathsBrowsed = newValue as! [URL]
+                } else if newValue is String {
+                    thePathsBrowsed = [URL]()
+                    let theURL: URL = URL(fileURLWithPath: newValue as! String)
+                    thePathsBrowsed?.append(theURL)
+                } else {
+                    fatalError("newValue of VGBrowsePathFormView must be [URL] or URL")
+                    return
+                }
                 _setInfos()
+                super.value = newValue
             } else {
                 if thePathsBrowsed != nil {
                     thePathsBrowsed = [URL]()
@@ -68,20 +85,39 @@ import Cocoa
         }
         get {
             if thePathsBrowsed != nil && (thePathsBrowsed?.count)! > 0 {
-                return thePathsBrowsed
+                if allowsMultipleSelection {
+                    return thePathsBrowsed
+                } else {
+                    return thePathsBrowsed![0]
+                }
             }
             return nil
         }
     }
     
-    var freeSpace: UInt64? {
+    var URLFreeSpace: Int64? {
         get {
-            if (thePathsBrowsed?.count)! == 1 {
-                let theFreeSpace: UInt64 = UInt64(FileManager.getFreeSpace(thePath: thePathsBrowsed![0])!)
-                return theFreeSpace
+            if let theValue = value {
+                if theValue is URL {
+                    let theValueURL: URL = theValue as! URL
+                    return FileManager.getFreeSpace(thePath: theValueURL)
+                }
             }
             return nil
         }
+    }
+    
+    func getFolderContent(fileManager: FileManager = FileManager.default) -> [URL] {
+        var theFilesList = [URL]()
+        let theURL: URL = value as! URL
+        let thePath: String = theURL.path
+        let en=fileManager.enumerator(atPath: thePath)
+        
+        while let element = en?.nextObject() as? String {
+            let theItemURL: URL = URL(fileURLWithPath: thePath + "/" + element)
+            theFilesList.append(theItemURL)
+        }
+        return theFilesList
     }
     
     private func _setInfos() {
@@ -116,7 +152,9 @@ import Cocoa
     }
     
     func browse() {
-        delegate.browse(browsePathFormView: self)
+        if delegate != nil {
+            delegate.browse(browsePathFormView: self)
+        }
     }
     
 }

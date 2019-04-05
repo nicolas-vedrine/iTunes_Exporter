@@ -6,7 +6,7 @@
 //  Copyright © 2019 Nicolas VEDRINE. All rights reserved.
 //
 
-import CoreFoundation
+import Cocoa
 
 class DurationValueTransformer: ValueTransformer {
     

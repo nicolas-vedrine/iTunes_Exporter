@@ -8,16 +8,29 @@
 
 import Cocoa
 
-@IBDesignable class TrackListView: VGBaseNSView, VGLoadableNib, NSTableViewDelegate, NSTableViewDataSource {
+@IBDesignable class TrackListView: iTunesTracksListView, VGLoadableNib {
     
-    @IBOutlet var theArrayController: NSArrayController!
     @IBOutlet var contentView: NSView!
-    @IBOutlet weak var trackListTableView: NSTableView!
     @IBOutlet weak var addDeleteButton: NSButton!
-    
+    @IBOutlet weak var iTunesExporterTracksListTableView: NSTableView!
     
     private var _trackListType: Int = TrackListType.add.rawValue
-    private var _tracksAdded: [Track] = [Track]()
+    //private var _tracksAdded: [IT] = [Track]()
+    
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+        
+        // Drawing code here.
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        loadViewFromNib()
+        
+        tracksListTableView = iTunesExporterTracksListTableView
+        initView()
+    }
     
     @IBInspectable var trackListType: Int = TrackListType.add.rawValue {
         didSet {
@@ -28,21 +41,24 @@ import Cocoa
         }
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        loadViewFromNib()
-        trackListTableView.target = self
-        trackListTableView.doubleAction = #selector(_onTableViewDoubleClick(_:))
-    }
-    
-    @objc func _onTableViewDoubleClick(_ sender: AnyObject) {
+    @objc override func _onTableViewDoubleClick(_ sender: AnyObject) {
         if trackListType == TrackListType.add.rawValue {
             _addTracksAction()
         }
     }
     
-    func setTracks(theTracks: [Track], add: Bool = false) {
+    /*override var tracks: [NSObject]? {
+        set {
+            super.tracks = newValue
+            print("V&G_Project___tracks : ", self, theTracks?.count)
+            //iTunesExporterTracksListTableView.dataSource = self
+        }
+        get {
+            return super.tracks
+        }
+    }*/
+    
+    /*func setTracks(theTracks: [Track], add: Bool = false) {
         if !add {
             theArrayController.removeAll()
         }
@@ -75,9 +91,9 @@ import Cocoa
                 }
             }
         }
-    }
+    }*/
     
-    private func _messageBoxResult(theTrack: Track) -> NSApplication.ModalResponse {
+    /*private func _messageBoxResult(theTrack: Track) -> NSApplication.ModalResponse {
         let alert = NSAlert()
         alert.messageText = "Certains titres sélectionnés font déjà partie de la playlist. Voulez-vous les ajouter ou les ignorer ?"
         alert.addButton(withTitle: "Add")
@@ -85,7 +101,7 @@ import Cocoa
         alert.addButton(withTitle: "Ignore")
         let result = alert.runModal()
         return result
-    }
+    }*/
     
     @IBAction func addDeleteAction(_ sender: Any) {
         switch _trackListType {
@@ -99,20 +115,14 @@ import Cocoa
     }
     
     private func _addTracksAction() {
-        if trackListTableView.selectedRowIndexes.count > 0 {
-            var theSelectedTracks: [Track] = [Track]()
-            let theIndexSet = self.trackListTableView.selectedRowIndexes
-            let theTracks: [Track] = self.theArrayController.arrangedObjects as! [Track]
-            for theIndex in theIndexSet {
-                theSelectedTracks.append(theTracks[theIndex])
-            }
-            NotificationCenter.default.post(name: .TRACKS_ADDED, object: theSelectedTracks)
+        if tracksListTableView.selectedRowIndexes.count > 0 {
+            NotificationCenter.default.post(name: .TRACKS_ADDED, object: selectedTracks)
         }
     }
     
     private func _deleteTracksAction() {
-        if trackListTableView.selectedRowIndexes.count > 0 {
-            let theIndexSet = self.trackListTableView.selectedRowIndexes
+        /*if trackListView.selectedRowIndexes.count > 0 {
+            let theIndexSet = self.trackListView.selectedRowIndexes
             var theTracks: [Track]
             theTracks = self.theArrayController.arrangedObjects as! [Track]
             for theIndex in theIndexSet {
@@ -120,31 +130,15 @@ import Cocoa
             }
             theTracks = self.theArrayController.arrangedObjects as! [Track]
             NotificationCenter.default.post(name: .TRACKS_DELETED, object: theTracks)
-        }
+        }*/
     }
-    
-    var tracks: [Track] {
-        get {
-            let theTracks: [Track] = theArrayController.arrangedObjects as! [Track]
-            return theTracks
-        }
-    }
-    
     
 }
 
 extension TrackListView {
     
-   /*func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        if (tableColumn?.identifier)!.rawValue == "trackNumber" {
-            let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "TrackListCell"), owner: self)
-            return cell
-        }
-        return nil
-    }*/
-    
-    /*func tableView(_ tableView: NSTableView, rowViewForRow row: Int) -> NSTableRowView? {
-        return nil
+    /*override func numberOfRows(in tableView: NSTableView) -> Int {
+        return theiTunesTracks?.count ?? 0
     }*/
     
 }

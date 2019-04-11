@@ -11,10 +11,11 @@ import Cocoa
 class VGBaseNSView: NSView {
     
     internal var theState: String?
-
+    internal var theDatas: Any?
+    
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
-
+        
         // Drawing code here.
     }
     
@@ -40,6 +41,15 @@ class VGBaseNSView: NSView {
         }
         get {
             return theState!
+        }
+    }
+    
+    var datas: Any {
+        set {
+            theDatas = newValue
+        }
+        get {
+            return theDatas!
         }
     }
     

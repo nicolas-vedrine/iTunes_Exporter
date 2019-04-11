@@ -12,7 +12,7 @@ import iTunesLibrary
 class VGBaseTracksListView: VGBaseNSView {
     
     var tracksListTableView: NSTableView!
-    internal var theTracks: [ITLibMediaItem]?
+    internal var theTracks: [NSObject]?
     
     internal func initView() {
         removeColumns()
@@ -20,6 +20,9 @@ class VGBaseTracksListView: VGBaseNSView {
         tracksListTableView.allowsColumnReordering = true
         tracksListTableView.allowsMultipleSelection = true
         tracksListTableView.usesAlternatingRowBackgroundColors = true
+        
+        tracksListTableView.dataSource = self
+        tracksListTableView.delegate = self
         
         tracksListTableView.target = self
         tracksListTableView.doubleAction = #selector(_onTableViewDoubleClick(_:))
@@ -29,29 +32,38 @@ class VGBaseTracksListView: VGBaseNSView {
         print("V&G_FW____onTableViewDoubleClick : ", self)
     }
     
-    override func draw(_ dirtyRect: NSRect) {
+    /*override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
         
         // Drawing code here.
-    }
+    }*/
     
-    override var datas: Any {
+    var tracks: [NSObject]? {
         set {
-            theDatas = newValue
-            theTracks = theDatas as? [ITLibMediaItem]
-            tracksListTableView.dataSource = self
-            tracksListTableView.delegate = self
+            datas = newValue as Any
+            theTracks = theDatas as? [NSObject]
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+                self!.tracksListTableView.reloadData()
+            }
+            //tracksListTableView.reloadData()
         }
         get {
-            return theTracks!
+            guard let tracks = theTracks else {
+                return nil
+            }
+            return tracks
         }
     }
     
-    var tracks: [ITLibMediaItem]? {
-        guard let tracks = theTracks else {
-            return nil
+    var selectedTracks: [NSObject] {
+        get {
+            var theSelectedTracks = [NSObject]()
+            let theIndexSet = self.tracksListTableView.selectedRowIndexes
+            for theIndex in theIndexSet {
+                theSelectedTracks.append(theTracks![theIndex])
+            }
+            return theSelectedTracks
         }
-        return tracks
     }
     
     func buildColumns(columnsList: [ColumnsListStruct]) {
@@ -75,38 +87,14 @@ class VGBaseTracksListView: VGBaseNSView {
 extension VGBaseTracksListView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
+        print("V&G_FW___numberOfRows : ", self, theTracks?.count)
         return theTracks?.count ?? 0
     }
-    
-    /*func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        print("V&G_FW___objectValueFor : ", self, tableColumn?.title)
-        guard let item = theTracks?[row] else {
-            return nil
-        }
-        switch tableColumn?.title {
-        case "":
-            return row + 1
-        default:
-            return item.title
-        }
-    }*/
-    
-    /*func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
-     print("V&G_FW___setObjectValue : ", self, object)
-     }*/
-    
-    /*func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
-        print("V&G_FW___willDisplayCell : ", self)
-    }*/
-    
-    
-    
 }
 
 extension VGBaseTracksListView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        //print("V&G_FW___viewFor tableColumn : ", self, row)
         guard let item = theTracks?[row] else {
             return nil
         }
@@ -117,16 +105,13 @@ extension VGBaseTracksListView: NSTableViewDelegate {
         case TableColumnID.trackNumberTableColumnID.rawValue:
             text = String(row + 1)
         case TableColumnID.titleTableColumnID.rawValue:
-            text = item.title
+            text = getTrackTitle(theTrack: item)
         case TableColumnID.artistTableColumnID.rawValue:
-            text = iTunesModel.getArtistName(theITTrack: item)
+            text = getTrackArtistName(theTrack: item)
         case TableColumnID.albumTableColumnID.rawValue:
-            text = iTunesModel.getAlbumTitle(theITTrack: item)
-        case TableColumnID.locationTableColumnID.rawValue:
-            text = item.location?.path ?? ""
-            //text  = item.
+            text = getTrackAlbumName(theTrack: item)
         case TableColumnID.totalTimeTableColumnID.rawValue:
-            text = getTotalTime(time: item.totalTime)
+            text = getTotalTime(theTrack: item)
         default:
             text = ""
         }
@@ -139,7 +124,20 @@ extension VGBaseTracksListView: NSTableViewDelegate {
         return nil
     }
     
-    @objc internal func getTotalTime(time: Int) -> String {
+    @objc internal func getTrackTitle(theTrack: NSObject) -> String {
+        return ""
+    }
+    
+    @objc internal func getTrackArtistName(theTrack: NSObject) -> String {
+        return ""
+    }
+    
+    @objc internal func getTrackAlbumName(theTrack: NSObject) -> String {
+        return ""
+    }
+    
+    @objc internal func getTotalTime(theTrack: NSObject) -> String {
+        let time: Int = 0
         return time.toFormattedDuration()
     }
     
@@ -153,7 +151,7 @@ enum TableColumnID: String {
     case albumTableColumnID = "AlbumTableColumnID"
     case locationTableColumnID = "LocationTableColumnID"
     case kindTableColumnID = "KindTableColumnID"
-    case totalTimeTableColumnID = "TotalPlayedTime"
+    case totalTimeTableColumnID = "TotalPlayedTimeID"
     
 }
 

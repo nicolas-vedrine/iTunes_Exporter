@@ -707,30 +707,30 @@
             <objects>
                 <viewController storyboardIdentifier="ExportController" id="6sS-KT-wY3" customClass="ExportController" customModule="iTunes_Exporter" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="n9F-XO-8jT" customClass="ExportFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="800" height="456"/>
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="458"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView distribution="fillEqually" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SYP-w8-J6m">
-                                <rect key="frame" x="10" y="10" width="780" height="436"/>
+                                <rect key="frame" x="10" y="10" width="780" height="438"/>
                                 <subviews>
                                     <box title="Export to:" translatesAutoresizingMaskIntoConstraints="NO" id="Ogg-q9-Ijn">
-                                        <rect key="frame" x="-3" y="263" width="786" height="173"/>
+                                        <rect key="frame" x="-3" y="264" width="786" height="174"/>
                                         <view key="contentView" id="hsN-MW-2CH">
-                                            <rect key="frame" x="2" y="2" width="782" height="156"/>
+                                            <rect key="frame" x="3" y="3" width="780" height="156"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehy-U5-A7S">
-                                                    <rect key="frame" x="0.0" y="0.0" width="782" height="156"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="780" height="156"/>
                                                     <subviews>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="0Nb-BF-t0f" customClass="VGBrowsePathFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                                                            <rect key="frame" x="141" y="66" width="500" height="80"/>
+                                                            <rect key="frame" x="140" y="66" width="500" height="80"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="80" id="Hxn-Vv-3Wc"/>
                                                                 <constraint firstAttribute="width" constant="500" id="cSf-Yz-WXY"/>
                                                             </constraints>
                                                         </customView>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SpJ-Bh-dGi">
-                                                            <rect key="frame" x="-2" y="41" width="786" height="17"/>
+                                                            <rect key="frame" x="-2" y="41" width="784" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="space required" id="pgp-VV-t5Z">
                                                                 <font key="font" usesAppearanceFont="YES"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -738,7 +738,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aum-iI-heK">
-                                                            <rect key="frame" x="-2" y="16" width="786" height="17"/>
+                                                            <rect key="frame" x="-2" y="16" width="784" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="free space" id="V6I-yM-XOv">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -773,23 +773,23 @@
                                         </view>
                                     </box>
                                     <box title="File name format:" translatesAutoresizingMaskIntoConstraints="NO" id="chb-HY-nuC">
-                                        <rect key="frame" x="-3" y="54" width="786" height="205"/>
+                                        <rect key="frame" x="-3" y="54" width="786" height="206"/>
                                         <view key="contentView" id="Zha-na-IVf">
-                                            <rect key="frame" x="2" y="2" width="782" height="188"/>
+                                            <rect key="frame" x="3" y="3" width="780" height="188"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lSF-Q0-fA9">
-                                                    <rect key="frame" x="0.0" y="0.0" width="782" height="188"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="780" height="188"/>
                                                     <subviews>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="oat-jS-znY" customClass="VGComboBoxFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                                                            <rect key="frame" x="141" y="98" width="500" height="80"/>
+                                                            <rect key="frame" x="140" y="98" width="500" height="80"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="500" id="Mfc-WY-ImX"/>
                                                                 <constraint firstAttribute="height" constant="80" id="WzK-R9-BMr"/>
                                                             </constraints>
                                                         </customView>
                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="GbH-Mb-XnR" customClass="VGComboBoxFormView" customModule="iTunes_Exporter" customModuleProvider="target">
-                                                            <rect key="frame" x="141" y="10" width="500" height="80"/>
+                                                            <rect key="frame" x="140" y="10" width="500" height="80"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="500" id="JDK-Um-487"/>
                                                                 <constraint firstAttribute="height" constant="80" id="eeZ-x8-5if"/>
@@ -962,7 +962,7 @@ Gw
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="o4I-J4-uTV">
-                                            <rect key="frame" x="-2" y="2" width="1360" height="17"/>
+                                            <rect key="frame" x="-2" y="3" width="1360" height="17"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="32 éléments mis en file d’attente, durée totale 8:15:13:17, 16,62 Go" id="jps-wX-QdO">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1099,11 +1099,11 @@ Gw
                                                                 </subviews>
                                                                 <nil key="backgroundColor"/>
                                                             </clipView>
-                                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="2H5-4h-UGO">
+                                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2H5-4h-UGO">
                                                                 <rect key="frame" x="1" y="119" width="238" height="15"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
-                                                            <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="7cd-Bg-4uR">
+                                                            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="7cd-Bg-4uR">
                                                                 <rect key="frame" x="224" y="17" width="15" height="102"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
@@ -1219,13 +1219,13 @@ Gw
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="theAddedTracksListView" destination="9dl-nI-GGY" id="jd8-PG-4qm"/>
+                        <outlet property="theAddedTracksListView" destination="9dl-nI-GGY" id="8cQ-Ip-ZQz"/>
                         <outlet property="theAppInfosView" destination="Bnz-Yr-hXG" id="jBt-4C-B0P"/>
                         <outlet property="theArrayController" destination="M8V-rF-Dhi" id="jwN-eH-Uk7"/>
                         <outlet property="theExportButton" destination="mdC-e9-NoT" id="MNx-u0-RWm"/>
                         <outlet property="theMenuBox" destination="6s2-0n-rA2" id="wpL-N4-Pmq"/>
                         <outlet property="theOutlineView" destination="2sP-yT-sX9" id="PQv-Za-NZD"/>
-                        <outlet property="thePlaylistTracksListView" destination="9eL-LK-PaA" id="7Bt-Ys-zei"/>
+                        <outlet property="thePlaylistTracksListView" destination="9eL-LK-PaA" id="dfw-FH-QXh"/>
                         <outlet property="theSegmentedControl" destination="4dH-wi-ukD" id="NDK-hR-F34"/>
                         <outlet property="theStatutInfosLabel" destination="o4I-J4-uTV" id="cuP-2r-rNu"/>
                         <outlet property="theTreeController" destination="s0B-Ql-wGv" id="Ayn-n3-IIv"/>

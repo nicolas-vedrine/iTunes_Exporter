@@ -144,11 +144,11 @@ class Track: NSObject {
     @objc dynamic var duration: Int = 0
     @objc dynamic var size: UInt64 = 0
     @objc dynamic var location: URL?
-    //private(set) var theITTrack: ITLibMediaItem
+    private(set) var theITTrack: ITLibMediaItem
     
     init(theITTrack: ITLibMediaItem) {
         self.artist = iTunesModel.getArtistName(theITTrack: theITTrack)
-        self.artist = ""
+        //self.artist = ""
         self.name = theITTrack.title
         if let theAlbumName = theITTrack.album.title {
             self.album = theAlbumName
@@ -156,7 +156,23 @@ class Track: NSObject {
         //self.duration = theITTrack.totalTime
         //self.size = theITTrack.fileSize
         self.location = theITTrack.location
-        //self.theITTrack = theITTrack
+        self.theITTrack = theITTrack
+    }
+    
+}
+
+class KVOTrack: NSObject {
+    
+    
+    
+}
+
+class VGITLib: ITLibrary {
+    
+    override var allMediaItems: [ITLibMediaItem] {
+        get {
+            return super.allMediaItems
+        }
     }
     
 }
@@ -238,6 +254,49 @@ class iTunesModel {
         print("V&G_Project___<#name#> : ", theFinalList.count)
         return theFinalList
     }
+    
+    static func getFlattenPlaylistsTree(theList: [Playlist], isDistinguishedKind: Bool = true, theSeparator: String = "   ", theLevel: Int = 0) -> [Playlist] {
+        var theFinalList = [Playlist]()
+        for thePlaylist in theList {
+            if let thePlaylist = thePlaylist as? Playlist {
+                let thePlaylistName = thePlaylist.name
+                var theIdent = ""
+                var i = 0
+                while i < theLevel {
+                    theIdent = theIdent + theSeparator
+                    i += 1
+                }
+                theIdent += " "
+                print("V&G_FW___getFlattenPlaylistsTree : ", self, thePlaylist.theITPlaylist.distinguishedKind.rawValue, thePlaylist.theITPlaylist.isMaster)
+                thePlaylist.name = theIdent + thePlaylistName!
+                theFinalList.append(thePlaylist)
+                if thePlaylist.isFolder {
+                    let children = thePlaylist.children
+                    let result = getFlattenPlaylistsTree(theList: children!, theSeparator: theSeparator, theLevel: theLevel + 1)
+                    for i in result {
+                        theFinalList.append(i)
+                    }
+                }
+            }
+        }
+        return theFinalList
+    }
+    
+    /*private static func _getFlattenPlaylist(thePlaylist: Playlist) -> [Playlist] {
+        var theList = [Playlist]()
+        if let theChildren = thePlaylist.children {
+            for theChild in theChildren {
+                theList.append(theChild)
+                let theChildrenList = _getFlattenPlaylist(thePlaylist: theChild)
+                if theChildrenList.count > 0 {
+                    for item in theChildrenList {
+                        
+                    }
+                }
+            }
+        }
+        return theList
+    }*/
     
     private static func _getPlaylistParent(thePlaylistID: NSNumber, thePlaylists: [ITLibPlaylist]) -> ITLibPlaylist! {
         if let thePlaylistParentID = thePlaylists.first(where: {$0.persistentID == thePlaylistID}) {
@@ -324,6 +383,10 @@ class iTunesModel {
         }
         
         return theArtists
+    }
+    
+    public static func getiTunesTrackTitle(theiTunesTrack: ITLibMediaItem) -> String {
+        return theiTunesTrack.title
     }
     
     public static func getAlbumTitle(theITTrack: ITLibMediaItem) -> String {
@@ -430,12 +493,12 @@ class iTunesModel {
         
     }
     
-    static func getStatutInfos(theTracks: [Track]) -> StatutInfos {
+    static func getStatutInfos(theTracks: [ITLibMediaItem]) -> StatutInfos {
         var statutInfos: StatutInfos = StatutInfos()
         statutInfos.count = theTracks.count
         for theTrack in theTracks {
-            statutInfos.duration += theTrack.duration
-            statutInfos.size += theTrack.size
+            statutInfos.duration += theTrack.totalTime
+            statutInfos.size += theTrack.fileSize
         }
         return statutInfos
     }
@@ -454,12 +517,12 @@ class iTunesModel {
         return theFormattedTrackName
     }
     
-    static func getDestinationPattern(theTrack: Track, fileNameType: iTunesExportFileNameType) -> String {
+    static func getDestinationPattern(theITTrack: ITLibMediaItem, fileNameType: iTunesExportFileNameType) -> String {
         var theDestinationPattern: String = ""
-        let theFileName: String = (theTrack.location?.getName())!
-        let theAlbumName = theTrack.album
+        let theFileName: String = (theITTrack.location?.getName())!
+        let theAlbumName = getAlbumTitle(theITTrack: theITTrack)
         //let theAlbumName = "album_name"
-        let theArtistName = theTrack.artist
+        let theArtistName = getArtistName(theITTrack: theITTrack)
         //let theArtistName = "artist_name"
         switch fileNameType {
         case iTunesExportFileNameType.fileName:

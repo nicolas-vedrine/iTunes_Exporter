@@ -37,6 +37,8 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     override func buildView() {
         do {
             _lib = try ITLibrary(apiVersion: "1.0")
+            
+            _buildTracks()
             _addData()
         } catch let error {
             print("V&G_Project___buildView : ", error)
@@ -61,20 +63,21 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     }
     
     private func _onTracksAddedDeleted(notification: Notification) {
-        let theTracks: [Track] = notification.object as! [Track]
+        let theTracks: [ITLibMediaItem] = notification.object as! [ITLibMediaItem]
         switch notification.name {
         case Notification.Name.TRACKS_ADDED:
-            theAddedTracksListView.setTracks(theTracks: theTracks, add: true)
+            //theAddedTracksListView.setTracks(theTracks: theTracks, add: true)
+            theAddedTracksListView.tracks = theTracks
         case Notification.Name.TRACKS_DELETED:
             print("V&G_FW____onTracksAddedDeleted : ", self)
             
         default:
             print("V&G_FW____onTracksAddedDeleted : ", self)
         }
-        _updateStatutInfos(theTracks: theAddedTracksListView.tracks)
+        _updateStatutInfos(theTracks: theTracks)
     }
     
-    private func _updateStatutInfos(theTracks: [Track]? = nil) {
+    private func _updateStatutInfos(theTracks: [ITLibMediaItem]? = nil) {
         theStatutInfosLabel.stringValue = "Pas d'éléments dans la file d'attente."
         if let theTracks = theTracks {
             if theTracks.count > 0 {
@@ -94,6 +97,19 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         }
     }
     
+    private func _buildTracks() {
+        let trackNumber = ColumnsListStruct(title: "Track Number", id: TableColumnID.trackNumberTableColumnID)
+        let title = ColumnsListStruct(title: "Title", id: TableColumnID.titleTableColumnID)
+        let artist = ColumnsListStruct(title: "Artist", id: TableColumnID.artistTableColumnID)
+        let album = ColumnsListStruct(title: "Album", id: TableColumnID.albumTableColumnID)
+        let totalTime = ColumnsListStruct(title: "Total Time", id: TableColumnID.totalTimeTableColumnID)
+        let location = ColumnsListStruct(title: "Emplacement", id: TableColumnID.locationTableColumnID)
+        
+        let columnsList: [ColumnsListStruct] = [trackNumber, title, artist, album, totalTime, location]
+        theAddedTracksListView.buildColumns(columnsList: columnsList)
+        thePlaylistTracksListView.buildColumns(columnsList: columnsList)
+    }
+    
     private func _addPlaylists(lib: ITLibrary) {
         let playlists = iTunesModel.getMusicPlaylists(lib: lib)
         let thePlaylistsTree = iTunesModel.getPlaylistsTree(theITPlaylists: playlists, theLenght: playlists.count)
@@ -104,6 +120,12 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         //let item = theOutlineView.
         self.theOutlineView.expandItem(nil, expandChildren: true)
         theSegmentedControl.selectedSegment = 0
+        
+        let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
+        let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isDistinguishedKind: true, theSeparator: "")
+        let theMusicBoxPlaylists = theFlattenPlaylist.filter({($0.name?.lowercased().contains("music box"))!})
+        let theMusicBoxPlaylist = theMusicBoxPlaylists[0]
+        thePlaylistTracksListView.tracks = theMusicBoxPlaylist.theITPlaylist.items
     }
     
     private func _addArtists(lib: ITLibrary) {
@@ -161,7 +183,7 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         let theExportButton: NSButton = sender as! NSButton
         if theAppInfosView.state == AppInfosViewState.playListInfo.rawValue {
             theExportButton.state = NSControl.StateValue.off
-            if theAddedTracksListView.tracks.count > 0 {
+            if theAddedTracksListView.tracks!.count > 0 {
                 self.performSegue(withIdentifier: NSStoryboardSegue.EXPORT_SEGUE, sender: self)
             }
         } else {
@@ -201,11 +223,11 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         let exportTo: URL = formResult[FormItemCode.exportTo.rawValue] as! URL
         let theChosenIfFileAlreadyExistsType: IfFileAlreadyExistsType = formResult[FormItemCode.ifAlreadyExists.rawValue] as! IfFileAlreadyExistsType
         let theFileNameType: iTunesExportFileNameType = formResult[FormItemCode.fileName.rawValue] as! iTunesExportFileNameType
-        for i in 0...theTracksList.count - 1 {
-            let theTrack: Track = theTracksList[i]
+        for i in 0...theTracksList!.count - 1 {
+            let theTrack: ITLibMediaItem = theTracksList![i] as! ITLibMediaItem
             let file: URL = theTrack.location!
             let theSourcePathStr: String = file.path
-            let theDestinationPattern: String = iTunesModel.getDestinationPattern(theTrack: theTrack, fileNameType: theFileNameType)
+            let theDestinationPattern: String = iTunesModel.getDestinationPattern(theITTrack: theTrack, fileNameType: theFileNameType)
             let theDestinationPathStr: String = exportTo.path + "/" + theDestinationPattern
             let theCopyFileOperation: FileOperation = FileOperation(fileManager: fm, srcPath: theSourcePathStr, dstPath: theDestinationPathStr, ifFileAlreadyExistsType: theChosenIfFileAlreadyExistsType)
             theCopyFileOperation.index = i
@@ -385,13 +407,6 @@ extension ViewController {
     
     func outlineView(_ outlineView: NSOutlineView, isGroupItem item: Any) -> Bool {
         return item is PlaylistGroup
-        
-        /*switch item {
-        case let playlistGroup as PlaylistGroup:
-            return true
-        default:
-            return false
-        }*/
     }
     
     func outlineViewSelectionDidChange(_ notification: Notification) {
@@ -404,11 +419,15 @@ extension ViewController {
         if let theNode = outlineView.item(atRow: selectedIndex) as? NSTreeNode {
             //3
             if let thePlaylist = theNode.representedObject as? Playlist {
-                self.thePlaylistTracksListView.setTracks(theTracks: thePlaylist.tracks)
-                self.theAppInfosView.setPlaylistDuration(duration: thePlaylist.duration)
+                let theITTracks = thePlaylist.theITPlaylist.items
+                let theITSortKind = ITSortKind.artistAndThenAlbum
+                let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
+                self.thePlaylistTracksListView.tracks = theITTracksSorted
+                //print("V&G_Project___outlineViewSelectionDidChange : ", self, thePlaylistTracksListView.tracks)
+                /*self.theAppInfosView.setPlaylistDuration(duration: thePlaylist.duration)
                 self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
                 self.theAppInfosView.setPlaylistName(playlistName: thePlaylist.name!)
-                self.theAppInfosView.setSize(size: thePlaylist.size)
+                self.theAppInfosView.setSize(size: thePlaylist.size)*/
             }
         }
     }

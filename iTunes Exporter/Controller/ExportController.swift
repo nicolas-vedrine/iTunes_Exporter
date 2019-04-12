@@ -18,7 +18,7 @@ class ExportController: BaseProjectViewController {
     @IBOutlet weak var theFileNameComboBoxFormView: VGComboBoxFormView!
     @IBOutlet weak var theIfAlreadyExistsComboBoxFormView: VGComboBoxFormView!
     
-    private var _theTracks: [Track]?
+    //private var _theTracks: [ITLibMediaItem]?
     private var _theFilesSize: UInt64 = 0
     
     var onValidateForm: ((_ formResult: [String: Any]) -> ())?
@@ -26,9 +26,9 @@ class ExportController: BaseProjectViewController {
     override func buildView() {
         super.buildView()
         
-        if let theData = data {
-            print("V&G_Project___buildView : ", theData)
-            _theTracks = data as? [Track]
+        if let data = data {
+            print("V&G_Project___buildView : ", data)
+            //_theTracks = data as? [Track]
             _buildFormView()
             _setSpaceRequired()
         }
@@ -96,8 +96,9 @@ class ExportController: BaseProjectViewController {
     
     private func _getFilesSize() -> UInt64 {
         var theFilesSize: UInt64 = 0
-        for track in _theTracks! {
-            theFilesSize += track.size
+        let theTracks: [ITLibMediaItem] = data as! [ITLibMediaItem]
+        for track in theTracks {
+            theFilesSize += track.fileSize
         }
         return theFilesSize
     }

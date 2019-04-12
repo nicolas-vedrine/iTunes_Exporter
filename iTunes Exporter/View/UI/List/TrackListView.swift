@@ -47,16 +47,71 @@ import Cocoa
         }
     }
     
-    /*override var tracks: [NSObject]? {
+    override var tracks: [NSObject]? {
         set {
-            super.tracks = newValue
-            print("V&G_Project___tracks : ", self, theTracks?.count)
-            //iTunesExporterTracksListTableView.dataSource = self
+            if _trackListType == TrackListType.add.rawValue {
+                super.tracks = newValue
+            } else {
+                if let datas: [ITLibMediaItem] = datas as? [ITLibMediaItem] {
+                    var theTracks = [ITLibMediaItem]()
+                    for track in datas {
+                        theTracks.append(track)
+                    }
+                    let theTracksToAdd: [ITLibMediaItem] = newValue as! [ITLibMediaItem]
+                    var isAdd: Bool = false
+                    var isRemembered: Bool = false
+                    for theTrackToAdd in theTracksToAdd {
+                        let theFilter = theTracks.filter({$0.persistentID == theTrackToAdd.persistentID})
+                        var isCanceled: Bool = false
+                        var isIgnore: Bool = false
+                        if theFilter.count == 0 {
+                            theTracks.append(theTrackToAdd)
+                        } else {
+                            if !isRemembered {
+                                let msgBoxResult = _messageBoxResult(theTrack: theTrackToAdd)
+                                isRemembered = msgBoxResult.isRemembered
+                                switch(msgBoxResult.response) {
+                                case NSApplication.ModalResponse.alertFirstButtonReturn:
+                                    isAdd = true
+                                    theTracks.append(theTrackToAdd)
+                                case NSApplication.ModalResponse.alertSecondButtonReturn:
+                                    isCanceled = true
+                                case NSApplication.ModalResponse.alertThirdButtonReturn:
+                                    isIgnore = true
+                                    if isRemembered {
+                                        isCanceled = true
+                                    }
+                                default:
+                                    break
+                                }
+                                
+                                if isCanceled {
+                                    break
+                                }
+                            } else {
+                                if isAdd {
+                                    theTracks.append(theTrackToAdd)
+                                }
+                            }
+                        }
+                    }
+                    super.datas = theTracks
+                    tracksListTableView.reloadData()
+                    /*DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+                        //self!.tracksListTableView.reloadData()
+                    }*/
+                    
+                } else {
+                    super.tracks = newValue
+                }
+                //print("V&G_Project___tracks : ", self, theTracks?.count)
+            }
+            
         }
         get {
             return super.tracks
         }
-    }*/
+    }
     
     /*func setTracks(theTracks: [Track], add: Bool = false) {
         if !add {
@@ -93,15 +148,20 @@ import Cocoa
         }
     }*/
     
-    /*private func _messageBoxResult(theTrack: Track) -> NSApplication.ModalResponse {
+    private func _messageBoxResult(theTrack: ITLibMediaItem) -> MessageBoxResult {
         let alert = NSAlert()
-        alert.messageText = "Certains titres sélectionnés font déjà partie de la playlist. Voulez-vous les ajouter ou les ignorer ?"
+        alert.showsSuppressionButton = true
+        alert.suppressionButton?.title = "remember..."
+        let trackTitle = iTunesModel.getFormattedTrackName(theITTrack: theTrack, theFormattedTrackNameStyle: .artistNameTrackName)
+        alert.messageText = "Le titre \"" + trackTitle + "\" fait déjà parti de la playlist. Voulez-vous l'ajouter ?"
         alert.addButton(withTitle: "Add")
         alert.addButton(withTitle: "Cancel")
         alert.addButton(withTitle: "Ignore")
         let result = alert.runModal()
-        return result
-    }*/
+        let isRemembered: Bool = alert.suppressionButton?.state == NSControl.StateValue.on ? true : false
+        let msgBoxResult = MessageBoxResult(response: result, isRemembered: isRemembered)
+        return msgBoxResult
+    }
     
     @IBAction func addDeleteAction(_ sender: Any) {
         switch _trackListType {

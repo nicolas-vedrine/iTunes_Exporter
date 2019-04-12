@@ -424,10 +424,10 @@ extension ViewController {
                 let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
                 self.thePlaylistTracksListView.tracks = theITTracksSorted
                 //print("V&G_Project___outlineViewSelectionDidChange : ", self, thePlaylistTracksListView.tracks)
-                /*self.theAppInfosView.setPlaylistDuration(duration: thePlaylist.duration)
+                self.theAppInfosView.setPlaylistDuration(duration: thePlaylist.duration)
                 self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
                 self.theAppInfosView.setPlaylistName(playlistName: thePlaylist.name!)
-                self.theAppInfosView.setSize(size: thePlaylist.size)*/
+                self.theAppInfosView.setSize(size: thePlaylist.size)
             }
         }
     }

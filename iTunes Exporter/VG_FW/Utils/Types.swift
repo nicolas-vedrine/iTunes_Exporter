@@ -33,17 +33,6 @@ extension String {
         return date
     }
     
-    var replacingHTMLEntities: String? {
-        do {
-            return try NSAttributedString(data: Data(utf8), options: [
-                .documentType: NSAttributedString.DocumentType.html,
-                .characterEncoding: String.Encoding.utf8.rawValue
-                ], documentAttributes: nil).string
-        } catch {
-            return nil
-        }
-    }
-    
 }
 
 extension UInt64 {
@@ -281,84 +270,6 @@ extension FileManager {
             return nil
         }
         return nil
-    }
-    
-}
-
-extension URL {
-    
-    func isMostRecenThan(url: URL, _ fileManager: FileManager = FileManager.default) -> Bool {
-        return self.getModificationDate(fileManager)! > url.getModificationDate(fileManager)!
-    }
-    
-    func isPathExists(_ fileManager: FileManager = FileManager.default) -> Bool {
-        return fileManager.fileExists(atPath: self.path)
-    }
-    
-    func getModificationDate(_ fileManager: FileManager = FileManager.default) -> Date? {
-        do {
-            let attr = try fileManager.attributesOfItem(atPath: self.path)
-            return attr[FileAttributeKey.modificationDate] as? Date
-        } catch {
-            return nil
-        }
-    }
-    
-    func getName() -> String? {
-        let thePathComponents: [String] = self.pathComponents
-        //print("V&G_FW___getName : ", self, thePathComponents)
-        if thePathComponents.count > 0 {
-            let theName = thePathComponents[thePathComponents.count - 1]
-            return theName
-        }
-        return nil
-    }
-    
-    func getFileExtension() -> String {
-        let theFileName: String = self.getName()!
-        let theFileNameComponents: [String] = theFileName.components(separatedBy: ".")
-        let theFileExtension: String = theFileNameComponents[theFileNameComponents.count - 1]
-        return theFileExtension
-    }
-    
-    func getParentFolderName() -> String {
-        let thePathComponents: [String] = self.pathComponents
-        return thePathComponents[thePathComponents.count - 2]
-    }
-    
-    func getFileNameWithoutExtension() -> String {
-        let theFileName: String = self.getName()!
-        let theFileExtension: String = self.getFileExtension()
-        let theStartIndex = theFileName.startIndex
-        let theEndIndex = theFileName.index(theFileName.endIndex, offsetBy: -(theFileExtension.count + 1))
-        let theFileNameWithoutExtension = theFileName[theStartIndex..<theEndIndex]
-        return String(theFileNameWithoutExtension)
-    }
-    
-}
-
-extension NSView {
-    
-    func getConstraint(byIdentifier identifier: String) -> NSLayoutConstraint? {
-        for constraint in constraints {
-            print("V&G_FW___getConstraint : ", self, constraint.identifier)
-            if constraint.identifier == identifier {
-                return constraint
-            }
-        }
-        return nil
-    }
-    
-}
-
-struct MessageBoxResult {
-    
-    let response: NSApplication.ModalResponse
-    let isRemembered: Bool
-    
-    init(response: NSApplication.ModalResponse, isRemembered: Bool) {
-        self.response = response
-        self.isRemembered = isRemembered
     }
     
 }

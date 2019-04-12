@@ -11,14 +11,12 @@
 		8B0DD5DA2215C14300146683 /* TrackListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B0DD5D92215C14300146683 /* TrackListView.xib */; };
 		8B0DD5DC2215C1A400146683 /* TrackListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0DD5DB2215C1A400146683 /* TrackListView.swift */; };
 		8B2E02D6225EA2D400ADC246 /* VGBaseTracksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2E02D3225EA2D300ADC246 /* VGBaseTracksListView.swift */; };
-		8B2E02D7225EA2D400ADC246 /* iTunesTracksListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B2E02D4225EA2D300ADC246 /* iTunesTracksListView.xib */; };
 		8B2E02D8225EA2D400ADC246 /* iTunesTracksListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2E02D5225EA2D300ADC246 /* iTunesTracksListView.swift */; };
 		8B2E02DA225EA34000ADC246 /* iTunesObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2E02D9225EA34000ADC246 /* iTunesObjects.swift */; };
 		8B3CCB32221B159800BD7EC1 /* AppInfosView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B3CCB31221B159800BD7EC1 /* AppInfosView.xib */; };
 		8B3CCB34221B15AA00BD7EC1 /* AppInfosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3CCB33221B15AA00BD7EC1 /* AppInfosView.swift */; };
 		8B3CCB37221B418500BD7EC1 /* NSSearchFieldFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3CCB36221B418400BD7EC1 /* NSSearchFieldFilterCell.swift */; };
 		8B3CCB3B221B5AA300BD7EC1 /* DurationValueTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3CCB3A221B5AA300BD7EC1 /* DurationValueTransformer.swift */; };
-		8B3CCB3E221B756600BD7EC1 /* TrackListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3CCB3D221B756600BD7EC1 /* TrackListCell.swift */; };
 		8B43834D2215FA490040D2EB /* VGBaseNSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43834C2215FA490040D2EB /* VGBaseNSView.swift */; };
 		8B43835122160C7D0040D2EB /* VGLoadableNib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43835022160C7D0040D2EB /* VGLoadableNib.swift */; };
 		8B43835322175ECB0040D2EB /* NotificationNameExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B43835222175ECB0040D2EB /* NotificationNameExtension.swift */; };
@@ -57,14 +55,12 @@
 		8B0DD5D92215C14300146683 /* TrackListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackListView.xib; sourceTree = "<group>"; };
 		8B0DD5DB2215C1A400146683 /* TrackListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListView.swift; sourceTree = "<group>"; };
 		8B2E02D3225EA2D300ADC246 /* VGBaseTracksListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGBaseTracksListView.swift; sourceTree = "<group>"; };
-		8B2E02D4225EA2D300ADC246 /* iTunesTracksListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = iTunesTracksListView.xib; sourceTree = "<group>"; };
 		8B2E02D5225EA2D300ADC246 /* iTunesTracksListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesTracksListView.swift; sourceTree = "<group>"; };
 		8B2E02D9225EA34000ADC246 /* iTunesObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesObjects.swift; sourceTree = "<group>"; };
 		8B3CCB31221B159800BD7EC1 /* AppInfosView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppInfosView.xib; sourceTree = "<group>"; };
 		8B3CCB33221B15AA00BD7EC1 /* AppInfosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfosView.swift; sourceTree = "<group>"; };
 		8B3CCB36221B418400BD7EC1 /* NSSearchFieldFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSearchFieldFilterCell.swift; sourceTree = "<group>"; };
 		8B3CCB3A221B5AA300BD7EC1 /* DurationValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationValueTransformer.swift; sourceTree = "<group>"; };
-		8B3CCB3D221B756600BD7EC1 /* TrackListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackListCell.swift; sourceTree = "<group>"; };
 		8B43834C2215FA490040D2EB /* VGBaseNSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGBaseNSView.swift; sourceTree = "<group>"; };
 		8B43835022160C7D0040D2EB /* VGLoadableNib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGLoadableNib.swift; sourceTree = "<group>"; };
 		8B43835222175ECB0040D2EB /* NotificationNameExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNameExtension.swift; sourceTree = "<group>"; };
@@ -119,7 +115,6 @@
 			isa = PBXGroup;
 			children = (
 				8B2E02D3225EA2D300ADC246 /* VGBaseTracksListView.swift */,
-				8B2E02D4225EA2D300ADC246 /* iTunesTracksListView.xib */,
 				8B2E02D5225EA2D300ADC246 /* iTunesTracksListView.swift */,
 			);
 			path = List;
@@ -255,7 +250,6 @@
 		8BCDFC822257A511007E263A /* List */ = {
 			isa = PBXGroup;
 			children = (
-				8B3CCB3D221B756600BD7EC1 /* TrackListCell.swift */,
 				8B0DD5D92215C14300146683 /* TrackListView.xib */,
 				8B0DD5DB2215C1A400146683 /* TrackListView.swift */,
 			);
@@ -399,7 +393,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B2E02D7225EA2D400ADC246 /* iTunesTracksListView.xib in Resources */,
 				8BAE61E622527B07007C13FE /* VGTextInputFormView.xib in Resources */,
 				8B0DD5DA2215C14300146683 /* TrackListView.xib in Resources */,
 				8B3CCB32221B159800BD7EC1 /* AppInfosView.xib in Resources */,
@@ -445,7 +438,6 @@
 				8B3CCB34221B15AA00BD7EC1 /* AppInfosView.swift in Sources */,
 				8B43835322175ECB0040D2EB /* NotificationNameExtension.swift in Sources */,
 				8BE2D75E21FA8A9900E12848 /* AppDelegate.swift in Sources */,
-				8B3CCB3E221B756600BD7EC1 /* TrackListCell.swift in Sources */,
 				8B43835122160C7D0040D2EB /* VGLoadableNib.swift in Sources */,
 				8B6F3D802244191900286C86 /* ExportButton.swift in Sources */,
 				8BAE61E422527B07007C13FE /* VGForm.swift in Sources */,

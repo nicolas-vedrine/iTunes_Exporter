@@ -40,8 +40,8 @@ class Playlist: NSObject {
         get {
             var duration: Int = 0
             for theITTrack in theITPlaylist.items {
-                //let theTrack: Track = Track(theITTrack: theITTrack)
-                duration += theITTrack.totalTime / 1000
+                let theTrack: Track = Track(theITTrack: theITTrack)
+                duration += theTrack.duration
             }
             return duration
         }
@@ -51,18 +51,25 @@ class Playlist: NSObject {
         get {
             var size: UInt64 = 0
             for theITTrack in theITPlaylist.items {
-                //let theTrack: Track = Track(theITTrack: theITTrack)
-                size += theITTrack.fileSize
+                let theTrack: Track = Track(theITTrack: theITTrack)
+                size += theTrack.size
             }
             return size
         }
     }
     
-    /*var tracks: [Track] {
+    var tracks: [Track] {
         get {
-            return iTunesModel.getTracksFromITTracks(theITTracks: theITPlaylist.items)
+            var theTracks: [Track] = [Track]()
+            let theITTracks: [ITLibMediaItem] = theITPlaylist.items
+            let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: iTunesModel.ITSortKind.artistAndThenAlbum)})
+            for theITTrack in theITTracksSorted {
+                let theTrack: Track = Track(theITTrack: theITTrack)
+                theTracks.append(theTrack)
+            }
+            return theTracks
         }
-    }*/
+    }
     
     @objc func isLeaf() -> Bool {
         return !(self.isFolder)
@@ -147,32 +154,17 @@ class Track: NSObject {
     private(set) var theITTrack: ITLibMediaItem
     
     init(theITTrack: ITLibMediaItem) {
-        self.artist = iTunesModel.getArtistName(theITTrack: theITTrack)
-        //self.artist = ""
+        if let theArtistName = theITTrack.artist?.name {
+            self.artist = theArtistName
+        }
         self.name = theITTrack.title
         if let theAlbumName = theITTrack.album.title {
             self.album = theAlbumName
         }
-        //self.duration = theITTrack.totalTime
-        //self.size = theITTrack.fileSize
+        self.duration = theITTrack.totalTime
+        self.size = theITTrack.fileSize
         self.location = theITTrack.location
         self.theITTrack = theITTrack
-    }
-    
-}
-
-class KVOTrack: NSObject {
-    
-    
-    
-}
-
-class VGITLib: ITLibrary {
-    
-    override var allMediaItems: [ITLibMediaItem] {
-        get {
-            return super.allMediaItems
-        }
     }
     
 }
@@ -255,49 +247,6 @@ class iTunesModel {
         return theFinalList
     }
     
-    static func getFlattenPlaylistsTree(theList: [Playlist], isDistinguishedKind: Bool = true, theSeparator: String = "   ", theLevel: Int = 0) -> [Playlist] {
-        var theFinalList = [Playlist]()
-        for thePlaylist in theList {
-            if let thePlaylist = thePlaylist as? Playlist {
-                let thePlaylistName = thePlaylist.name
-                var theIdent = ""
-                var i = 0
-                while i < theLevel {
-                    theIdent = theIdent + theSeparator
-                    i += 1
-                }
-                theIdent += " "
-                print("V&G_FW___getFlattenPlaylistsTree : ", self, thePlaylist.theITPlaylist.distinguishedKind.rawValue, thePlaylist.theITPlaylist.isMaster)
-                thePlaylist.name = theIdent + thePlaylistName!
-                theFinalList.append(thePlaylist)
-                if thePlaylist.isFolder {
-                    let children = thePlaylist.children
-                    let result = getFlattenPlaylistsTree(theList: children!, theSeparator: theSeparator, theLevel: theLevel + 1)
-                    for i in result {
-                        theFinalList.append(i)
-                    }
-                }
-            }
-        }
-        return theFinalList
-    }
-    
-    /*private static func _getFlattenPlaylist(thePlaylist: Playlist) -> [Playlist] {
-        var theList = [Playlist]()
-        if let theChildren = thePlaylist.children {
-            for theChild in theChildren {
-                theList.append(theChild)
-                let theChildrenList = _getFlattenPlaylist(thePlaylist: theChild)
-                if theChildrenList.count > 0 {
-                    for item in theChildrenList {
-                        
-                    }
-                }
-            }
-        }
-        return theList
-    }*/
-    
     private static func _getPlaylistParent(thePlaylistID: NSNumber, thePlaylists: [ITLibPlaylist]) -> ITLibPlaylist! {
         if let thePlaylistParentID = thePlaylists.first(where: {$0.persistentID == thePlaylistID}) {
             return thePlaylistParentID
@@ -378,31 +327,16 @@ class iTunesModel {
                     theArtists.append(theArtist)
                 }
                 
-                let theCurrent: Int = i + 1
-                //NotificationCenter.default.post(name: .ARTIST_TREE_LOADING, object: ArtistTreeObject(track: theTrack, current: theCurrent, total: theLenght))
+                NotificationCenter.default.post(name: .ARTIST_TREE_LOADING, object: ArtistTreeObject(track: theTrack, current: i + 1, total: theLenght))
         }
         
         return theArtists
     }
     
-    public static func getiTunesTrackTitle(theiTunesTrack: ITLibMediaItem) -> String {
-        return theiTunesTrack.title
-    }
-    
-    public static func getAlbumTitle(theITTrack: ITLibMediaItem) -> String {
-        var theAlbumTitle: String = ""
-        if let theITAlbumName = theITTrack.album.title {
-            theAlbumTitle = theITAlbumName
-        }
-        return theAlbumTitle
-    }
-    
-    public static func getArtistName(theITTrack: ITLibMediaItem) -> String {
-        var theArtistName: String = ""
-        if let theITArtistName = theITTrack.artist?.name {
-            theArtistName = theITArtistName.replacingHTMLEntities!
-        }
-        return theArtistName
+    enum ITSortKind: Int {
+        case artist = 0
+        case album = 1
+        case artistAndThenAlbum = 2
     }
     
     public static func sortITTrack(ITTrack1: ITLibMediaItem, ITTrack2: ITLibMediaItem, kind: ITSortKind) -> Bool {
@@ -440,7 +374,12 @@ class iTunesModel {
             if let param44 = ITTrack2.album.title {
                 param4 = param44
             }
+            
             return (param1, param3) < (param2, param4)
+            
+        default:
+            param1 = (ITTrack1.artist?.name)!
+            param2 = (ITTrack2.artist?.name)!
         }
         if param1 != nil && param2 != nil {
             return param1.localizedCaseInsensitiveCompare((param2)) == ComparisonResult.orderedAscending
@@ -493,114 +432,22 @@ class iTunesModel {
         
     }
     
-    static func getStatutInfos(theTracks: [ITLibMediaItem]) -> StatutInfos {
+    static func getStatutInfos(theTracks: [Track]) -> StatutInfos {
         var statutInfos: StatutInfos = StatutInfos()
         statutInfos.count = theTracks.count
         for theTrack in theTracks {
-            statutInfos.duration += theTrack.totalTime
-            statutInfos.size += theTrack.fileSize
+            statutInfos.duration += theTrack.duration
+            statutInfos.size += theTrack.size
         }
         return statutInfos
     }
     
-    static func getFormattedTrackName(theITTrack: ITLibMediaItem, theFormattedTrackNameStyle: FormattedTrackNameStyle = .trackNameArtistNameAlbumName, theSeparator: String = " - ") -> String {
-        let theTrackName: String = theITTrack.title
-        let theArtistName: String = getArtistName(theITTrack: theITTrack)
-        let theAlbumTitle: String = getAlbumTitle(theITTrack: theITTrack)
-        var theFormattedTrackName: String = ""
-        switch theFormattedTrackNameStyle {
-        case .trackNameArtistNameAlbumName:
-            theFormattedTrackName = theTrackName + theSeparator + theArtistName + theSeparator + theAlbumTitle
-        case .artistNameTrackName:
-            theFormattedTrackName = theArtistName + theSeparator + theTrackName
-        }
-        return theFormattedTrackName
-    }
-    
-    static func getDestinationPattern(theITTrack: ITLibMediaItem, fileNameType: iTunesExportFileNameType) -> String {
-        var theDestinationPattern: String = ""
-        let theFileName: String = (theITTrack.location?.getName())!
-        let theAlbumName = getAlbumTitle(theITTrack: theITTrack)
-        //let theAlbumName = "album_name"
-        let theArtistName = getArtistName(theITTrack: theITTrack)
-        //let theArtistName = "artist_name"
-        switch fileNameType {
-        case iTunesExportFileNameType.fileName:
-            theDestinationPattern = theFileName
-        case iTunesExportFileNameType.albumSlashFileName:
-            theDestinationPattern = theAlbumName + "/" + theFileName
-        case iTunesExportFileNameType.artistSepAlbumSlashFileName:
-            theDestinationPattern = theArtistName + " - " + theAlbumName + "/" + theFileName
-        case iTunesExportFileNameType.artistSlashAlbumSlashFileName:
-            theDestinationPattern = theArtistName + "/" + theAlbumName + "/" + theFileName
-        case iTunesExportFileNameType.artistSlashFileName:
-            theDestinationPattern = theArtistName + "/" + theFileName
-        }
-        return theDestinationPattern
-    }
-    
-    static func getTracksFromITTracks(theITTracks: [ITLibMediaItem], theITSortKind: ITSortKind = ITSortKind.artistAndThenAlbum) -> [Track] {
-        var theTracks: [Track] = [Track]()
-        let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
-        let theCount = theITTracksSorted.count - 1
-        for i in 0...theCount {
-            let theITTrack = theITTracksSorted[i]
-            let theTrack: Track = Track(theITTrack: theITTrack)
-            theTracks.append(theTrack)
-            print("V&G_FW___getTracksFromITTracks : ", i, theCount)
-        }
-        return theTracks
-    }
-    
-    /*
- 
- to getFormatedTrackName(theTrack, theStyle)
- tell application "iTunes"
- try
- set trackName to name of theTrack
- set artistName to artist of theTrack
- set albumName to album of theTrack
- if theStyle is _formatedTrackNameTrackNameArtistNameAlbumName_ then
- if (albumName = "") then
- set str to ("\"" & trackName & "\"" & " by " & artistName & " in unknown album")
- else
- set str to ("\"" & trackName & "\"" & " by " & artistName & " in " & albumName)
- end if
- end if
- on error
- display dialog "error with the method getFormatedTrackName()"
- end try
- end tell
- return str
- end getFormatedTrackName
- */
- 
-    
-}
-
-enum FormattedTrackNameStyle: Int {
-    case trackNameArtistNameAlbumName = 0
-    case artistNameTrackName = 1
-}
-
-enum ITSortKind: Int {
-    case artist = 0
-    case album = 1
-    case artistAndThenAlbum = 2
 }
 
 struct StatutInfos {
     var count: Int = 0
     var duration: Int = 0
     var size: UInt64 = 0
-}
-
-enum iTunesExportFileNameType: String {
-    case fileName = "file_name"
-    case artistSepAlbumSlashFileName = "artist-album/file_name"
-    case artistSlashAlbumSlashFileName = "<artist>/<album>/<file_name>"
-    case albumSlashFileName = "<album>/<file name>"
-    case artistSlashFileName = "<artist>/<file name>"
 }
 
 

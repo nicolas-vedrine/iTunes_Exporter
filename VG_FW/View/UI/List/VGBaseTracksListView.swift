@@ -12,7 +12,7 @@ import iTunesLibrary
 class VGBaseTracksListView: VGBaseNSView {
     
     var tracksListTableView: NSTableView!
-    internal var theTracks: [NSObject]?
+    //internal var theTracks: [NSObject]?
     
     internal func initView() {
         removeColumns()
@@ -40,29 +40,32 @@ class VGBaseTracksListView: VGBaseNSView {
     
     var tracks: [NSObject]? {
         set {
-            datas = newValue as Any
-            theTracks = theDatas as? [NSObject]
+            datas = newValue
+            //theTracks = theDatas as? [NSObject]
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
                 self!.tracksListTableView.reloadData()
             }
             //tracksListTableView.reloadData()
         }
         get {
-            guard let tracks = theTracks else {
-                return nil
+            if let tracks: [NSObject] = datas as? [NSObject] {
+                return tracks
             }
-            return tracks
+            return nil
         }
     }
     
-    var selectedTracks: [NSObject] {
+    var selectedTracks: [NSObject]? {
         get {
-            var theSelectedTracks = [NSObject]()
-            let theIndexSet = self.tracksListTableView.selectedRowIndexes
-            for theIndex in theIndexSet {
-                theSelectedTracks.append(theTracks![theIndex])
+            if let tracks = tracks {
+                var theSelectedTracks = [NSObject]()
+                let theIndexSet = self.tracksListTableView.selectedRowIndexes
+                for theIndex in theIndexSet {
+                    theSelectedTracks.append(tracks[theIndex])
+                }
+                return theSelectedTracks
             }
-            return theSelectedTracks
+            return nil
         }
     }
     
@@ -87,38 +90,26 @@ class VGBaseTracksListView: VGBaseNSView {
 extension VGBaseTracksListView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        print("V&G_FW___numberOfRows : ", self, theTracks?.count)
-        return theTracks?.count ?? 0
+        if let tracks = tracks {
+            print("V&G_FW___numberOfRows : ", self, tracks.count)
+            return tracks.count
+        }
+        return 0
     }
 }
 
 extension VGBaseTracksListView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let item = theTracks?[row] else {
-            return nil
-        }
-        let cellIdentifier: String = "TitleCellID"
-        var text: String = ""
         
-        switch tableColumn?.identifier.rawValue {
-        case TableColumnID.trackNumberTableColumnID.rawValue:
-            text = String(row + 1)
-        case TableColumnID.titleTableColumnID.rawValue:
-            text = getTrackTitle(theTrack: item)
-        case TableColumnID.artistTableColumnID.rawValue:
-            text = getTrackArtistName(theTrack: item)
-        case TableColumnID.albumTableColumnID.rawValue:
-            text = getTrackAlbumName(theTrack: item)
-        case TableColumnID.totalTimeTableColumnID.rawValue:
-            text = getTotalTime(theTrack: item)
-        default:
-            text = ""
-        }
-        
-        if let cell: NSTableCellView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
-            cell.textField!.stringValue = text
-            return cell
+        if let tracks = tracks {
+            let cellIdentifier: String = "TracksListCellID"
+            let item = tracks[row]
+            let text = "text : " + String(row + 1)
+            if let cell: NSTableCellView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
+                cell.textField!.stringValue = text
+                return cell
+            }
         }
         
         return nil

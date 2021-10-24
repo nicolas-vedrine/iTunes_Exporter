@@ -69,9 +69,6 @@
                                                 </connections>
                                             </tableCellView>
                                         </prototypeCellViews>
-                                        <connections>
-                                            <binding destination="e98-qm-71r" name="value" keyPath="arrangedObjects" id="7Na-we-Qb0"/>
-                                        </connections>
                                     </tableColumn>
                                     <tableColumn width="507" minWidth="40" maxWidth="1000" id="KVv-II-h54">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
@@ -191,7 +188,7 @@
         <arrayController objectClassName="Track" id="e98-qm-71r">
             <classReference key="objectClass" className="Track"/>
             <connections>
-                <binding destination="5cU-pN-D2e" name="managedObjectContext" keyPath="self" id="Npp-0l-ntc"/>
+                <binding destination="5cU-pN-D2e" name="managedObjectContext" keyPath="self" id="8Ij-y3-bn3"/>
             </connections>
         </arrayController>
         <userDefaultsController representsSharedInstance="YES" id="c20-Yh-xrc"/>

@@ -13,9 +13,9 @@ import Cocoa
     @IBOutlet var contentView: NSView!
     @IBOutlet weak var addDeleteButton: NSButton!
     @IBOutlet weak var iTunesExporterTracksListTableView: NSTableView!
+    @IBOutlet var arrayController: NSArrayController!
     
     private var _trackListType: Int = TrackListType.add.rawValue
-    //private var _tracksAdded: [IT] = [Track]()
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -47,6 +47,7 @@ import Cocoa
         }
     }
     
+    // to add and get tracks
     override var tracks: [NSObject]? {
         set {
             if _trackListType == TrackListType.add.rawValue {
@@ -71,18 +72,18 @@ import Cocoa
                                 let msgBoxResult = _messageBoxResult(theTrack: theTrackToAdd)
                                 isRemembered = msgBoxResult.isRemembered
                                 switch(msgBoxResult.response) {
-                                case NSApplication.ModalResponse.alertFirstButtonReturn:
-                                    isAdd = true
-                                    theTracks.append(theTrackToAdd)
-                                case NSApplication.ModalResponse.alertSecondButtonReturn:
-                                    isCanceled = true
-                                case NSApplication.ModalResponse.alertThirdButtonReturn:
-                                    isIgnore = true
-                                    if isRemembered {
+                                    case NSApplication.ModalResponse.alertFirstButtonReturn:
+                                        isAdd = true
+                                        theTracks.append(theTrackToAdd)
+                                    case NSApplication.ModalResponse.alertSecondButtonReturn:
                                         isCanceled = true
-                                    }
-                                default:
-                                    break
+                                    case NSApplication.ModalResponse.alertThirdButtonReturn:
+                                        isIgnore = true
+                                        if isRemembered {
+                                            isCanceled = true
+                                        }
+                                    default:
+                                        break
                                 }
                                 
                                 if isCanceled {
@@ -97,14 +98,9 @@ import Cocoa
                     }
                     super.datas = theTracks
                     tracksListTableView.reloadData()
-                    /*DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
-                        //self!.tracksListTableView.reloadData()
-                    }*/
-                    
                 } else {
                     super.tracks = newValue
                 }
-                //print("V&G_Project___tracks : ", self, theTracks?.count)
             }
             
         }
@@ -112,41 +108,6 @@ import Cocoa
             return super.tracks
         }
     }
-    
-    /*func setTracks(theTracks: [Track], add: Bool = false) {
-        if !add {
-            theArrayController.removeAll()
-        }
-        let theArrangedObjects: [Track] = theArrayController.arrangedObjects as! [Track]
-        var isAdd: Bool = false
-        for theTrack in theTracks {
-            let theArrangedObjectsFiltered = theArrangedObjects.filter({$0.theITTrack.persistentID == theTrack.theITTrack.persistentID})
-            var isBreak: Bool = false
-            var isIgnore: Bool = false
-            if theArrangedObjectsFiltered.count == 0 || isAdd {
-                theArrayController.addObject(theTrack)
-            } else {
-                let result = _messageBoxResult(theTrack: theTrack)
-                switch(result) {
-                case NSApplication.ModalResponse.alertFirstButtonReturn:
-                    isAdd = true
-                    theArrayController.addObject(theTrack)
-                case NSApplication.ModalResponse.alertSecondButtonReturn:
-                    
-                    isBreak = true
-                case NSApplication.ModalResponse.alertThirdButtonReturn:
-                    isIgnore = true
-                default:
-                    break
-                }
-                
-                if isBreak {
-                    print("V&G_FW___<#name#> : ", "break")
-                    break
-                }
-            }
-        }
-    }*/
     
     private func _messageBoxResult(theTrack: ITLibMediaItem) -> MessageBoxResult {
         let alert = NSAlert()
@@ -181,17 +142,39 @@ import Cocoa
     }
     
     private func _deleteTracksAction() {
-        /*if trackListView.selectedRowIndexes.count > 0 {
-            let theIndexSet = self.trackListView.selectedRowIndexes
-            var theTracks: [Track]
-            theTracks = self.theArrayController.arrangedObjects as! [Track]
-            for theIndex in theIndexSet {
-                self.theArrayController.removeObject(theTracks[theIndex])
+        if tracksListTableView.selectedRowIndexes.count > 0 {
+            let theIndexSet: IndexSet = self.tracksListTableView.selectedRowIndexes
+            let theSelectedTracks: [NSObject] = selectedTracks!
+//            let bool: Bool = arrayController.removeSelectedObjects(theSelectedTracks)
+            //arrayController.remove(atArrangedObjectIndexes: arrayController.selectionIndexes)
+            
+            //let theTracks: [Track] = selectedTracks! as [Track]
+            //for theIndex in theIndexSet {
+                //self.arrayController.removeObject(theTracks[theIndex])
+            //}
+            /*self.arrayController.removeAll()
+            tracksListTableView.reloadData()*/
+            
+            for theTest in theSelectedTracks {
+                let theTrack: ITLibMediaItem = theTest as! ITLibMediaItem
+                print("V&G_Project____deleteTracksAction : ", theTrack.artist?.name)
+                
             }
-            theTracks = self.theArrayController.arrangedObjects as! [Track]
-            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theTracks)
-        }*/
+            //tracksListTableView.removeRows(at: theIndexSet, withAnimation: .effectFade)
+            //var theTracks = [ITLibMediaItem]()
+            let theTracks: [ITLibMediaItem] = tracks! as! [ITLibMediaItem]
+            for theTrack: ITLibMediaItem in theTracks {
+                print("V&G_Project___<#name#> : ", theTrack.artist?.name)
+            }
+            super.datas = theTracks
+            tracksListTableView.reloadData()
+            //print("V&G_Project___deleteTracksAction : ", arrayController.)
+            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)
+            
+        }
     }
+    
+    
     
 }
 
@@ -200,6 +183,14 @@ extension TrackListView {
     /*override func numberOfRows(in tableView: NSTableView) -> Int {
         return theiTunesTracks?.count ?? 0
     }*/
+    
+    override func numberOfRows(in tableView: NSTableView) -> Int {
+        super.numberOfRows(in: tableView)
+    }
+    
+    func tableView(_ tableView: NSTableView, didRemove rowView: NSTableRowView, forRow row: Int) {
+        //
+    }
     
 }
 

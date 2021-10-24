@@ -63,6 +63,7 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     }
     
     private func _onTracksAddedDeleted(notification: Notification) {
+        print("V&G_Project____onTracksAddedDeleted : ", notification.name)
         let theTracks: [ITLibMediaItem] = notification.object as! [ITLibMediaItem]
         switch notification.name {
         case Notification.Name.TRACKS_ADDED:
@@ -70,7 +71,6 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
             theAddedTracksListView.tracks = theTracks
         case Notification.Name.TRACKS_DELETED:
             print("V&G_FW____onTracksAddedDeleted : ", self)
-            
         default:
             print("V&G_FW____onTracksAddedDeleted : ", self)
         }
@@ -217,16 +217,14 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         theAppInfosView.state = AppInfosViewState.exporting.rawValue
         theAppInfosView.setStatus(theStatus: AppInfosView.exportingStatus)
         theExportButton.state = NSControl.StateValue.on
-        //theMenuBox.su
         
-        //let exportToArray: [URL] = formResult[FormItemCode.exportTo.rawValue] as! [URL]
         let exportTo: URL = formResult[FormItemCode.exportTo.rawValue] as! URL
         let theChosenIfFileAlreadyExistsType: IfFileAlreadyExistsType = formResult[FormItemCode.ifAlreadyExists.rawValue] as! IfFileAlreadyExistsType
         let theFileNameType: iTunesExportFileNameType = formResult[FormItemCode.fileName.rawValue] as! iTunesExportFileNameType
         for i in 0...theTracksList!.count - 1 {
             let theTrack: ITLibMediaItem = theTracksList![i] as! ITLibMediaItem
-            let file: URL = theTrack.location!
-            let theSourcePathStr: String = file.path
+            let theFile: URL = theTrack.location!
+            let theSourcePathStr: String = theFile.path
             let theDestinationPattern: String = iTunesModel.getDestinationPattern(theITTrack: theTrack, fileNameType: theFileNameType)
             let theDestinationPathStr: String = exportTo.path + "/" + theDestinationPattern
             let theCopyFileOperation: FileOperation = FileOperation(fileManager: fm, srcPath: theSourcePathStr, dstPath: theDestinationPathStr, ifFileAlreadyExistsType: theChosenIfFileAlreadyExistsType)
@@ -239,9 +237,6 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         }
         _theCopyFilesOperationQueue?.isSuspended = false
     }
-    
-    
-    
     
 }
 
@@ -366,22 +361,6 @@ extension ViewController {
             return cell
         }
     }
-    
-    /*func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
-        print("V&G_FW___<#name#> : ", "isItemExpandable")
-        switch item {
-        case let playlistGroup as PlaylistGroup:
-            return (playlistGroup.children.count > 0) ? true : false
-        case let playlist as Playlist:
-            if playlist.isFolder && playlist.children!.count > 0 {
-                return true
-            } else {
-                return false
-            }
-        default:
-            return false
-        }
-    }*/
     
     func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
         print("V&G_FW___<#name#> : ", item)

@@ -117,22 +117,6 @@ class ExportController: BaseProjectViewController {
 
 extension ExportController: VGBrowsePathFormViewDelegate {
     
-    /*func browse(browsePathFormView: VGBrowsePathFormView) {
-        let theBrowsePanel: NSOpenPanel = NSOpenPanel()
-        theBrowsePanel.delegate = self as? NSOpenSavePanelDelegate
-        theBrowsePanel.title = "Choose your export folder..."
-        theBrowsePanel.allowsMultipleSelection = false
-        let canChooseFiles: Bool = false
-        theBrowsePanel.canChooseFiles = canChooseFiles
-        theBrowsePanel.canChooseDirectories = !canChooseFiles
-        
-        if theBrowsePanel.runModal() == NSApplication.ModalResponse.OK {
-            browsePathFormView.value = [theBrowsePanel.url]
-            print("V&G_Project___browse : ", self, browsePathFormView.value)
-            _setFreeSpace(browsePathFormView: browsePathFormView)
-        }
-    }*/
-    
     func browse(browsePathFormView: VGBrowsePathFormView) {
         DispatchQueue.main.async { [unowned self] in
             let theBrowsePanel: NSOpenPanel = NSOpenPanel()

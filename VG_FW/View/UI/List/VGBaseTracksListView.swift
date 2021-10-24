@@ -57,11 +57,11 @@ class VGBaseTracksListView: VGBaseNSView {
     
     var selectedTracks: [NSObject]? {
         get {
-            if let tracks = tracks {
+            if let theTracks = tracks {
                 var theSelectedTracks = [NSObject]()
                 let theIndexSet = self.tracksListTableView.selectedRowIndexes
                 for theIndex in theIndexSet {
-                    theSelectedTracks.append(tracks[theIndex])
+                    theSelectedTracks.append(theTracks[theIndex])
                 }
                 return theSelectedTracks
             }

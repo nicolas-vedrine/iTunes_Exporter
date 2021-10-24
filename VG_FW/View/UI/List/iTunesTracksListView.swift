@@ -14,10 +14,10 @@ class iTunesTracksListView: VGBaseTracksListView {
     //internal var theiTunesTracks: [ITLibMediaItem]?
     
     /*override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-        
-        // Drawing code here.
-    }*/
+     super.draw(dirtyRect)
+     
+     // Drawing code here.
+     }*/
     
     override func _onTableViewDoubleClick(_ sender: AnyObject) {
         print("V&G_FW___TableViewDoubleClick iTunes : ", self)
@@ -25,8 +25,7 @@ class iTunesTracksListView: VGBaseTracksListView {
     
     override var tracks: [NSObject]? {
         set {
-            super.tracks = newValue 
-            //theiTunesTracks = theTracks as? [ITLibMediaItem]
+            super.tracks = newValue
         }
         get {
             guard let tracks = theDatas else {
@@ -63,8 +62,6 @@ extension iTunesTracksListView {
             default:
                 text = ""
             }
-            
-            //print("V&G_FW___viewFor tableColumn : ", self)
             
             if let cell: NSTableCellView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
                 cell.textField!.stringValue = text

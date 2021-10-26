@@ -121,11 +121,22 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         self.theOutlineView.expandItem(nil, expandChildren: true)
         theSegmentedControl.selectedSegment = 0
         
-        let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
-        let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isDistinguishedKind: true, theSeparator: "")
-        let theMusicBoxPlaylists = theFlattenPlaylist.filter({($0.name?.lowercased().contains("music box"))!})
-        let theMusicBoxPlaylist = theMusicBoxPlaylists[0]
-        thePlaylistTracksListView.tracks = theMusicBoxPlaylist.theITPlaylist.items
+        if IS_DEBUG_MODE {
+            let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
+            let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isDistinguishedKind: true, theSeparator: "")
+            let theMusicBoxPlaylists = theFlattenPlaylist.filter({($0.name?.lowercased().contains("music box"))!})
+            let thePlaylistTest = theMusicBoxPlaylists[0]
+            thePlaylistTracksListView.tracks = thePlaylistTest.theITPlaylist.items
+            
+            let thePlaylistTestTracks: [ITLibMediaItem] = (thePlaylistTracksListView.tracks! as? [ITLibMediaItem])!
+            let theRandomInt = Int.random(in: 0..<thePlaylistTestTracks.count - 1)
+            var theTracksToAdd: [ITLibMediaItem] = [ITLibMediaItem]()
+            for n in 0...theRandomInt {
+                let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracks[n]
+                theTracksToAdd.append(theTrackToAdd)
+            }
+            theAddedTracksListView.tracks = theTracksToAdd
+        }
     }
     
     private func _addArtists(lib: ITLibrary) {

@@ -14,7 +14,6 @@
             </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="addDeleteButton" destination="Rgw-U5-UFh" id="npp-zI-pbt"/>
-                <outlet property="arrayController" destination="e98-qm-71r" id="hR0-6P-RLe"/>
                 <outlet property="contentView" destination="c22-O7-iKe" id="nrb-gc-NXE"/>
                 <outlet property="iTunesExporterTracksListTableView" destination="rEN-Kb-Lxw" id="uxp-fb-VFs"/>
             </connections>
@@ -69,9 +68,6 @@
                                                 </connections>
                                             </tableCellView>
                                         </prototypeCellViews>
-                                        <connections>
-                                            <binding destination="e98-qm-71r" name="value" keyPath="arrangedObjects" id="7Na-we-Qb0"/>
-                                        </connections>
                                     </tableColumn>
                                     <tableColumn width="507" minWidth="40" maxWidth="1000" id="KVv-II-h54">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
@@ -149,14 +145,6 @@
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </searchFieldCell>
-                                    <connections>
-                                        <binding destination="e98-qm-71r" name="predicate" keyPath="filterPredicate" id="Yum-lU-fmW">
-                                            <dictionary key="options">
-                                                <string key="NSDisplayName">predicate</string>
-                                                <string key="NSPredicateFormat">self.artist contains[cd] $value OR self.name contains[cd] $value OR self.album contains[cd] $value</string>
-                                            </dictionary>
-                                        </binding>
-                                    </connections>
                                 </searchField>
                             </subviews>
                             <constraints>
@@ -188,12 +176,5 @@
             <point key="canvasLocation" x="233.5" y="302"/>
         </customView>
         <customObject id="5cU-pN-D2e" customClass="NSMutableArray"/>
-        <arrayController objectClassName="Track" id="e98-qm-71r">
-            <classReference key="objectClass" className="Track"/>
-            <connections>
-                <binding destination="5cU-pN-D2e" name="managedObjectContext" keyPath="self" id="Npp-0l-ntc"/>
-            </connections>
-        </arrayController>
-        <userDefaultsController representsSharedInstance="YES" id="c20-Yh-xrc"/>
     </objects>
 </document>

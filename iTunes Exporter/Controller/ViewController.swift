@@ -129,10 +129,11 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
             thePlaylistTracksListView.tracks = thePlaylistTest.theITPlaylist.items
             
             let thePlaylistTestTracks: [ITLibMediaItem] = (thePlaylistTracksListView.tracks! as? [ITLibMediaItem])!
+            let thePlaylistTestTracksShuffled = thePlaylistTestTracks.shuffled()
             let theRandomInt = Int.random(in: 0..<thePlaylistTestTracks.count - 1)
             var theTracksToAdd: [ITLibMediaItem] = [ITLibMediaItem]()
             for n in 0...theRandomInt {
-                let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracks[n]
+                let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracksShuffled[n]
                 theTracksToAdd.append(theTrackToAdd)
             }
             theAddedTracksListView.tracks = theTracksToAdd

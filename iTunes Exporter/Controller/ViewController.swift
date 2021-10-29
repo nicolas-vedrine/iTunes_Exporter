@@ -117,10 +117,10 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
             _thePlaylistsGroups = iTunesModel.getPlaylistsGroups(thePlaylists: thePlaylistsTree)
         }
         theTreeController.content = _thePlaylistsGroups
-        //let item = theOutlineView.
         self.theOutlineView.expandItem(nil, expandChildren: true)
         theSegmentedControl.selectedSegment = 0
         
+        // remplissage auto de tableaux
         if IS_DEBUG_MODE {
             let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
             let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isDistinguishedKind: true, theSeparator: "")
@@ -158,7 +158,6 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     
     private func _onArtistTreeLoading(notification: Notification) {
         let artistTreeObject = notification.object as! ArtistTreeObject
-        //print("V&G_Project___<#name#> : ", artistTreeObject.track?.artist)
         theAppInfosView.setProgress(current: Double(artistTreeObject.current!), total: Double(artistTreeObject.total!))
     }
     
@@ -274,7 +273,7 @@ extension ViewController {
             
             switch key {
             case Operation.FINISHED:
-                print("V&G_Project___observeValue Operation.FINISHED : ", self, theCopyFileOperation.index, theCopyFileOperation.srcPath)
+                print("V&G_Project___observeValue Operation.FINISHED : ", self, theCopyFileOperation.index!, theCopyFileOperation.srcPath)
                 DispatchQueue.main.async { [unowned self] in
                     if !(self._theCopyFilesOperationQueue?.isCancelled)! {
                         self.theAppInfosView.setProgress(current: Double(current), total: total)

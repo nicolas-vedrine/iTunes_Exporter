@@ -96,8 +96,8 @@ import Cocoa
                             }
                         }
                     }
-                    super.datas = theTracks
-                    tracksListTableView.reloadData()
+                    super.tracks = theTracks
+                    //tracksListTableView.reloadData()
                 } else {
                     super.tracks = newValue
                 }
@@ -143,34 +143,9 @@ import Cocoa
     
     private func _deleteTracksAction() {
         if tracksListTableView.selectedRowIndexes.count > 0 {
-            let theIndexSet: IndexSet = self.tracksListTableView.selectedRowIndexes
             let theSelectedTracks: [NSObject] = selectedTracks!
-//            let bool: Bool = arrayController.removeSelectedObjects(theSelectedTracks)
-            //arrayController.remove(atArrangedObjectIndexes: arrayController.selectionIndexes)
-            
-            //let theTracks: [Track] = selectedTracks! as [Track]
-            //for theIndex in theIndexSet {
-                //self.arrayController.removeObject(theTracks[theIndex])
-            //}
-            /*self.arrayController.removeAll()
-            tracksListTableView.reloadData()*/
-            
-            for theTest in theSelectedTracks {
-                let theTrack: ITLibMediaItem = theTest as! ITLibMediaItem
-                print("V&G_Project____deleteTracksAction : ", theTrack.artist?.name)
-                
-            }
-            //tracksListTableView.removeRows(at: theIndexSet, withAnimation: .effectFade)
-            //var theTracks = [ITLibMediaItem]()
-            let theTracks: [ITLibMediaItem] = tracks! as! [ITLibMediaItem]
-            for theTrack: ITLibMediaItem in theTracks {
-                print("V&G_Project___<#name#> : ", theTrack.artist?.name)
-            }
-            super.datas = theTracks
-            tracksListTableView.reloadData()
-            //print("V&G_Project___deleteTracksAction : ", arrayController.)
-            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)
-            
+            removeTracks(theTracksToRemove: theSelectedTracks)
+            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)            
         }
     }
     

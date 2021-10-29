@@ -69,6 +69,16 @@ class VGBaseTracksListView: VGBaseNSView {
         }
     }
     
+    func removeTracks(theTracksToRemove: [NSObject]) {
+        var theTracks: [NSObject] = tracks!
+        for theTrackToRemove in theTracksToRemove {
+            let theIndex: Int = theTracks.index(of: theTrackToRemove)!
+            theTracks.remove(at: theIndex)
+        }
+        datas = theTracks
+        tracksListTableView.reloadData()
+    }
+    
     func buildColumns(columnsList: [ColumnsListStruct]) {
         for columnStruct in columnsList {
             let columnID: NSUserInterfaceItemIdentifier = NSUserInterfaceItemIdentifier(rawValue: columnStruct.id.rawValue)

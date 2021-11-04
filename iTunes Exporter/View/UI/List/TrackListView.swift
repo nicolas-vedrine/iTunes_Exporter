@@ -13,7 +13,8 @@ import Cocoa
     @IBOutlet var contentView: NSView!
     @IBOutlet weak var addDeleteButton: NSButton!
     @IBOutlet weak var iTunesExporterTracksListTableView: NSTableView!
-    @IBOutlet var arrayController: NSArrayController!
+    @IBOutlet weak var searchField: NSSearchField!
+    
     
     private var _trackListType: Int = TrackListType.add.rawValue
     
@@ -30,6 +31,12 @@ import Cocoa
         
         tracksListTableView = iTunesExporterTracksListTableView
         initView()
+    }
+    
+    override func removeTracks(theTracksToRemove: [NSObject]) {
+        if _trackListType == TrackListType.delete.rawValue {
+            super.removeTracks(theTracksToRemove: theTracksToRemove)
+        }
     }
     
     @IBInspectable var trackListType: Int = TrackListType.add.rawValue {
@@ -155,16 +162,8 @@ import Cocoa
 
 extension TrackListView {
     
-    /*override func numberOfRows(in tableView: NSTableView) -> Int {
-        return theiTunesTracks?.count ?? 0
-    }*/
-    
     override func numberOfRows(in tableView: NSTableView) -> Int {
         super.numberOfRows(in: tableView)
-    }
-    
-    func tableView(_ tableView: NSTableView, didRemove rowView: NSTableRowView, forRow row: Int) {
-        //
     }
     
 }

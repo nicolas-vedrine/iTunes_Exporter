@@ -11,14 +11,6 @@ import iTunesLibrary
 
 class iTunesTracksListView: VGBaseTracksListView {
     
-    //internal var theiTunesTracks: [ITLibMediaItem]?
-    
-    /*override func draw(_ dirtyRect: NSRect) {
-     super.draw(dirtyRect)
-     
-     // Drawing code here.
-     }*/
-    
     override func _onTableViewDoubleClick(_ sender: AnyObject) {
         print("V&G_FW___TableViewDoubleClick iTunes : ", self)
     }

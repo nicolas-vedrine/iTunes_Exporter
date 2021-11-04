@@ -32,20 +32,20 @@ class VGBaseTracksListView: VGBaseNSView {
         print("V&G_FW____onTableViewDoubleClick : ", self)
     }
     
-    /*override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-        
-        // Drawing code here.
-    }*/
+    override func keyDown(with event: NSEvent) {
+        super.keyDown(with: event)
+        print("V&G_FW___keyDown : ", event.keyCode)
+        if event.keyCode == 117 {
+            removeTracks(theTracksToRemove: selectedTracks!)
+        }
+    }
     
     var tracks: [NSObject]? {
         set {
             datas = newValue
-            //theTracks = theDatas as? [NSObject]
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
                 self!.tracksListTableView.reloadData()
             }
-            //tracksListTableView.reloadData()
         }
         get {
             if let tracks: [NSObject] = datas as? [NSObject] {

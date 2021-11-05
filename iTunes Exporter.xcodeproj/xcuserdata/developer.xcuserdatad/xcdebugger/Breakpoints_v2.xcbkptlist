@@ -49,8 +49,8 @@
             timestampString = "576786118.586185"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "341"
-            endingLineNumber = "341"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "getArtistsTree(theITTracks:theLenght:isRecursive:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -66,8 +66,8 @@
             timestampString = "576786118.586521"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "475"
-            endingLineNumber = "475"
+            startingLineNumber = "459"
+            endingLineNumber = "459"
             landmarkName = "iTunesModel"
             landmarkType = "3">
          </BreakpointContent>
@@ -92,35 +92,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "55C4D6E1-5CD9-44C6-9394-103D8EFFD9B1"
+            uuid = "784E91BA-D87D-4EF5-BD01-97698359FE73"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "iTunes Exporter/Controller/ViewController.swift"
-            timestampString = "576786118.5869319"
+            filePath = "iTunes Exporter/View/UI/List/TrackListView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "415"
-            endingLineNumber = "415"
-            landmarkName = "outlineViewSelectionDidChange(_:)"
-            landmarkType = "7">
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "tracks"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3D2124AA-9B04-4882-8E58-92A4BE414E8A"
-            shouldBeEnabled = "No"
+            uuid = "DAB0C396-06E4-4B1F-8887-B6D60C0A1357"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "VG_FW/View/UI/List/VGBaseTracksListView.swift"
-            timestampString = "576786118.587587"
+            filePath = "iTunes Exporter/View/UI/List/TrackListView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "numberOfRows(in:)"
-            landmarkType = "7">
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "tracks"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

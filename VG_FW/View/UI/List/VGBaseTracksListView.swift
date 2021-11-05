@@ -12,7 +12,7 @@ import iTunesLibrary
 class VGBaseTracksListView: VGBaseNSView {
     
     var tracksListTableView: NSTableView!
-    //internal var theTracks: [NSObject]?
+    private var _arrayController: NSArrayController = NSArrayController()
     
     internal func initView() {
         removeColumns()
@@ -26,6 +26,8 @@ class VGBaseTracksListView: VGBaseNSView {
         
         tracksListTableView.target = self
         tracksListTableView.doubleAction = #selector(_onTableViewDoubleClick(_:))
+        
+        tracksListTableView.bind(.content, to: _arrayController, withKeyPath: "arrangedObjects", options: nil)
     }
     
     @objc func _onTableViewDoubleClick(_ sender: AnyObject) {
@@ -43,9 +45,12 @@ class VGBaseTracksListView: VGBaseNSView {
     var tracks: [NSObject]? {
         set {
             datas = newValue
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
-                self!.tracksListTableView.reloadData()
+            for theTrack in tracks! {
+                _arrayController.add(theTrack)
             }
+            /*DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+                self!.tracksListTableView.reloadData()
+            }*/
         }
         get {
             if let tracks: [NSObject] = datas as? [NSObject] {
@@ -95,6 +100,8 @@ class VGBaseTracksListView: VGBaseNSView {
         }
     }
     
+    
+    
 }
 
 extension VGBaseTracksListView: NSTableViewDataSource {
@@ -114,7 +121,6 @@ extension VGBaseTracksListView: NSTableViewDelegate {
         
         if let tracks = tracks {
             let cellIdentifier: String = "TracksListCellID"
-            let item = tracks[row]
             let text = "text : " + String(row + 1)
             if let cell: NSTableCellView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
                 cell.textField!.stringValue = text

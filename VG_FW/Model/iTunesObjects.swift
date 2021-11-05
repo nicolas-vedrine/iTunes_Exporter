@@ -234,24 +234,9 @@ class iTunesModel {
                 }
             }
             
-            /*if hasParent {
-             if isFolder {
-             
-             } else {
-             
-             }
-             } else {
-             if isFolder {
-             
-             } else {
-             
-             }
-             }*/
-            
             theList.append(theItem)
             
         }
-        print("V&G_Project___<#name#> : ", theFinalList.count)
         return theFinalList
     }
     
@@ -267,7 +252,6 @@ class iTunesModel {
                     i += 1
                 }
                 theIdent += " "
-                print("V&G_FW___getFlattenPlaylistsTree : ", self, thePlaylist.theITPlaylist.distinguishedKind.rawValue, thePlaylist.theITPlaylist.isMaster)
                 thePlaylist.name = theIdent + thePlaylistName!
                 theFinalList.append(thePlaylist)
                 if thePlaylist.isFolder {

@@ -27,13 +27,21 @@ class iTunesTracksListView: VGBaseTracksListView {
         }
     }
     
+    func filterTracks(theStr: String) {
+        let theTracks: [ITLibMediaItem] = (tracks! as? [ITLibMediaItem])!
+        let theSearch = theTracks.filter({($0.artist?.name?.lowercased().contains(theStr))!})
+        print("V&G_Project___filterTracks : ", theStr + " " + String(theSearch.count))
+        datas = theSearch
+        tracksListTableView.reloadData()
+    }
+    
 }
 
 extension iTunesTracksListView {
     
     override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        if let tracks: [ITLibMediaItem] = tracks as? [ITLibMediaItem] {
-            let item = tracks[row]
+        if let theTracks: [ITLibMediaItem] = tracks as? [ITLibMediaItem] {
+            let theTrack = theTracks[row]
             let cellIdentifier: String = "TracksListCellID"
             var text: String = ""
             
@@ -41,16 +49,16 @@ extension iTunesTracksListView {
             case TableColumnID.trackNumberTableColumnID.rawValue:
                 text = String(row + 1)
             case TableColumnID.titleTableColumnID.rawValue:
-                text = getTrackTitle(theTrack: item)
+                text = getTrackTitle(theTrack: theTrack)
             case TableColumnID.artistTableColumnID.rawValue:
-                text = iTunesModel.getArtistName(theITTrack: item)
+                text = iTunesModel.getArtistName(theITTrack: theTrack)
             case TableColumnID.albumTableColumnID.rawValue:
-                text = iTunesModel.getAlbumTitle(theITTrack: item)
+                text = iTunesModel.getAlbumTitle(theITTrack: theTrack)
             case TableColumnID.locationTableColumnID.rawValue:
-                text = item.location?.path ?? ""
+                text = theTrack.location?.path ?? ""
             //text  = item.
             case TableColumnID.totalTimeTableColumnID.rawValue:
-                text = getTotalTime(theTrack: item)
+                text = getTotalTime(theTrack: theTrack)
             default:
                 text = ""
             }

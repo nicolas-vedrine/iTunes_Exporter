@@ -18,7 +18,6 @@ class ExportController: BaseProjectViewController {
     @IBOutlet weak var theFileNameComboBoxFormView: VGComboBoxFormView!
     @IBOutlet weak var theIfAlreadyExistsComboBoxFormView: VGComboBoxFormView!
     
-    //private var _theTracks: [ITLibMediaItem]?
     private var _theFilesSize: UInt64 = 0
     
     var onValidateForm: ((_ formResult: [String: Any]) -> ())?

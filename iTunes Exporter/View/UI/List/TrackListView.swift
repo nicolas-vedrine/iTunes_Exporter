@@ -30,6 +30,14 @@ import Cocoa
         loadViewFromNib()
         
         tracksListTableView = iTunesExporterTracksListTableView
+        
+        searchField.target = self
+        if #available(macOS 10.11, *) {
+            searchField.delegate = self
+        } else {
+            // Fallback on earlier versions
+        }
+        
         initView()
     }
     
@@ -64,6 +72,8 @@ import Cocoa
                     var theTracks = [ITLibMediaItem]()
                     for track in datas {
                         theTracks.append(track)
+                        //_arrayController.add(track)
+                        //_arrayController.addObject(track)
                     }
                     let theTracksToAdd: [ITLibMediaItem] = newValue as! [ITLibMediaItem]
                     var isAdd: Bool = false
@@ -79,18 +89,18 @@ import Cocoa
                                 let msgBoxResult = _messageBoxResult(theTrack: theTrackToAdd)
                                 isRemembered = msgBoxResult.isRemembered
                                 switch(msgBoxResult.response) {
-                                    case NSApplication.ModalResponse.alertFirstButtonReturn:
-                                        isAdd = true
-                                        theTracks.append(theTrackToAdd)
-                                    case NSApplication.ModalResponse.alertSecondButtonReturn:
+                                case NSApplication.ModalResponse.alertFirstButtonReturn:
+                                    isAdd = true
+                                    theTracks.append(theTrackToAdd)
+                                case NSApplication.ModalResponse.alertSecondButtonReturn:
+                                    isCanceled = true
+                                case NSApplication.ModalResponse.alertThirdButtonReturn:
+                                    isIgnore = true
+                                    if isRemembered {
                                         isCanceled = true
-                                    case NSApplication.ModalResponse.alertThirdButtonReturn:
-                                        isIgnore = true
-                                        if isRemembered {
-                                            isCanceled = true
-                                        }
-                                    default:
-                                        break
+                                    }
+                                default:
+                                    break
                                 }
                                 
                                 if isCanceled {
@@ -104,7 +114,6 @@ import Cocoa
                         }
                     }
                     super.tracks = theTracks
-                    //tracksListTableView.reloadData()
                 } else {
                     super.tracks = newValue
                 }
@@ -154,8 +163,7 @@ import Cocoa
             removeTracks(theTracksToRemove: theSelectedTracks)
             NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)            
         }
-    }
-    
+    }    
     
     
 }
@@ -166,6 +174,22 @@ extension TrackListView {
         super.numberOfRows(in: tableView)
     }
     
+}
+
+extension TrackListView: NSSearchFieldDelegate {
+    func searchFieldDidStartSearching(_ sender: NSSearchField) {
+        print("didStart")
+    }
+    
+    func searchFieldDidEndSearching(_ sender: NSSearchField) {
+        print("didEnd")
+    }
+    
+    func controlTextDidChange(_ obj: Notification) {
+        let theTextField = obj.object as! NSTextField
+        let theStr = theTextField.stringValue
+        filterTracks(theStr: theStr)
+    }
 }
 
 public enum TrackListType: Int {

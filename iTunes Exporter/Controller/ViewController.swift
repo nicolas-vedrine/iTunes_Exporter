@@ -67,7 +67,6 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         let theTracks: [ITLibMediaItem] = notification.object as! [ITLibMediaItem]
         switch notification.name {
         case Notification.Name.TRACKS_ADDED:
-            //theAddedTracksListView.setTracks(theTracks: theTracks, add: true)
             theAddedTracksListView.tracks = theTracks
         case Notification.Name.TRACKS_DELETED:
             print("V&G_FW____onTracksAddedDeleted : ", self)
@@ -131,7 +130,7 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
             let thePlaylistTestTracks: [ITLibMediaItem] = (thePlaylistTracksListView.tracks! as? [ITLibMediaItem])!
             let thePlaylistTestTracksShuffled = thePlaylistTestTracks.shuffled()
             //let theRandomInt = Int.random(in: 0..<thePlaylistTestTracks.count - 1)
-            let theRandomInt = Int.random(in: 2..<5)
+            let theRandomInt = Int.random(in: 2..<10)
             var theTracksToAdd: [ITLibMediaItem] = [ITLibMediaItem]()
             for n in 0...theRandomInt {
                 let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracksShuffled[n]

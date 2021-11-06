@@ -31,6 +31,14 @@ import Cocoa
         tracksListTableView = iTunesExporterTracksListTableView
         
         searchField.target = self
+        
+        /*searchField.bind(
+            .predicate,
+            to: self.arrayController,
+            withKeyPath: NSBindingName.filterPredicate.rawValue,
+            options: [.predicateFormat: "col CONTAINS[cd] $value"]
+        )*/
+        
         if #available(macOS 10.11, *) {
             searchField.delegate = self
         } else {
@@ -222,7 +230,8 @@ extension TrackListView: NSSearchFieldDelegate {
     func controlTextDidChange(_ obj: Notification) {
         let theTextField = obj.object as! NSTextField
         let theStr = theTextField.stringValue
-        filterTracks(theStr: theStr)
+        //filterTracks(theStr: theStr)
+        searchField.sendAction(searchField.action, to: searchField.target)
     }
 }
 

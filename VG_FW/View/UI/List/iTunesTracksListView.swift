@@ -37,11 +37,13 @@ class iTunesTracksListView: VGBaseTracksListView {
     }
     
     func filterTracks(theStr: String) {
-        let theTracks: [ITLibMediaItem] = (tracks! as? [ITLibMediaItem])!
+        /*let theTracks: [ITLibMediaItem] = (tracks! as? [ITLibMediaItem])!
         let theSearch = theTracks.filter({($0.artist?.name?.lowercased().contains(theStr))!})
         print("V&G_Project___filterTracks : ", theStr + " " + String(theSearch.count))
         datas = theSearch
-        tracksListTableView.reloadData()
+        tracksListTableView.reloadData()*/
+        /*var thePredicate: NSPredicate = NSPredicate(format: "ANY partsList.partNumber contains[c] %@", argumentArray: [theStr])
+        arrayController.filterPredicate = thePredicate*/
     }
     
 }

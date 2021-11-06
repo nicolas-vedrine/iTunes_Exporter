@@ -68,7 +68,13 @@ class VGBaseTracksListView: VGBaseNSView {
     var selectedTracks: [NSObject]? {
         get {
             if let theTracks = tracks {
-                let selectedTracks: [NSObject] = (arrayController.selectedObjects as? [NSObject])!
+                var selectedTracks: [NSObject] = [NSObject]()
+                let selectedIndexes: IndexSet = tracksListTableView.selectedRowIndexes
+                let theTracks: [NSObject] = arrayController.arrangedObjects as! [NSObject]
+                for theIndex in selectedIndexes {
+                    let theTrack = theTracks[theIndex]
+                    selectedTracks.append(theTrack)
+                }
                 return selectedTracks
             }
             return nil

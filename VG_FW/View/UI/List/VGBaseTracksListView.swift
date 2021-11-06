@@ -12,7 +12,7 @@ import iTunesLibrary
 class VGBaseTracksListView: VGBaseNSView {
     
     var tracksListTableView: NSTableView!
-    private var _arrayController: NSArrayController = NSArrayController()
+    var arrayController: NSArrayController!
     
     internal func initView() {
         removeColumns()
@@ -27,7 +27,9 @@ class VGBaseTracksListView: VGBaseNSView {
         tracksListTableView.target = self
         tracksListTableView.doubleAction = #selector(_onTableViewDoubleClick(_:))
         
-        tracksListTableView.bind(.content, to: _arrayController, withKeyPath: "arrangedObjects", options: nil)
+        arrayController = NSArrayController()
+        
+        tracksListTableView.bind(.content, to: arrayController, withKeyPath: "arrangedObjects", options: nil)
     }
     
     @objc func _onTableViewDoubleClick(_ sender: AnyObject) {
@@ -45,16 +47,18 @@ class VGBaseTracksListView: VGBaseNSView {
     var tracks: [NSObject]? {
         set {
             datas = newValue
-            for theTrack in tracks! {
-                _arrayController.add(theTrack)
+            arrayController.removeAll()
+            for theTrack in datas as! [NSObject] {
+                arrayController.addObject(theTrack)
             }
-            /*DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
-                self!.tracksListTableView.reloadData()
-            }*/
         }
         get {
-            if let tracks: [NSObject] = datas as? [NSObject] {
+            /*if let tracks: [NSObject] = datas as? [NSObject] {
                 return tracks
+            }*/
+            if let theArrayCollection: NSArrayController = arrayController {
+                let theTracks = theArrayCollection.arrangedObjects as! [NSObject]
+                return theTracks
             }
             return nil
         }
@@ -75,13 +79,20 @@ class VGBaseTracksListView: VGBaseNSView {
     }
     
     func removeTracks(theTracksToRemove: [NSObject]) {
-        var theTracks: [NSObject] = tracks!
-        for theTrackToRemove in theTracksToRemove {
-            let theIndex: Int = theTracks.index(of: theTrackToRemove)!
-            theTracks.remove(at: theIndex)
-        }
-        datas = theTracks
-        tracksListTableView.reloadData()
+        /*var theTracks: [NSObject] = tracks!
+         for theTrackToRemove in theTracksToRemove {
+         let theIndex: Int = theTracks.index(of: theTrackToRemove)!
+         theTracks.remove(at: theIndex)
+         }
+         datas = theTracks
+         tracksListTableView.reloadData()*/
+        //_arrayController.remove(atArrangedObjectIndex: 0)
+    }
+    
+    func removeTracks(theIndexesToRemove: IndexSet) {
+        arrayController.remove(atArrangedObjectIndexes: theIndexesToRemove)
+        let theTracks = arrayController.arrangedObjects as! [NSObject]
+        print("V&G_FW___removeTracks : ", theTracks.count)
     }
     
     func buildColumns(columnsList: [ColumnsListStruct]) {
@@ -99,8 +110,6 @@ class VGBaseTracksListView: VGBaseNSView {
             tracksListTableView.removeTableColumn(column)
         }
     }
-    
-    
     
 }
 

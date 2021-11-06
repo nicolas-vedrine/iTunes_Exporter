@@ -20,10 +20,19 @@ class iTunesTracksListView: VGBaseTracksListView {
             super.tracks = newValue
         }
         get {
-            guard let tracks = theDatas else {
+            /*guard let tracks = theDatas else {
                 return nil
             }
-            return tracks as! [ITLibMediaItem]
+            return tracks as! [ITLibMediaItem]*/
+            
+            
+            /*if let theArrayCollection: NSArrayController = arrayController {
+                let theTracks = theArrayCollection.arrangedObjects as! [ITLibMediaItem]
+                return theTracks
+            }
+            return nil*/
+            
+            return super.tracks
         }
     }
     
@@ -40,7 +49,9 @@ class iTunesTracksListView: VGBaseTracksListView {
 extension iTunesTracksListView {
     
     override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        if let theTracks: [ITLibMediaItem] = tracks as? [ITLibMediaItem] {
+        
+        if let theArrayCollection: NSArrayController = arrayController {
+            let theTracks = theArrayCollection.arrangedObjects as! [ITLibMediaItem]
             let theTrack = theTracks[row]
             let cellIdentifier: String = "TracksListCellID"
             var text: String = ""
@@ -52,11 +63,12 @@ extension iTunesTracksListView {
                 text = getTrackTitle(theTrack: theTrack)
             case TableColumnID.artistTableColumnID.rawValue:
                 text = iTunesModel.getArtistName(theITTrack: theTrack)
+               // text = (theTrack.artist?.name)!
             case TableColumnID.albumTableColumnID.rawValue:
                 text = iTunesModel.getAlbumTitle(theITTrack: theTrack)
+                //text = theTrack.album.title!
             case TableColumnID.locationTableColumnID.rawValue:
                 text = theTrack.location?.path ?? ""
-            //text  = item.
             case TableColumnID.totalTimeTableColumnID.rawValue:
                 text = getTotalTime(theTrack: theTrack)
             default:
@@ -67,8 +79,7 @@ extension iTunesTracksListView {
                 cell.textField!.stringValue = text
                 return cell
             }
-        }
-        
+        }        
         
         print("V&G_FW___viewFor tableColumn : ", self, "no TitleCellID is present !")
         

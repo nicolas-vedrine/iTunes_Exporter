@@ -15,7 +15,6 @@ import Cocoa
     @IBOutlet weak var iTunesExporterTracksListTableView: NSTableView!
     @IBOutlet weak var searchField: NSSearchField!
     
-    
     private var _trackListType: Int = TrackListType.add.rawValue
     
     override func draw(_ dirtyRect: NSRect) {
@@ -41,12 +40,6 @@ import Cocoa
         initView()
     }
     
-    override func removeTracks(theTracksToRemove: [NSObject]) {
-        if _trackListType == TrackListType.delete.rawValue {
-            super.removeTracks(theTracksToRemove: theTracksToRemove)
-        }
-    }
-    
     @IBInspectable var trackListType: Int = TrackListType.add.rawValue {
         didSet {
             if let addDeleteButton = self.addDeleteButton {
@@ -68,12 +61,11 @@ import Cocoa
             if _trackListType == TrackListType.add.rawValue {
                 super.tracks = newValue
             } else {
-                if let datas: [ITLibMediaItem] = datas as? [ITLibMediaItem] {
+                
+                if let datas: [ITLibMediaItem] = tracks as? [ITLibMediaItem] {
                     var theTracks = [ITLibMediaItem]()
                     for track in datas {
                         theTracks.append(track)
-                        //_arrayController.add(track)
-                        //_arrayController.addObject(track)
                     }
                     let theTracksToAdd: [ITLibMediaItem] = newValue as! [ITLibMediaItem]
                     var isAdd: Bool = false
@@ -112,7 +104,52 @@ import Cocoa
                                 }
                             }
                         }
+                }
+                
+                
+                /*if let datas: [ITLibMediaItem] = datas as? [ITLibMediaItem] {
+                    var theTracks = [ITLibMediaItem]()
+                    for track in datas {
+                        theTracks.append(track)
                     }
+                    let theTracksToAdd: [ITLibMediaItem] = newValue as! [ITLibMediaItem]
+                    var isAdd: Bool = false
+                    var isRemembered: Bool = false
+                    for theTrackToAdd in theTracksToAdd {
+                        let theFilter = theTracks.filter({$0.persistentID == theTrackToAdd.persistentID})
+                        var isCanceled: Bool = false
+                        var isIgnore: Bool = false
+                        if theFilter.count == 0 {
+                            theTracks.append(theTrackToAdd)
+                        } else {
+                            if !isRemembered {
+                                let msgBoxResult = _messageBoxResult(theTrack: theTrackToAdd)
+                                isRemembered = msgBoxResult.isRemembered
+                                switch(msgBoxResult.response) {
+                                case NSApplication.ModalResponse.alertFirstButtonReturn:
+                                    isAdd = true
+                                    theTracks.append(theTrackToAdd)
+                                case NSApplication.ModalResponse.alertSecondButtonReturn:
+                                    isCanceled = true
+                                case NSApplication.ModalResponse.alertThirdButtonReturn:
+                                    isIgnore = true
+                                    if isRemembered {
+                                        isCanceled = true
+                                    }
+                                default:
+                                    break
+                                }
+                                
+                                if isCanceled {
+                                    break
+                                }
+                            } else {
+                                if isAdd {
+                                    theTracks.append(theTrackToAdd)
+                                }
+                            }
+                        }
+                    }*/
                     super.tracks = theTracks
                 } else {
                     super.tracks = newValue
@@ -160,7 +197,10 @@ import Cocoa
     private func _deleteTracksAction() {
         if tracksListTableView.selectedRowIndexes.count > 0 {
             let theSelectedTracks: [NSObject] = selectedTracks!
-            removeTracks(theTracksToRemove: theSelectedTracks)
+            //removeTracks(theTracksToRemove: theSelectedTracks)
+            let theIndexSet = self.tracksListTableView.selectedRowIndexes
+            //tracksListTableView.removeRows(at: theIndexSet, withAnimation: .effectFade)
+            removeTracks(theIndexesToRemove: theIndexSet)
             NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)            
         }
     }    

@@ -148,7 +148,6 @@ class Track: NSObject {
     
     init(theITTrack: ITLibMediaItem) {
         self.artist = iTunesModel.getArtistName(theITTrack: theITTrack)
-        //self.artist = ""
         self.name = theITTrack.title
         if let theAlbumName = theITTrack.album.title {
             self.album = theAlbumName
@@ -158,12 +157,6 @@ class Track: NSObject {
         self.location = theITTrack.location
         self.theITTrack = theITTrack
     }
-    
-}
-
-class KVOTrack: NSObject {
-    
-    
     
 }
 
@@ -384,7 +377,8 @@ class iTunesModel {
     public static func getArtistName(theITTrack: ITLibMediaItem) -> String {
         var theArtistName: String = ""
         if let theITArtistName = theITTrack.artist?.name {
-            theArtistName = theITArtistName.replacingHTMLEntities!
+            //theArtistName = theITArtistName.replacingHTMLEntities!
+            theArtistName = theITArtistName
         }
         return theArtistName
     }

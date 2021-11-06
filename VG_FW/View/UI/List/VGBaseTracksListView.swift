@@ -40,7 +40,8 @@ class VGBaseTracksListView: VGBaseNSView {
         super.keyDown(with: event)
         print("V&G_FW___keyDown : ", event.keyCode)
         if event.keyCode == 117 {
-            removeTracks(theTracksToRemove: selectedTracks!)
+            let theIndexSet = self.tracksListTableView.selectedRowIndexes
+            removeTracks(theIndexesToRemove: theIndexSet)
         }
     }
     
@@ -67,32 +68,21 @@ class VGBaseTracksListView: VGBaseNSView {
     var selectedTracks: [NSObject]? {
         get {
             if let theTracks = tracks {
-                var theSelectedTracks = [NSObject]()
-                let theIndexSet = self.tracksListTableView.selectedRowIndexes
-                for theIndex in theIndexSet {
-                    theSelectedTracks.append(theTracks[theIndex])
-                }
-                return theSelectedTracks
+                let selectedTracks: [NSObject] = (arrayController.selectedObjects as? [NSObject])!
+                return selectedTracks
             }
             return nil
         }
     }
     
-    func removeTracks(theTracksToRemove: [NSObject]) {
-        /*var theTracks: [NSObject] = tracks!
-         for theTrackToRemove in theTracksToRemove {
-         let theIndex: Int = theTracks.index(of: theTrackToRemove)!
-         theTracks.remove(at: theIndex)
-         }
-         datas = theTracks
-         tracksListTableView.reloadData()*/
-        //_arrayController.remove(atArrangedObjectIndex: 0)
-    }
-    
     func removeTracks(theIndexesToRemove: IndexSet) {
-        arrayController.remove(atArrangedObjectIndexes: theIndexesToRemove)
-        let theTracks = arrayController.arrangedObjects as! [NSObject]
-        print("V&G_FW___removeTracks : ", theTracks.count)
+        if tracksListTableView.selectedRowIndexes.count > 0 {
+            let theSelectedTracks: [NSObject] = selectedTracks!
+            arrayController.remove(atArrangedObjectIndexes: theIndexesToRemove)
+            let theTracks = arrayController.arrangedObjects as! [NSObject]
+            print("V&G_FW___removeTracks : ", theTracks.count)
+            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)
+        }
     }
     
     func buildColumns(columnsList: [ColumnsListStruct]) {

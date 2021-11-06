@@ -195,14 +195,8 @@ import Cocoa
     }
     
     private func _deleteTracksAction() {
-        if tracksListTableView.selectedRowIndexes.count > 0 {
-            let theSelectedTracks: [NSObject] = selectedTracks!
-            //removeTracks(theTracksToRemove: theSelectedTracks)
-            let theIndexSet = self.tracksListTableView.selectedRowIndexes
-            //tracksListTableView.removeRows(at: theIndexSet, withAnimation: .effectFade)
-            removeTracks(theIndexesToRemove: theIndexSet)
-            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)            
-        }
+        let theIndexSet = self.tracksListTableView.selectedRowIndexes
+        removeTracks(theIndexesToRemove: theIndexSet)
     }    
     
     

@@ -22,10 +22,10 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     @IBOutlet weak var theAppInfosView: AppInfosView!
     @IBOutlet weak var theMenuBox: NSBox!
     
-//    lazy var exportController: NSViewController = {
-//        return self.storyboard!.instantiateController(withIdentifier: "ExportController")
-//            as! NSViewController
-//    }()
+    //    lazy var exportController: NSViewController = {
+    //        return self.storyboard!.instantiateController(withIdentifier: "ExportController")
+    //            as! NSViewController
+    //    }()
     
     private var _lib: ITLibrary?
     private var _thePlaylistsGroups: [PlaylistGroup]?
@@ -73,19 +73,19 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         default:
             print("V&G_FW____onTracksAddedDeleted : ", self)
         }
-        _updateStatutInfos(theTracks: theTracks)
+        _updateStatutInfos()
     }
     
-    private func _updateStatutInfos(theTracks: [ITLibMediaItem]? = nil) {
+    private func _updateStatutInfos() {
         theStatutInfosLabel.stringValue = "Pas d'éléments dans la file d'attente."
-        if let theTracks = theTracks {
-            if theTracks.count > 0 {
-                let statutInfos = iTunesModel.getStatutInfos(theTracks: theTracks)
-                var theStr = statutInfos.count.toFormattedNumber() + " morceaux mis en file, "
-                theStr += "durée totale " + Int(statutInfos.duration / 1000).toFormattedDuration() + ", "
-                theStr += statutInfos.size.toMegaBytes()
-                theStatutInfosLabel.stringValue = theStr
-            }
+        let theAddedTracks: [ITLibMediaItem] = theAddedTracksListView.tracks as! [ITLibMediaItem]
+        let theCount: Int = theAddedTracks.count
+        if theCount > 0 {
+            let statutInfos = iTunesModel.getStatutInfos(theTracks: theAddedTracks)
+            var theStr = theAddedTracks.count.toFormattedNumber() + " morceaux mis en file, "
+            theStr += "durée totale " + Int(statutInfos.duration / 1000).toFormattedDuration() + ", "
+            theStr += statutInfos.size.toMegaBytes()
+            theStatutInfosLabel.stringValue = theStr
         }
     }
     
@@ -170,11 +170,11 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         }
         return theSearch
     }
-
-
+    
+    
     override var representedObject: Any? {
         didSet {
-        // Update the view, if already loaded.
+            // Update the view, if already loaded.
         }
     }
     

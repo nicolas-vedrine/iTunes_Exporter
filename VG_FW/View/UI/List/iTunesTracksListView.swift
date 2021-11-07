@@ -15,7 +15,7 @@ class iTunesTracksListView: VGBaseTracksListView {
         print("V&G_FW___TableViewDoubleClick iTunes : ", self)
     }
     
-    override var tracks: [NSObject]? {
+    /*override var tracks: [NSObject]? {
         set {
             super.tracks = newValue
         }
@@ -34,7 +34,7 @@ class iTunesTracksListView: VGBaseTracksListView {
             
             return super.tracks
         }
-    }
+    }*/
     
     func filterTracks(theStr: String) {
         /*let theTracks: [ITLibMediaItem] = (tracks! as? [ITLibMediaItem])!

@@ -54,9 +54,6 @@ class VGBaseTracksListView: VGBaseNSView {
             }
         }
         get {
-            /*if let tracks: [NSObject] = datas as? [NSObject] {
-                return tracks
-            }*/
             if let theArrayCollection: NSArrayController = arrayController {
                 let theTracks = theArrayCollection.arrangedObjects as! [NSObject]
                 return theTracks
@@ -65,9 +62,10 @@ class VGBaseTracksListView: VGBaseNSView {
         }
     }
     
+    // récupération de la selection de piste. doit être dans un tableau récupéré à partir de la selection dans la tableView puis on cherche dans le arrayController
     var selectedTracks: [NSObject]? {
         get {
-            if let theTracks = tracks {
+            if tracksListTableView.selectedRowIndexes.count > 0 {
                 var selectedTracks: [NSObject] = [NSObject]()
                 let selectedIndexes: IndexSet = tracksListTableView.selectedRowIndexes
                 let theTracks: [NSObject] = arrayController.arrangedObjects as! [NSObject]

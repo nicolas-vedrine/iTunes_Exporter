@@ -15,37 +15,6 @@ class iTunesTracksListView: VGBaseTracksListView {
         print("V&G_FW___TableViewDoubleClick iTunes : ", self)
     }
     
-    /*override var tracks: [NSObject]? {
-        set {
-            super.tracks = newValue
-        }
-        get {
-            /*guard let tracks = theDatas else {
-                return nil
-            }
-            return tracks as! [ITLibMediaItem]*/
-            
-            
-            /*if let theArrayCollection: NSArrayController = arrayController {
-                let theTracks = theArrayCollection.arrangedObjects as! [ITLibMediaItem]
-                return theTracks
-            }
-            return nil*/
-            
-            return super.tracks
-        }
-    }*/
-    
-    func filterTracks(theStr: String) {
-        /*let theTracks: [ITLibMediaItem] = (tracks! as? [ITLibMediaItem])!
-        let theSearch = theTracks.filter({($0.artist?.name?.lowercased().contains(theStr))!})
-        print("V&G_Project___filterTracks : ", theStr + " " + String(theSearch.count))
-        datas = theSearch
-        tracksListTableView.reloadData()*/
-        /*var thePredicate: NSPredicate = NSPredicate(format: "ANY partsList.partNumber contains[c] %@", argumentArray: [theStr])
-        arrayController.filterPredicate = thePredicate*/
-    }
-    
 }
 
 extension iTunesTracksListView {

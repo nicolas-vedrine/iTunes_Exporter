@@ -33,8 +33,22 @@ class Playlist: NSObject {
     @objc dynamic var count: Int = 0
     @objc dynamic var id: NSNumber?
     var kind: ITLibPlaylistKind?
-    @objc dynamic var children: [Playlist]?
+    //@objc dynamic var children: [Playlist]?
     private(set) var theITPlaylist: ITLibPlaylist
+    
+    //typealias Element = Playlist
+    
+    var predicate: NSPredicate? {
+        didSet {
+            _propagatePredicatesAndRefilterChildren()
+        }
+    }
+    
+    @objc dynamic var children: [Playlist] = [] {
+        didSet {
+            _propagatePredicatesAndRefilterChildren()
+        }
+    }
     
     var duration: Int {
         get {
@@ -58,15 +72,17 @@ class Playlist: NSObject {
         }
     }
     
-    /*var tracks: [Track] {
+    var tracks: [Track] {
         get {
             return iTunesModel.getTracksFromITTracks(theITTracks: theITPlaylist.items)
         }
+    }
+    
+    /*@objc func isLeaf() -> Bool {
+        return !(self.isFolder)
     }*/
     
-    @objc func isLeaf() -> Bool {
-        return !(self.isFolder)
-    }
+    @objc private(set) dynamic var isLeaf: Bool = true
     
     init(thePlaylist: ITLibPlaylist) {
         self.name = thePlaylist.name
@@ -78,6 +94,38 @@ class Playlist: NSObject {
         self.theITPlaylist = thePlaylist
         if isFolder {
             children = [Playlist]()
+        }
+    }
+    
+    @objc private(set) dynamic var filteredChildren: [Playlist] = [] {
+            didSet {
+                count = filteredChildren.count
+                isLeaf = filteredChildren.isEmpty
+            }
+        }
+    
+    private func _propagatePredicatesAndRefilterChildren() {
+        // Propagate the predicate down the child nodes in case either
+        // the predicate or the children array changed.
+        children.forEach { $0.predicate = predicate }
+        
+        // Determine the matching leaf nodes.
+        let newChildren: [Playlist]
+        
+        if let predicate = predicate {
+            newChildren = children.compactMap { child -> Playlist? in
+                if child.isLeaf, !predicate.evaluate(with: child) {
+                    return nil
+                }
+                return child
+            }
+        } else {
+            newChildren = children
+        }
+        
+        // Only actually update the children if the count varies.
+        if newChildren.count != filteredChildren.count {
+            filteredChildren = newChildren
         }
     }
 }
@@ -170,6 +218,58 @@ class VGITLib: ITLibrary {
     
 }
 
+class PredicateOutlineNode: NSObject {
+    
+    typealias Element = PredicateOutlineNode
+    
+    @objc dynamic var children: [Element] = [] {
+        didSet {
+            propagatePredicatesAndRefilterChildren()
+        }
+    }
+    
+    @objc private(set) dynamic var filteredChildren: [Element] = [] {
+        didSet {
+            count = filteredChildren.count
+            isLeaf = filteredChildren.isEmpty
+        }
+    }
+    
+    @objc private(set) dynamic var count: Int = 0
+    @objc private(set) dynamic var isLeaf: Bool = true
+    
+    var predicate: NSPredicate? {
+        didSet {
+            propagatePredicatesAndRefilterChildren()
+        }
+    }
+    
+    private func propagatePredicatesAndRefilterChildren() {
+        // Propagate the predicate down the child nodes in case either
+        // the predicate or the children array changed.
+        children.forEach { $0.predicate = predicate }
+        
+        // Determine the matching leaf nodes.
+        let newChildren: [Element]
+        
+        if let predicate = predicate {
+            newChildren = children.compactMap { child -> Element? in
+                if child.isLeaf, !predicate.evaluate(with: child) {
+                    return nil
+                }
+                return child
+            }
+        } else {
+            newChildren = children
+        }
+        
+        // Only actually update the children if the count varies.
+        if newChildren.count != filteredChildren.count {
+            filteredChildren = newChildren
+        }
+    }
+}
+
 class iTunesModel {
     
     ////////////////// PLAYLISTS //////////////////
@@ -210,7 +310,7 @@ class iTunesModel {
                     if let thePlaylistParent = self._getPlaylistParent(thePlaylistID: theITPlaylist.parentID!, thePlaylists: theITPlaylists) {
                         let thePlaylistParentID = thePlaylistParent.persistentID
                         let theIndex = thePlaylistsList.index(of: thePlaylistParentID)
-                        theList[theIndex!].children?.append(theItem)
+                        theList[theIndex!].children.append(theItem)
                     }
                 } else {
                     theFinalList.append(theItem)
@@ -220,7 +320,7 @@ class iTunesModel {
                     if let thePlaylistParent = self._getPlaylistParent(thePlaylistID: theITPlaylist.parentID!, thePlaylists: theITPlaylists) {
                         let thePlaylistParentID = thePlaylistParent.persistentID
                         let theIndex = thePlaylistsList.index(of: thePlaylistParentID)
-                        theList[theIndex!].children?.append(theItem)
+                        theList[theIndex!].children.append(theItem)
                     }
                 } else {
                     theFinalList.append(theItem)
@@ -249,7 +349,7 @@ class iTunesModel {
                 theFinalList.append(thePlaylist)
                 if thePlaylist.isFolder {
                     let children = thePlaylist.children
-                    let result = getFlattenPlaylistsTree(theList: children!, theSeparator: theSeparator, theLevel: theLevel + 1)
+                    let result = getFlattenPlaylistsTree(theList: children, theSeparator: theSeparator, theLevel: theLevel + 1)
                     for i in result {
                         theFinalList.append(i)
                     }
@@ -260,20 +360,20 @@ class iTunesModel {
     }
     
     /*private static func _getFlattenPlaylist(thePlaylist: Playlist) -> [Playlist] {
-        var theList = [Playlist]()
-        if let theChildren = thePlaylist.children {
-            for theChild in theChildren {
-                theList.append(theChild)
-                let theChildrenList = _getFlattenPlaylist(thePlaylist: theChild)
-                if theChildrenList.count > 0 {
-                    for item in theChildrenList {
-                        
-                    }
-                }
-            }
-        }
-        return theList
-    }*/
+     var theList = [Playlist]()
+     if let theChildren = thePlaylist.children {
+     for theChild in theChildren {
+     theList.append(theChild)
+     let theChildrenList = _getFlattenPlaylist(thePlaylist: theChild)
+     if theChildrenList.count > 0 {
+     for item in theChildrenList {
+     
+     }
+     }
+     }
+     }
+     return theList
+     }*/
     
     private static func _getPlaylistParent(thePlaylistID: NSNumber, thePlaylists: [ITLibPlaylist]) -> ITLibPlaylist! {
         if let thePlaylistParentID = thePlaylists.first(where: {$0.persistentID == thePlaylistID}) {
@@ -308,56 +408,58 @@ class iTunesModel {
     }
     
     static func getArtistsTree(theITTracks: [ITLibMediaItem], theLenght: Int, isRecursive: Bool = false) -> [Artist] {
-        var theArtists: [Artist] = [Artist]()
+        var theArtists = [Artist]()
         
-        let theITTrackSorted = theITTracks.sorted(by: {self.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: ITSortKind.artistAndThenAlbum)})
-        var theArtistNamesList: [String] = [String]()
+        //let theITArtists = 
         
-            for i in 0...theLenght - 1 {
-                let theITTrack = theITTrackSorted[i]
-                var theArtist: Artist
-                var theAlbum: Album
-                let theTrack = Track(theITTrack: theITTrack)
-                var theArtistName: String = ""
-                if let theITArtistName: String = theITTrack.artist?.name {
-                    theArtistName = theITArtistName
-                }
-                let theArtistNameLowercased = theArtistName.lowercased()
-                // si l'artiste est deja dans la liste
-                if let theIndex = theArtistNamesList.index(of: theArtistNameLowercased) {
-                    if isRecursive {
-                        theArtist = theArtists[theIndex]
-                        var theAlbumTitle: String = ""
-                        if let theITAlbumName = theITTrack.album.title {
-                            theAlbumTitle = theITAlbumName
-                        }
-                        if let theArtistAlbumFound = theArtist.getAlbum(by: theAlbumTitle) {
-                            theAlbum = theArtistAlbumFound
-                        } else {
-                            //print("V&G_Project___getArtistsTree : ", "new album ----------------------------------- " + theAlbumTitle)
-                            theAlbum = Album(theITAlbum: theITTrack.album)
-                            theArtist.albums.append(theAlbum)
-                            //print("V&G_Project___getArtistsTree : ", "album added : ", theAlbumTitle)
-                        }
-                        theAlbum.tracks.append(theTrack)
-                        //print("V&G_Project___getArtistsTree : ", "track added : ", theITTrack.title)
-                    }                    
-                } else {
-                    //print("V&G_Project___getArtistsTree : ", "------------------------------------------------------------------------------------")
-                    theArtistNamesList.append(theArtistNameLowercased)
-                    //print("V&G_Project___getArtistsTree : ", "artist added : ", theArtistNameLowercased)
-                    theArtist = Artist(theITArtist: theITTrack.artist!)
-                    theAlbum = Album(theITAlbum: theITTrack.album)
-                    theArtist.albums.append(theAlbum)
-                    //print("V&G_Project___getArtistsTree : ", "album added : ", theITTrack.album.title)
+        /*let theITTrackSorted = theITTracks.sorted(by: {self.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: ITSortKind.artistAndThenAlbum)})
+        var theArtistNamesList = [String]()
+        
+        for i in 0...theLenght - 1 {
+            let theITTrack = theITTrackSorted[i]
+            var theArtist: Artist
+            var theAlbum: Album
+            let theTrack = Track(theITTrack: theITTrack)
+            var theArtistName: String = ""
+            if let theITArtistName: String = theITTrack.artist?.name {
+                theArtistName = theITArtistName
+            }
+            let theArtistNameLowercased = theArtistName.lowercased()
+            // si l'artiste est deja dans la liste
+            if let theIndex = theArtistNamesList.index(of: theArtistNameLowercased) {
+                if isRecursive {
+                    theArtist = theArtists[theIndex]
+                    var theAlbumTitle: String = ""
+                    if let theITAlbumName = theITTrack.album.title {
+                        theAlbumTitle = theITAlbumName
+                    }
+                    if let theArtistAlbumFound = theArtist.getAlbum(by: theAlbumTitle) {
+                        theAlbum = theArtistAlbumFound
+                    } else {
+                        //print("V&G_Project___getArtistsTree : ", "new album ----------------------------------- " + theAlbumTitle)
+                        theAlbum = Album(theITAlbum: theITTrack.album)
+                        theArtist.albums.append(theAlbum)
+                        //print("V&G_Project___getArtistsTree : ", "album added : ", theAlbumTitle)
+                    }
                     theAlbum.tracks.append(theTrack)
                     //print("V&G_Project___getArtistsTree : ", "track added : ", theITTrack.title)
-                    theArtists.append(theArtist)
                 }
-                
-                let theCurrent: Int = i + 1
-                //NotificationCenter.default.post(name: .ARTIST_TREE_LOADING, object: ArtistTreeObject(track: theTrack, current: theCurrent, total: theLenght))
-        }
+            } else {
+                //print("V&G_Project___getArtistsTree : ", "------------------------------------------------------------------------------------")
+                theArtistNamesList.append(theArtistNameLowercased)
+                //print("V&G_Project___getArtistsTree : ", "artist added : ", theArtistNameLowercased)
+                theArtist = Artist(theITArtist: theITTrack.artist!)
+                theAlbum = Album(theITAlbum: theITTrack.album)
+                theArtist.albums.append(theAlbum)
+                //print("V&G_Project___getArtistsTree : ", "album added : ", theITTrack.album.title)
+                theAlbum.tracks.append(theTrack)
+                //print("V&G_Project___getArtistsTree : ", "track added : ", theITTrack.title)
+                theArtists.append(theArtist)
+            }
+            
+            let theCurrent: Int = i + 1
+            //NotificationCenter.default.post(name: .ARTIST_TREE_LOADING, object: ArtistTreeObject(track: theTrack, current: theCurrent, total: theLenght))
+        }*/
         
         return theArtists
     }
@@ -445,7 +547,7 @@ class iTunesModel {
         }
         
         
-       // dump(theSearch)
+        // dump(theSearch)
         
         
         return theAlbums
@@ -531,28 +633,28 @@ class iTunesModel {
     }
     
     /*
- 
- to getFormatedTrackName(theTrack, theStyle)
- tell application "iTunes"
- try
- set trackName to name of theTrack
- set artistName to artist of theTrack
- set albumName to album of theTrack
- if theStyle is _formatedTrackNameTrackNameArtistNameAlbumName_ then
- if (albumName = "") then
- set str to ("\"" & trackName & "\"" & " by " & artistName & " in unknown album")
- else
- set str to ("\"" & trackName & "\"" & " by " & artistName & " in " & albumName)
- end if
- end if
- on error
- display dialog "error with the method getFormatedTrackName()"
- end try
- end tell
- return str
- end getFormatedTrackName
- */
- 
+     
+     to getFormatedTrackName(theTrack, theStyle)
+     tell application "iTunes"
+     try
+     set trackName to name of theTrack
+     set artistName to artist of theTrack
+     set albumName to album of theTrack
+     if theStyle is _formatedTrackNameTrackNameArtistNameAlbumName_ then
+     if (albumName = "") then
+     set str to ("\"" & trackName & "\"" & " by " & artistName & " in unknown album")
+     else
+     set str to ("\"" & trackName & "\"" & " by " & artistName & " in " & albumName)
+     end if
+     end if
+     on error
+     display dialog "error with the method getFormatedTrackName()"
+     end try
+     end tell
+     return str
+     end getFormatedTrackName
+     */
+    
     
 }
 

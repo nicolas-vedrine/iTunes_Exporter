@@ -121,16 +121,14 @@ extension VGBaseTracksListView: NSTableViewDataSource {
 extension VGBaseTracksListView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        
-        if let tracks = tracks {
+        if tracks != nil {
             let cellIdentifier: String = "TracksListCellID"
             let text = "text : " + String(row + 1)
             if let cell: NSTableCellView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
                 cell.textField!.stringValue = text
                 return cell
             }
-        }
-        
+        }        
         return nil
     }
     

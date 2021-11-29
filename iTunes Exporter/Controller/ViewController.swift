@@ -93,7 +93,7 @@ class ViewController: BaseProjectViewController {
     private func _addData() {
         if let lib = _lib {
             _addPlaylists(lib: lib)
-            _addArtists(lib: lib)
+            //_addArtists(lib: lib)
             
             //thePlaylistsSearchField.bind(.predicate, to: theTreeController, withKeyPath: NSBindingName.filterPredicate.rawValue, options: [.predicateFormat: "(name contains[cd] $value)"])
         }
@@ -113,8 +113,9 @@ class ViewController: BaseProjectViewController {
     }
     
     private func _addPlaylists(lib: ITLibrary) {
-        let playlists = iTunesModel.getMusicPlaylists(lib: lib)
-        let thePlaylistsTree = iTunesModel.getPlaylistsTree(theITPlaylists: playlists, theLenght: playlists.count)
+        let theITPlaylists = iTunesModel.getMusicPlaylists(lib: lib)
+        let theRootITPlaylists = theITPlaylists.filter({ $0.parentID == nil })
+        let thePlaylistsTree = iTunesModel.getPlaylistsTree(theLevelITPlaylists: theRootITPlaylists, theITPlaylists: theITPlaylists)
         if _thePlaylistsGroups == nil {
             _thePlaylistsGroups = iTunesModel.getPlaylistsGroups(thePlaylists: thePlaylistsTree)
         }

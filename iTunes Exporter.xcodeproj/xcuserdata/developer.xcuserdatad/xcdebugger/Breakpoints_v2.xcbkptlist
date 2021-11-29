@@ -49,8 +49,8 @@
             timestampString = "576786118.586521"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "568"
-            endingLineNumber = "568"
+            startingLineNumber = "541"
+            endingLineNumber = "541"
             landmarkName = "iTunesModel"
             landmarkType = "3">
          </BreakpointContent>
@@ -98,8 +98,8 @@
             filePath = "iTunes Exporter/Controller/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
             landmarkName = "_addPlaylists(lib:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -162,8 +162,8 @@
             filePath = "iTunes Exporter/Controller/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "159"
+            endingLineNumber = "159"
             landmarkName = "_addArtists(lib:)"
             landmarkType = "7">
             <Locations>
@@ -210,8 +210,8 @@
             filePath = "iTunes Exporter/Controller/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "_addArtists(lib:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -321,47 +321,36 @@ class iTunesModel {
         return playlistsGroups
     }
     
-    static func getPlaylistsTree(theITPlaylists: [ITLibPlaylist], theLenght: Int) -> [Playlist] {
-        var theList: [Playlist] = [Playlist]()
-        var thePlaylistsList: [NSNumber] = [NSNumber]()
-        var theFinalList: [Playlist] = [Playlist]()
-        
-        for i in 0...theLenght - 1 {
-            let theITPlaylist = theITPlaylists[i]
-            let thePlaylistID = theITPlaylist.persistentID
-            let isFolder: Bool = theITPlaylist.kind == .folder
-            let hasParent: Bool = self._hasParentPlaylist(thePlaylist: theITPlaylist)
+    static func getPlaylistsTree(theLevelITPlaylists: [ITLibPlaylist], theITPlaylists: [ITLibPlaylist]) -> [Playlist] {
+        var thePlaylistsTree = [Playlist]()
+        var theNewITPlaylists = theITPlaylists
+        for theITPlaylist in theLevelITPlaylists {
             
-            thePlaylistsList.append(thePlaylistID)
+            let theIndex = theNewITPlaylists.firstIndex(where: {$0.persistentID == theITPlaylist.persistentID})
+            theNewITPlaylists.remove(at: theIndex!)
             
-            let theItem: Playlist = Playlist(thePlaylist: theITPlaylist)
-            
-            if isFolder {
-                if hasParent {
-                    if let thePlaylistParent = self._getPlaylistParent(thePlaylistID: theITPlaylist.parentID!, thePlaylists: theITPlaylists) {
-                        let thePlaylistParentID = thePlaylistParent.persistentID
-                        let theIndex = thePlaylistsList.index(of: thePlaylistParentID)
-                        theList[theIndex!].children.append(theItem)
-                    }
-                } else {
-                    theFinalList.append(theItem)
-                }
-            } else {
-                if hasParent {
-                    if let thePlaylistParent = self._getPlaylistParent(thePlaylistID: theITPlaylist.parentID!, thePlaylists: theITPlaylists) {
-                        let thePlaylistParentID = thePlaylistParent.persistentID
-                        let theIndex = thePlaylistsList.index(of: thePlaylistParentID)
-                        theList[theIndex!].children.append(theItem)
-                    }
-                } else {
-                    theFinalList.append(theItem)
-                }
+            let thePlaylist = Playlist(thePlaylist: theITPlaylist)
+            if theITPlaylist.kind == .folder {
+                //print(theNewITPlaylists.count)
+                let theChildrenPlaylists = getITPlaylistChildren(theFolderITPlaylist: theITPlaylist, theITPlaylists: theNewITPlaylists)
+                thePlaylist.children = getPlaylistsTree(theLevelITPlaylists: theChildrenPlaylists, theITPlaylists: theNewITPlaylists)
             }
             
-            theList.append(theItem)
+            //print(theNewITPlaylists.count)
             
+            thePlaylistsTree.append(thePlaylist)
         }
-        return theFinalList
+        return thePlaylistsTree
+    }
+    
+    static func getITPlaylistChildren(theFolderITPlaylist: ITLibPlaylist, theITPlaylists: [ITLibPlaylist]) -> [ITLibPlaylist] {
+        var theChildrenPlaylists = [ITLibPlaylist]()
+        //print(theITPlaylists.count)
+        let theChildrenITPlaylists = theITPlaylists.filter({ $0.parentID == theFolderITPlaylist.persistentID })
+        for theChildITPlaylist in theChildrenITPlaylists {
+            theChildrenPlaylists.append(theChildITPlaylist)
+        }
+        return theChildrenPlaylists
     }
     
     static func getFlattenPlaylistsTree(theList: [Playlist], isDistinguishedKind: Bool = true, theSeparator: String = "   ", theLevel: Int = 0) -> [Playlist] {
@@ -389,22 +378,6 @@ class iTunesModel {
         }
         return theFinalList
     }
-    
-    /*private static func _getFlattenPlaylist(thePlaylist: Playlist) -> [Playlist] {
-     var theList = [Playlist]()
-     if let theChildren = thePlaylist.children {
-     for theChild in theChildren {
-     theList.append(theChild)
-     let theChildrenList = _getFlattenPlaylist(thePlaylist: theChild)
-     if theChildrenList.count > 0 {
-     for item in theChildrenList {
-     
-     }
-     }
-     }
-     }
-     return theList
-     }*/
     
     private static func _getPlaylistParent(thePlaylistID: NSNumber, thePlaylists: [ITLibPlaylist]) -> ITLibPlaylist! {
         if let thePlaylistParentID = thePlaylists.first(where: {$0.persistentID == thePlaylistID}) {

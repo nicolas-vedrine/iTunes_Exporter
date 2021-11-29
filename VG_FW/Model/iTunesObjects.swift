@@ -163,6 +163,33 @@ class Artist: NSObject {
         return nil
     }
     
+    /*func getITTracks(ITArtistTracks: [ITLibMediaItem]) -> [ITLibMediaItem] {
+        let theITTracks = [ITLibMediaItem]()
+        for album in albums {
+            //let theArtistAlbums = Dictionary(grouping: theAlbumsTracks, by: { $0.album.title?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
+            let theITTracksAlbumDic = Dictionary(grouping: ITArtistTracks, by: { $0.album.persistentID })
+            print("V&G_Project___getITTracks : ", theITTracksAlbumDic, theITTracksAlbumDic.count)
+            print("-----------------")
+        }
+        return theITTracks
+    }*/
+    
+    func getITTracks() -> [ITLibMediaItem] {
+        let theTracks = getTracks()
+        let theITTracks = theTracks.map({$0.theITTrack})
+        return theITTracks
+    }
+    
+    func getTracks() -> [Track] {
+        var theTrack = [Track]()
+        for album in albums {
+            for track in album.tracks {
+                theTrack.append(track)
+            }
+        }
+        return theTrack
+    }
+    
 }
 
 class Album: NSObject {
@@ -180,6 +207,10 @@ class Album: NSObject {
             self.name = theName
         }
         self._ITAlbum = theITAlbum
+    }
+    
+    func getITTracks() -> [ITLibMediaItem] {
+        return tracks.map({ $0.theITTrack })
     }
     
 }
@@ -200,15 +231,15 @@ class Track: NSObject {
         if let theAlbumName = theITTrack.album.title {
             self.album = theAlbumName
         }
-        //self.duration = theITTrack.totalTime
-        //self.size = theITTrack.fileSize
+        self.duration = theITTrack.totalTime
+        self.size = theITTrack.fileSize
         self.location = theITTrack.location
         self.theITTrack = theITTrack
     }
     
 }
 
-class VGITLib: ITLibrary {
+/*class VGITLib: ITLibrary {
     
     override var allMediaItems: [ITLibMediaItem] {
         get {
@@ -216,7 +247,7 @@ class VGITLib: ITLibrary {
         }
     }
     
-}
+}*/
 
 class PredicateOutlineNode: NSObject {
     
@@ -407,61 +438,43 @@ class iTunesModel {
         return theArtistsList
     }
     
-    static func getArtistsTree(theITTracks: [ITLibMediaItem], theLenght: Int, isRecursive: Bool = false) -> [Artist] {
-        var theArtists = [Artist]()
+    static func getArtistsTree(theITTracks: [ITLibMediaItem]) -> [Artist] {
+        let theTracksByArtist = Dictionary(grouping: theITTracks, by: { $0.artist?.name?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
         
-        //let theITArtists = 
-        
-        /*let theITTrackSorted = theITTracks.sorted(by: {self.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: ITSortKind.artistAndThenAlbum)})
-        var theArtistNamesList = [String]()
-        
-        for i in 0...theLenght - 1 {
-            let theITTrack = theITTrackSorted[i]
-            var theArtist: Artist
-            var theAlbum: Album
-            let theTrack = Track(theITTrack: theITTrack)
-            var theArtistName: String = ""
-            if let theITArtistName: String = theITTrack.artist?.name {
-                theArtistName = theITArtistName
-            }
-            let theArtistNameLowercased = theArtistName.lowercased()
-            // si l'artiste est deja dans la liste
-            if let theIndex = theArtistNamesList.index(of: theArtistNameLowercased) {
-                if isRecursive {
-                    theArtist = theArtists[theIndex]
-                    var theAlbumTitle: String = ""
-                    if let theITAlbumName = theITTrack.album.title {
-                        theAlbumTitle = theITAlbumName
-                    }
-                    if let theArtistAlbumFound = theArtist.getAlbum(by: theAlbumTitle) {
-                        theAlbum = theArtistAlbumFound
-                    } else {
-                        //print("V&G_Project___getArtistsTree : ", "new album ----------------------------------- " + theAlbumTitle)
-                        theAlbum = Album(theITAlbum: theITTrack.album)
-                        theArtist.albums.append(theAlbum)
-                        //print("V&G_Project___getArtistsTree : ", "album added : ", theAlbumTitle)
-                    }
+        var theArtistsTree = [Artist]()
+        for(artistKey, tracksByArtist) in theTracksByArtist {
+            let theAlbumsTracks = tracksByArtist.map{ $0 }
+            let theITArtist = theAlbumsTracks.first?.artist
+            let theArtist = Artist(theITArtist: theITArtist!)
+            
+            /*print("theArtist >>>", theArtist.name)
+            print("/////////")*/
+            
+            let theArtistAlbums = Dictionary(grouping: theAlbumsTracks, by: { $0.album.title?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
+            //print(theArtistAlbums.count, "album(s)")
+            for (albumID, tracksAlbum) in theArtistAlbums {
+                let theTracksAlbum = tracksAlbum.map { $0 }.sorted(by: { $0.trackNumber < $1.trackNumber })
+                let theITAlbum = theTracksAlbum.first?.album
+                let theAlbum = Album(theITAlbum: theITAlbum!)
+                //print(theAlbum.name)
+                
+                //print(theTracksAlbum.first?.album.title, "(" + String(theTracksAlbum.count), "track(s))")
+                //print("++++")
+                
+                for track in theTracksAlbum {
+                    //print(track.title)
+                    let theTrack = Track(theITTrack: track)
                     theAlbum.tracks.append(theTrack)
-                    //print("V&G_Project___getArtistsTree : ", "track added : ", theITTrack.title)
                 }
-            } else {
-                //print("V&G_Project___getArtistsTree : ", "------------------------------------------------------------------------------------")
-                theArtistNamesList.append(theArtistNameLowercased)
-                //print("V&G_Project___getArtistsTree : ", "artist added : ", theArtistNameLowercased)
-                theArtist = Artist(theITArtist: theITTrack.artist!)
-                theAlbum = Album(theITAlbum: theITTrack.album)
+                //print("***************")
+                
                 theArtist.albums.append(theAlbum)
-                //print("V&G_Project___getArtistsTree : ", "album added : ", theITTrack.album.title)
-                theAlbum.tracks.append(theTrack)
-                //print("V&G_Project___getArtistsTree : ", "track added : ", theITTrack.title)
-                theArtists.append(theArtist)
             }
             
-            let theCurrent: Int = i + 1
-            //NotificationCenter.default.post(name: .ARTIST_TREE_LOADING, object: ArtistTreeObject(track: theTrack, current: theCurrent, total: theLenght))
-        }*/
-        
-        return theArtists
+            theArtistsTree.append(theArtist)
+            //print("---------------------------------------------------------------------------------------------------")
+        }
+        return theArtistsTree
     }
     
     public static func getiTunesTrackTitle(theiTunesTrack: ITLibMediaItem) -> String {

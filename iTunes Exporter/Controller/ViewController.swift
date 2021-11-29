@@ -156,29 +156,13 @@ class ViewController: BaseProjectViewController {
         }
         
         let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
-        //let theITTrackSorted = theITTracks.sorted(by: {self.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: ITSortKind.artistAndThenAlbum)})
-        
-        let theTracksByArtist = Dictionary(grouping: theITTracks, by: { $0.artist?.name })
-        for (artist, tracksByArtist) in theTracksByArtist {
-            let theAlbumsTracks = tracksByArtist.map{ $0.album }
-            let theTracksByAlbum = Dictionary(grouping: theAlbumsTracks, by: { $0.title })
-            //print("V&G_Project___<#name#> : ", theTracksByAlbum.count)
-            for (album, tracksByAlbum) in theTracksByAlbum {
-                //print(album, tracksByAlbum.map { $0.title })
-                //print("V&G_Project___<#name#> : ", $0.)
-                let theTracksTitle = tracksByAlbum.map{$0}
-                dump(theTracksTitle)
-            }
-            //print("V&G_Project____addArtists : ", theArtistTracks)
-            
-        }
-        //print("V&G_Project____addArtists : ", tracksByArtist.count)
-        
         //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot")})
+        
         if _theArtistsTree == nil {
-            _theArtistsTree = iTunesModel.getArtistsTree(theITTracks: theITTracks, theLenght: theITTracks.count)
+            _theArtistsTree = iTunesModel.getArtistsTree(theITTracks: theITTracks)
+            
             //let theArtistsName = iTunesModel.getAllArtistNames(theITTracks: theITTracks)
-            //theTreeController.content = theArtistsName
+            theTreeController.content = _theArtistsTree
         }
         theSegmentedControl.selectedSegment = 1
         NotificationCenter.default.removeObserver(artistTreeLoadingObserver)
@@ -446,6 +430,14 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                 self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
                 self.theAppInfosView.setPlaylistName(playlistName: thePlaylist.name!)
                 self.theAppInfosView.setSize(size: thePlaylist.size)
+            } else if let theArtist = theNode.representedObject as? Artist {
+                //let theITArtistTracks = _lib!.allMediaItems.filter({$0.mediaKind == .kindSong && $0.artist?.name?.lowercased() == theArtist.name.lowercased()})
+                //print(theArtist.getITTracks(ITArtistTracks: theITArtistTracks))
+                let theITTracks = theArtist.getITTracks()
+                self.thePlaylistTracksListView.tracks = theITTracks
+            } else if let theAlbum = theNode.representedObject as? Album {
+                let theITTracks = theAlbum.getITTracks()
+                self.thePlaylistTracksListView.tracks = theITTracks
             }
         }
     }

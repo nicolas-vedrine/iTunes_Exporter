@@ -74,6 +74,7 @@
 		8B7DC665221DEA15004856F7 /* ExportController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportController.swift; sourceTree = "<group>"; };
 		8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardSegueIdentifierExtension.swift; sourceTree = "<group>"; };
 		8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProjectViewController.swift; sourceTree = "<group>"; };
+		8B896000274FC87B0033ABFA /* TestArtistsTree.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = TestArtistsTree.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8BAE61DA22527B07007C13FE /* VGBrowsePathFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGBrowsePathFormView.swift; sourceTree = "<group>"; };
 		8BAE61DB22527B07007C13FE /* VGComboBoxFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGComboBoxFormView.xib; sourceTree = "<group>"; };
 		8BAE61DC22527B07007C13FE /* VGBrowsePathFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGBrowsePathFormView.xib; sourceTree = "<group>"; };
@@ -84,6 +85,7 @@
 		8BAE61E922527CE2007C13FE /* VGOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGOperation.swift; sourceTree = "<group>"; };
 		8BAE61EA22527CE2007C13FE /* FilesOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesOperationQueue.swift; sourceTree = "<group>"; };
 		8BAE61EB22527CE2007C13FE /* FileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileOperation.swift; sourceTree = "<group>"; };
+		8BCE6B9C27550B17000EE381 /* TestPlaylistsTree.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = TestPlaylistsTree.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8BD228DF2218BB2C00A7ABA3 /* VGBaseNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGBaseNSViewController.swift; sourceTree = "<group>"; };
 		8BE2D75A21FA8A9900E12848 /* iTunes Exporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iTunes Exporter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE2D75D21FA8A9900E12848 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -207,6 +209,15 @@
 			path = base;
 			sourceTree = "<group>";
 		};
+		8B895FFF274FC8100033ABFA /* Playground */ = {
+			isa = PBXGroup;
+			children = (
+				8B896000274FC87B0033ABFA /* TestArtistsTree.playground */,
+				8BCE6B9C27550B17000EE381 /* TestPlaylistsTree.playground */,
+			);
+			path = Playground;
+			sourceTree = "<group>";
+		};
 		8BAE61D922527B07007C13FE /* Form */ = {
 			isa = PBXGroup;
 			children = (
@@ -288,6 +299,7 @@
 		8BE2D75C21FA8A9900E12848 /* iTunes Exporter */ = {
 			isa = PBXGroup;
 			children = (
+				8B895FFF274FC8100033ABFA /* Playground */,
 				8BFCEC2627287FBF00AF559C /* Config */,
 				8BE2D75D21FA8A9900E12848 /* AppDelegate.swift */,
 				8BE2D76121FA8A9B00E12848 /* Assets.xcassets */,

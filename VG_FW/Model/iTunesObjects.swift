@@ -58,7 +58,6 @@ class Playlist: ITNodeBase {
         get {
             var duration: Int = 0
             for theITTrack in theITPlaylist.items {
-                //let theTrack: Track = Track(theITTrack: theITTrack)
                 duration += theITTrack.totalTime / 1000
             }
             return duration
@@ -69,7 +68,6 @@ class Playlist: ITNodeBase {
         get {
             var size: UInt64 = 0
             for theITTrack in theITPlaylist.items {
-                //let theTrack: Track = Track(theITTrack: theITTrack)
                 size += theITTrack.fileSize
             }
             return size
@@ -204,6 +202,26 @@ class Artist: ITNodeBase {
         return theITTracks
     }
     
+    var duration: Int {
+        get {
+            var duration: Int = 0
+            for theITTrack in getITTracks() {
+                duration += theITTrack.totalTime / 1000
+            }
+            return duration
+        }
+    }
+    
+    var size: UInt64 {
+        get {
+            var size: UInt64 = 0
+            for theITTrack in getITTracks() {
+                size += theITTrack.fileSize
+            }
+            return size
+        }
+    }
+    
 }
 
 class Album: ITNodeBase {
@@ -224,15 +242,35 @@ class Album: ITNodeBase {
         self._ITAlbum = theITAlbum
     }
     
-    func getITTracks() -> [ITLibMediaItem] {
+    /*func getITTracks() -> [ITLibMediaItem] {
         return tracks.map({ $0.theITTrack })
-    }
+    }*/
     
     var ITAlbum: ITLibAlbum {
-            get {
-                return _ITAlbum!
-            }
+        get {
+            return _ITAlbum!
         }
+    }
+    
+    var duration: Int {
+        get {
+            var duration: Int = 0
+            for theITTrack in ITTracks {
+                duration += theITTrack.totalTime / 1000
+            }
+            return duration
+        }
+    }
+    
+    var size: UInt64 {
+        get {
+            var size: UInt64 = 0
+            for theITTrack in ITTracks {
+                size += theITTrack.fileSize
+            }
+            return size
+        }
+    }
     
 }
 

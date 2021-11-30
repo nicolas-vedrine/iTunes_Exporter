@@ -204,7 +204,7 @@ class ViewController: BaseProjectViewController {
     
     @IBAction func exportAction(_ sender: Any) {
         let theExportButton: NSButton = sender as! NSButton
-        if theAppInfosView.state == AppInfosViewState.playListInfo.rawValue {
+        if theAppInfosView.state == AppInfosViewState.playlistInfo.rawValue {
             theExportButton.state = NSControl.StateValue.off
             if theAddedTracksListView.tracks!.count > 0 {
                 self.performSegue(withIdentifier: NSStoryboardSegue.EXPORT_SEGUE, sender: self)
@@ -212,7 +212,7 @@ class ViewController: BaseProjectViewController {
         } else {
             _theCopyFilesOperationQueue?.cancelAllOperations()
             theExportButton.state = NSControl.StateValue.off
-            theAppInfosView.state = AppInfosViewState.playListInfo.rawValue
+            theAppInfosView.state = AppInfosViewState.playlistInfo.rawValue
         }
     }
     
@@ -267,7 +267,7 @@ extension ViewController {
     
     private func _reset() {
         self.theExportButton.state = NSControl.StateValue.off
-        self.theAppInfosView.state = AppInfosViewState.playListInfo.rawValue
+        self.theAppInfosView.state = AppInfosViewState.playlistInfo.rawValue
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -416,18 +416,25 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                 let theITSortKind = ITSortKind.artistAndThenAlbum
                 let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
                 self.thePlaylistTracksListView.tracks = theITTracksSorted
-                self.theAppInfosView.setPlaylistDuration(duration: thePlaylist.duration)
+                self.theAppInfosView.setDuration(duration: thePlaylist.duration)
                 self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
-                self.theAppInfosView.setPlaylistName(playlistName: thePlaylist.name!)
+                self.theAppInfosView.setName(name: thePlaylist.name!)
                 self.theAppInfosView.setSize(size: thePlaylist.size)
             } else if let theArtist = theNodeObject as? Artist {
                 //let theITArtistTracks = _lib!.allMediaItems.filter({$0.mediaKind == .kindSong && $0.artist?.name?.lowercased() == theArtist.name.lowercased()})
                 //print(theArtist.getITTracks(ITArtistTracks: theITArtistTracks))
                 let theITTracks = theArtist.getITTracks()
                 self.thePlaylistTracksListView.tracks = theITTracks
+                self.theAppInfosView.setDuration(duration: theArtist.duration)
+                self.theAppInfosView.setCountItems(countItems: theITTracks.count)
+                self.theAppInfosView.setName(name: theArtist.name)
+                self.theAppInfosView.setSize(size: theArtist.size)
             } else if let theAlbum = theNodeObject as? Album {
                 let theITTracks = theAlbum.ITTracks
                 self.thePlaylistTracksListView.tracks = theITTracks
+                self.theAppInfosView.setDuration(duration: theAlbum.duration)
+                self.theAppInfosView.setCountItems(countItems: theITTracks.count)
+                self.theAppInfosView.setSize(size: theAlbum.size)
             }
         }
     }

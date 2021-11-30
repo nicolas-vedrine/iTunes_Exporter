@@ -27,14 +27,14 @@ import Cocoa
         loadViewFromNib()
         
         if nItemsLabel != nil {
-            setPlaylistName(playlistName: "Sélectionnez une playlist...", isPlaceHolder: true)
+            setName(name: "Sélectionnez une playlist...", isPlaceHolder: true)
             durationLabel.isHidden = true
             nItemsLabel.isHidden = true
             sizeLabel.isHidden = true
             trackNameLabel.isHidden = true
             statusLabel.isHidden = true
             
-            theState = AppInfosViewState.playListInfo.rawValue
+            theState = AppInfosViewState.playlistInfo.rawValue
         }
     }
     
@@ -44,16 +44,16 @@ import Cocoa
         //print("V&G_Project___setProgress : ", current, total, Double(current / total * 100))
     }
     
-    func setPlaylistDuration(duration: Int) {
+    func setDuration(duration: Int) {
         durationLabel.isHidden = false
         let formattedDuration: String =  "Durée totale : " + Int(duration / 1000).toFormattedDuration()
         durationLabel.stringValue = formattedDuration
     }
     
-    func setPlaylistName(playlistName: String, isPlaceHolder: Bool = false) {
-        self.playlistNameLabel.placeholderString = playlistName
+    func setName(name: String, isPlaceHolder: Bool = false) {
+        self.playlistNameLabel.placeholderString = name
         if !isPlaceHolder {
-            self.playlistNameLabel.stringValue = "Nom de la playlist : " + playlistName
+            self.playlistNameLabel.stringValue = "Nom de la playlist : " + name
         }
     }
     
@@ -80,8 +80,7 @@ import Cocoa
         set {
             theState = newValue
             switch newValue {
-            case AppInfosViewState.playListInfo.rawValue:
-                //print("V&G_Project___<#name#> : ", self)
+            case AppInfosViewState.playlistInfo.rawValue:
                 nItemsLabel.isHidden = false
                 durationLabel.isHidden = false
                 playlistNameLabel.isHidden = false
@@ -109,6 +108,7 @@ import Cocoa
 }
 
 enum AppInfosViewState: String {
-    case playListInfo = "playListInfo"
+    case playlistInfo = "playlistInfo"
+    case artistInfo = "artistInfo"
     case exporting = "exporting"
 }

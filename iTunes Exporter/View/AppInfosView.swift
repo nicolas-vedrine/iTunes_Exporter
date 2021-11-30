@@ -46,7 +46,8 @@ import Cocoa
     
     func setDuration(duration: Int) {
         durationLabel.isHidden = false
-        let formattedDuration: String =  "Durée totale : " + Int(duration / 1000).toFormattedDuration()
+        print("V&G_Project___setDuration : ", duration)
+        let formattedDuration: String =  "Durée totale : " + duration.toFormattedDuration(unitsStyle: .abbreviated) // OK
         durationLabel.stringValue = formattedDuration
     }
     

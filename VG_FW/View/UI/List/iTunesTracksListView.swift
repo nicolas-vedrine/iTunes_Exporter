@@ -64,7 +64,7 @@ extension iTunesTracksListView {
     
     override func getTotalTime(theTrack: NSObject) -> String {
         let theiTunesTrack: ITLibMediaItem = theTrack as! ITLibMediaItem
-        return Int(theiTunesTrack.totalTime / 1000).toFormattedDuration()
+        return Int(theiTunesTrack.totalTime / 1000).toTrackDurationFormat()
     }
     
 }

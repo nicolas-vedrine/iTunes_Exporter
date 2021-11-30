@@ -126,14 +126,24 @@ extension Int {
         return sTime
     }*/
     
-    func toFormattedDuration() -> String {
+    func toFormattedDuration(unitsStyle: DateComponentsFormatter.UnitsStyle = .positional) -> String {
         let duration: TimeInterval = TimeInterval(self) // 701429
         let durationFormatter = DateComponentsFormatter()
-        durationFormatter.unitsStyle = .positional
+        durationFormatter.unitsStyle = unitsStyle
         durationFormatter.allowedUnits = [.day, .hour, .minute, .second ]
         durationFormatter.zeroFormattingBehavior = [ .dropMiddle ]
         let formattedDuration = durationFormatter.string(from: duration)
         return formattedDuration!
+    }
+    
+    func toTrackDurationFormat() -> String {
+        let duration: TimeInterval = TimeInterval(self)
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .positional
+        formatter.zeroFormattingBehavior = .pad
+        return formatter.string(from: duration)!
+            .replacingOccurrences(of: #"^00[:.]0?|^0"#, with: "", options: .regularExpression)
     }
     
     func toFormattedNumber() -> String {

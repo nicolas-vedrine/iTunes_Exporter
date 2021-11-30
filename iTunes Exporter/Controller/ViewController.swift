@@ -84,7 +84,7 @@ class ViewController: BaseProjectViewController {
         if theCount > 0 {
             let statutInfos = iTunesModel.getStatutInfos(theTracks: theAddedTracks)
             var theStr = theAddedTracks.count.toFormattedNumber() + " morceaux mis en file, "
-            theStr += "durée totale " + Int(statutInfos.duration / 1000).toFormattedDuration() + ", "
+            theStr += "durée totale " + Int(statutInfos.duration / 1000).toFormattedDuration(unitsStyle: .abbreviated) + ", "
             theStr += statutInfos.size.toMegaBytes()
             theStatutInfosLabel.stringValue = theStr
         }

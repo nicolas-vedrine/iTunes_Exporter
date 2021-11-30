@@ -86,6 +86,7 @@
 		8BAE61EA22527CE2007C13FE /* FilesOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesOperationQueue.swift; sourceTree = "<group>"; };
 		8BAE61EB22527CE2007C13FE /* FileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileOperation.swift; sourceTree = "<group>"; };
 		8BCE6B9C27550B17000EE381 /* TestPlaylistsTree.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = TestPlaylistsTree.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		8BCE6BA0275699B3000EE381 /* TestDurationFormatter.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = TestDurationFormatter.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8BD228DF2218BB2C00A7ABA3 /* VGBaseNSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGBaseNSViewController.swift; sourceTree = "<group>"; };
 		8BE2D75A21FA8A9900E12848 /* iTunes Exporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iTunes Exporter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE2D75D21FA8A9900E12848 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -214,6 +215,7 @@
 			children = (
 				8B896000274FC87B0033ABFA /* TestArtistsTree.playground */,
 				8BCE6B9C27550B17000EE381 /* TestPlaylistsTree.playground */,
+				8BCE6BA0275699B3000EE381 /* TestDurationFormatter.playground */,
 			);
 			path = Playground;
 			sourceTree = "<group>";

@@ -20,7 +20,7 @@ class TreeTableCellView: NSTableCellView {
             let thePlaylist: Playlist = node as! Playlist
             _buildPlaylist(playlist: thePlaylist)
         } else if node is Artist {
-            let theArtist: Artist = node as! Artist
+            //let theArtist: Artist = node as! Artist
             imageView?.image = NSImage(named: "artist-icon")
         } else if node is Album {
             let theAlbum: Album = node as! Album
@@ -37,11 +37,6 @@ class TreeTableCellView: NSTableCellView {
                 imageView?.image = NSImage(named: "album-icon")
             }
         }
-        /*if ((theFirstTrack?.hasArtworkAvailable) != nil) {
-            
-        } else {
-            imageView?.image = NSImage(named: "album-icon")
-        }*/
     }
     
     private func _buildPlaylist(playlist: Playlist) {

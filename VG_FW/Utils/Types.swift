@@ -128,7 +128,11 @@ extension Int {
     
     func toFormattedDuration(unitsStyle: DateComponentsFormatter.UnitsStyle = .positional) -> String {
         let duration: TimeInterval = TimeInterval(self) // 701429
+        var calendar = Calendar.current
+        let locale = String(Locale.preferredLanguages[0].prefix(2))
+        calendar.locale = Locale(identifier: locale)
         let durationFormatter = DateComponentsFormatter()
+        durationFormatter.calendar = calendar
         durationFormatter.unitsStyle = unitsStyle
         durationFormatter.allowedUnits = [.day, .hour, .minute, .second ]
         durationFormatter.zeroFormattingBehavior = [ .dropMiddle ]

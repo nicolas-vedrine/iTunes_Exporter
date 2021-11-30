@@ -92,8 +92,8 @@ class ViewController: BaseProjectViewController {
     
     private func _addData() {
         if let lib = _lib {
-            _addPlaylists(lib: lib)
-            //_addArtists(lib: lib)
+            //_addPlaylists(lib: lib)
+            _addArtists(lib: lib)
             
             //thePlaylistsSearchField.bind(.predicate, to: theTreeController, withKeyPath: NSBindingName.filterPredicate.rawValue, options: [.predicateFormat: "(name contains[cd] $value)"])
         }
@@ -156,15 +156,14 @@ class ViewController: BaseProjectViewController {
             self._onArtistTreeLoading(notification: notification)
         }
         
-        let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
+        //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
         //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot")})
+        let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot" || $0.artist?.name == nil)})
         
         if _theArtistsTree == nil {
-            _theArtistsTree = iTunesModel.getArtistsTree(theITTracks: theITTracks)
-            
-            //let theArtistsName = iTunesModel.getAllArtistNames(theITTracks: theITTracks)
-            theTreeController.content = _theArtistsTree
+            _theArtistsTree = iTunesModel.getArtistsTree(theITTracks: theITTracks, parseTracks: false)
         }
+        theTreeController.content = _theArtistsTree
         theSegmentedControl.selectedSegment = 1
         NotificationCenter.default.removeObserver(artistTreeLoadingObserver)
     }
@@ -361,34 +360,25 @@ extension ViewController {
 
 extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     
-    func isHeader(item: Any) -> Bool {
-        if let item = item as? NSTreeNode {
-            return !(item.representedObject is Playlist)
-        } else {
-            return !(item is Playlist)
-        }
-    }
-    
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
-        //print("V&G_Project___<#name#> : ", isHeader(item: item))
         var cellID:String
-        let treeNode = item as! NSTreeNode
-        if isHeader(item: item) {
+        let theTreeNode = item as! NSTreeNode
+        let theTreeNodeObject = theTreeNode.representedObject as! NSObject
+        if theTreeNodeObject is ITNodeBase {
+            cellID = "DataCell"
+            let theCell: TreeTableCellView = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self) as! TreeTableCellView
+            theCell.buildCell(node: theTreeNodeObject)
+            return theCell
+        } else {
             cellID = "HeaderCell"
             let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self)
             return cell
-        } else {
-            cellID = "DataCell"
-            let pl = treeNode.representedObject as! Playlist
-            let cell: PlaylistTableCellView = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self) as! PlaylistTableCellView
-            cell.buildCell(thePlaylist: pl)
-            return cell
         }
+        
+        return nil
     }
     
-    func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        print("V&G_FW___<#name#> : ", item)
-        
+    func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {        
         if let item = item as? NSTreeNode {
             if item.representedObject is PlaylistGroup {
                 return true
@@ -400,7 +390,6 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                     return false
                 }
             } else if item.representedObject is Artist {
-                //let theArtist = item.representedObject as! Artist
                 return true
             }
         }
@@ -421,23 +410,23 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
         let selectedIndex = outlineView.selectedRow
         if let theNode = outlineView.item(atRow: selectedIndex) as? NSTreeNode {
             //3
-            if let thePlaylist = theNode.representedObject as? Playlist {
+            let theNodeObject = theNode.representedObject
+            if let thePlaylist = theNodeObject as? Playlist {
                 let theITTracks = thePlaylist.theITPlaylist.items
                 let theITSortKind = ITSortKind.artistAndThenAlbum
                 let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
                 self.thePlaylistTracksListView.tracks = theITTracksSorted
-                //print("V&G_Project___outlineViewSelectionDidChange : ", self, thePlaylistTracksListView.tracks)
                 self.theAppInfosView.setPlaylistDuration(duration: thePlaylist.duration)
                 self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
                 self.theAppInfosView.setPlaylistName(playlistName: thePlaylist.name!)
                 self.theAppInfosView.setSize(size: thePlaylist.size)
-            } else if let theArtist = theNode.representedObject as? Artist {
+            } else if let theArtist = theNodeObject as? Artist {
                 //let theITArtistTracks = _lib!.allMediaItems.filter({$0.mediaKind == .kindSong && $0.artist?.name?.lowercased() == theArtist.name.lowercased()})
                 //print(theArtist.getITTracks(ITArtistTracks: theITArtistTracks))
                 let theITTracks = theArtist.getITTracks()
                 self.thePlaylistTracksListView.tracks = theITTracks
-            } else if let theAlbum = theNode.representedObject as? Album {
-                let theITTracks = theAlbum.getITTracks()
+            } else if let theAlbum = theNodeObject as? Album {
+                let theITTracks = theAlbum.ITTracks
                 self.thePlaylistTracksListView.tracks = theITTracks
             }
         }

@@ -46,7 +46,7 @@
 		8BE2D76F21FB74AC00E12848 /* AppleScriptObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE2D76E21FB74AC00E12848 /* AppleScriptObjC.framework */; };
 		8BE2D77121FB74EA00E12848 /* iTunesBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77021FB74EA00E12848 /* iTunesBridge.swift */; };
 		8BE2D77821FB751F00E12848 /* PlaylistImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */; };
-		8BE2D77921FB751F00E12848 /* PlaylistTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */; };
+		8BE2D77921FB751F00E12848 /* TreeTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE2D77721FB751F00E12848 /* TreeTableCellView.swift */; };
 		8BFCEC2827287FDC00AF559C /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFCEC2727287FDC00AF559C /* AppConfig.swift */; };
 		8BFDB41C2240444D008E8FED /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFDB41B2240444D008E8FED /* Types.swift */; };
 /* End PBXBuildFile section */
@@ -97,7 +97,7 @@
 		8BE2D76E21FB74AC00E12848 /* AppleScriptObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppleScriptObjC.framework; path = System/Library/Frameworks/AppleScriptObjC.framework; sourceTree = SDKROOT; };
 		8BE2D77021FB74EA00E12848 /* iTunesBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesBridge.swift; sourceTree = "<group>"; };
 		8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistImageCell.swift; sourceTree = "<group>"; };
-		8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistTableCellView.swift; sourceTree = "<group>"; };
+		8BE2D77721FB751F00E12848 /* TreeTableCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeTableCellView.swift; sourceTree = "<group>"; };
 		8BFCEC2727287FDC00AF559C /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		8BFDB41B2240444D008E8FED /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,11 +153,11 @@
 		8B3CCB3C221B750800BD7EC1 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8BCE6B9D275559AA000EE381 /* Cell */,
 				8BCDFC822257A511007E263A /* List */,
 				8B50841F2240518C001A9A6D /* Form */,
 				8B3CCB36221B418400BD7EC1 /* NSSearchFieldFilterCell.swift */,
 				8BE2D77621FB751F00E12848 /* PlaylistImageCell.swift */,
-				8BE2D77721FB751F00E12848 /* PlaylistTableCellView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -267,6 +267,14 @@
 				8B0DD5DB2215C1A400146683 /* TrackListView.swift */,
 			);
 			path = List;
+			sourceTree = "<group>";
+		};
+		8BCE6B9D275559AA000EE381 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				8BE2D77721FB751F00E12848 /* TreeTableCellView.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		8BD228DE2218BAF700A7ABA3 /* Controller */ = {
@@ -452,7 +460,7 @@
 				8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */,
 				8BE2D76021FA8A9900E12848 /* ViewController.swift in Sources */,
 				8B3CCB37221B418500BD7EC1 /* NSSearchFieldFilterCell.swift in Sources */,
-				8BE2D77921FB751F00E12848 /* PlaylistTableCellView.swift in Sources */,
+				8BE2D77921FB751F00E12848 /* TreeTableCellView.swift in Sources */,
 				8BAE61E522527B07007C13FE /* VGComboBoxFormView.swift in Sources */,
 				8BAE61E722527B07007C13FE /* VGTextInputFormView.swift in Sources */,
 				8BAE61EF22527CE2007C13FE /* FileOperation.swift in Sources */,

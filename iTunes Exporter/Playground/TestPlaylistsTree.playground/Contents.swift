@@ -44,11 +44,10 @@ func getPlaylistsTree(theLevelITPlaylists: [ITLibPlaylist], theITPlaylists: [ITL
 }
 
 func getITPlaylistChildren(theFolderITPlaylist: ITLibPlaylist, theITPlaylists: [ITLibPlaylist]) -> [ITLibPlaylist] {
-    var theChildrenPlaylists = [ITLibPlaylist]()
-    //print(theITPlaylists.count)
+    //var theChildrenPlaylists = [ITLibPlaylist]()
     let theChildrenITPlaylists = theITPlaylists.filter({ $0.parentID == theFolderITPlaylist.persistentID })
-    for theChildITPlaylist in theChildrenITPlaylists {
+    /*for theChildITPlaylist in theChildrenITPlaylists {
         theChildrenPlaylists.append(theChildITPlaylist)
-    }
-    return theChildrenPlaylists
+    }*/
+    return theChildrenITPlaylists
 }

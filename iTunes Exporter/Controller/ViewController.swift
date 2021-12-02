@@ -21,7 +21,7 @@ class ViewController: BaseProjectViewController {
     @IBOutlet weak var theStatutInfosLabel: NSTextField!
     @IBOutlet weak var theAppInfosView: AppInfosView!
     @IBOutlet weak var theMenuBox: NSBox!
-    @IBOutlet weak var thePlaylistsSearchField: NSSearchField!
+    @IBOutlet weak var theSearchField: NSSearchField!
     
     //    lazy var exportController: NSViewController = {
     //        return self.storyboard!.instantiateController(withIdentifier: "ExportController")
@@ -92,8 +92,14 @@ class ViewController: BaseProjectViewController {
     
     private func _addData() {
         if let lib = _lib {
-            //_addPlaylists(lib: lib)
-            _addArtists(lib: lib)
+            _addPlaylists(lib: lib)
+            //_addArtists(lib: lib)
+            
+            if(IS_DEBUG_MODE) {
+                let theStr = "music"
+                theSearchField.stringValue = theStr
+                _search(str: theStr)
+            }
             
             //thePlaylistsSearchField.bind(.predicate, to: theTreeController, withKeyPath: NSBindingName.filterPredicate.rawValue, options: [.predicateFormat: "(name contains[cd] $value)"])
         }
@@ -114,26 +120,26 @@ class ViewController: BaseProjectViewController {
     
     private func _addPlaylists(lib: ITLibrary) {
         let theITPlaylists = iTunesModel.getMusicPlaylists(lib: lib)
+        print("V&G_Project____addPlaylists : ", "theITPlaylists.count", theITPlaylists.count)
         let theRootITPlaylists = theITPlaylists.filter({ $0.parentID == nil })
         let thePlaylistsTree = iTunesModel.getPlaylistsTree(theLevelITPlaylists: theRootITPlaylists, theITPlaylists: theITPlaylists)
         if _thePlaylistsGroups == nil {
             _thePlaylistsGroups = iTunesModel.getPlaylistsGroups(thePlaylists: thePlaylistsTree)
         }
-        theTreeController.content = _thePlaylistsGroups
-        self.theOutlineView.expandItem(nil, expandChildren: true)
+        _resetTree()
         theSegmentedControl.selectedSegment = 0
         
-        thePlaylistsSearchField.target = self
+        theSearchField.target = self
         if #available(macOS 10.11, *) {
-            thePlaylistsSearchField.delegate = self
+            theSearchField.delegate = self
         } else {
             // Fallback on earlier versions
         }
         
         // remplissage auto de tableaux
         if IS_DEBUG_MODE {
-            let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
-            let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isDistinguishedKind: true, theSeparator: "")
+            /*let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
+            let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isIndent: false, theSeparator: "")
             let theMusicBoxPlaylists = theFlattenPlaylist.filter({($0.name?.lowercased().contains("music box"))!})
             let thePlaylistTest = theMusicBoxPlaylists[0]
             thePlaylistTracksListView.tracks = thePlaylistTest.theITPlaylist.items
@@ -147,7 +153,7 @@ class ViewController: BaseProjectViewController {
                 let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracksShuffled[n]
                 theTracksToAdd.append(theTrackToAdd)
             }
-            theAddedTracksListView.tracks = theTracksToAdd
+            theAddedTracksListView.tracks = theTracksToAdd*/
         }
     }
     
@@ -366,25 +372,27 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
         let theTreeNodeObject = theTreeNode.representedObject as! NSObject
         if theTreeNodeObject is ITNodeBase {
             cellID = "DataCell"
-            let theCell: TreeTableCellView = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self) as! TreeTableCellView
+            let theCell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self) as! TreeTableCellView
             theCell.buildCell(node: theTreeNodeObject)
             return theCell
         } else {
             cellID = "HeaderCell"
-            let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self)
-            return cell
+            let theCell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self)
+            return theCell
         }
         
         return nil
     }
     
-    func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {        
+    func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
+        print("V&G_Project___outlineView : ", self) // TODO
         if let item = item as? NSTreeNode {
             if item.representedObject is PlaylistGroup {
                 return true
             } else if item.representedObject is Playlist {
                 let thePlaylist  = item.representedObject as! Playlist
-                if thePlaylist.isFolder && (thePlaylist.children.count) > 0 {
+                print("V&G_Project___outlineView : ", "theSearchField.stringValue.count", theSearchField.stringValue.count)
+                if thePlaylist.isFolder && (thePlaylist.children!.count > 0) && (theSearchField.stringValue.count == 0) {
                     return true
                 }else{
                     return false
@@ -418,7 +426,7 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
                 self.thePlaylistTracksListView.tracks = theITTracksSorted
                 self.theAppInfosView.setDuration(duration: thePlaylist.duration)
                 self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
-                self.theAppInfosView.setName(name: thePlaylist.name!)
+                self.theAppInfosView.setName(name: thePlaylist.name)
                 self.theAppInfosView.setSize(size: thePlaylist.size)
             } else if let theArtist = theNodeObject as? Artist {
                 //let theITArtistTracks = _lib!.allMediaItems.filter({$0.mediaKind == .kindSong && $0.artist?.name?.lowercased() == theArtist.name.lowercased()})
@@ -448,25 +456,66 @@ extension ViewController: NSSearchFieldDelegate {
     
     func searchFieldDidEndSearching(_ sender: NSSearchField) {
         print("V&G_Project___TrackListView searchFieldDidEndSearching : ", self)
-        theTreeController.content = _thePlaylistsGroups
+        _resetTree()
     }
     
     func controlTextDidChange(_ obj: Notification) {
         let theTextField = obj.object as! NSTextField
         let theStr = theTextField.stringValue
-        //filterTracks(theStr: theStr)
+        _search(str: theStr)
+    }
+    
+    private func _search(str: String) {
         //thePlaylistsSearchField.sendAction(thePlaylistsSearchField.action, to: thePlaylistsSearchField.target)
-        let thePredicate = NSPredicate(format: "%K CONTAINS[cd] %@", "name", theStr)
-        print("V&G_Project___<#name#> : ", thePredicate.predicateFormat)
-        let theContent: [PlaylistGroup] = theTreeController.content as! [PlaylistGroup]
-        for theChild in theContent {
-            let thePlaylists: [Playlist] = theChild.children
-            for thePlaylist in thePlaylists {
-                thePlaylist.predicate = thePredicate
+        let thePredicate = NSPredicate(format: "%K CONTAINS[cd] %@", "name", str)
+        if let thePersonalPlaylistsGroup = _thePlaylistsGroups!.filter({$0.isAllPlaylists}).first {
+            let thePersonalPlaylists = thePersonalPlaylistsGroup.children
+            let theFlattenPlaylists = iTunesModel.getFlattenPlaylistsTree(theList: thePersonalPlaylists, isIndent: false, theSeparator: "")
+            
+            _resetSearch(playlists: theFlattenPlaylists)
+            
+            if str.count > 0 {
+                let theSearchResults = theFlattenPlaylists.filter({ $0.name.lowercased().contains(str.lowercased()) })
+                for thePlaylist in theSearchResults {
+                    //print("V&G_Project___controlTextDidChange : ", thePersonalPlaylist.name)
+                    //thePersonalPlaylist.predicate = thePredicate
+                    
+                    
+                    //print(thePersonalPlaylist.name, "----------")
+                    /*if thePlaylist.children.count > 0 {
+                        let theResult = thePlaylist.children.flatMap({$0.name})
+                        //dump(theResult)
+                        //let theResult: [Playlist] = thePersonalPlaylist.children.flatten().compactMap { $0 }
+                        //let theNames = theResult.map({$0.name})
+                        //print(theResult)
+                    }*/
+                    
+                    
+                    if thePlaylist.theITPlaylist.kind == .folder {
+                        thePlaylist.isSearched = true
+                    }
+                }
+                theTreeController.content = theSearchResults
+            } else {
+                _resetTree()
             }
         }
-        print("V&G_Project___ViewController controlTextDidChange : ", theStr)
     }
+    
+    private func _resetSearch(playlists: [Playlist]) {
+        let theIsSearchedPlaylists = playlists.filter({ $0.isSearched })
+        
+        for theIsSearchedPlaylist in theIsSearchedPlaylists {
+            theIsSearchedPlaylist.isSearched = false
+            print("V&G_Project__resetSearch : ", theIsSearchedPlaylist.isSearched, theIsSearchedPlaylist.name)
+        }
+    }
+    
+    private func _resetTree() {
+        theTreeController.content = _thePlaylistsGroups
+        self.theOutlineView.expandItem(nil, expandChildren: true)
+    }
+    
 }
 
 

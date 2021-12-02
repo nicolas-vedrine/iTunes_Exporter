@@ -60,7 +60,7 @@ do {
         let theRandomAlbumInt = Int.random(in: 0..<theRandomArtist.albums.count - 1)
         let theRandomAlbum = theRandomArtist.albums[theRandomAlbumInt]
         theArtistTracks = theRandomAlbum.tracks
-        theArtistITTracks = theRandomAlbum.getITTracks()
+        //theArtistITTracks = theRandomAlbum.getITTracks()
     } else {
         theArtistITTracks = theRandomArtist.getITTracks()
     }

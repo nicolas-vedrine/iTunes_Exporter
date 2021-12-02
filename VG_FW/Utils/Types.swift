@@ -240,6 +240,36 @@ enum DateFormatType: String {
     
 }
 
+extension Array {
+    
+    /*func flatten<T>(_ index: Int = 0) -> [T] {
+        guard index < self.count else {
+            return []
+        }
+        
+        var flatten: [T] = []
+        
+        if let itemArr = self[index] as? [T] {
+            flatten += itemArr.flatten()
+        } else if let element = self[index] as? T {
+            flatten.append(element)
+        }
+        return flatten + self.flatten(index + 1)
+    }*/
+    
+    func flatten(_ array: [Any]) -> [Any] {
+        var result = [Any]()
+        for element in array {
+            if let element = element as? [Any] {
+                result.append(contentsOf: flatten(element))
+            } else {
+                result.append(element)
+            }
+        }
+        return result
+    }
+    
+}
 
 extension NSArrayController {
     

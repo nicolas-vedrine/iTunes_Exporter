@@ -93,8 +93,8 @@ class ViewController: BaseProjectViewController {
     
     private func _addData() {
         if let lib = _lib {
-            //_addPlaylists(lib: lib)
-            _addArtists(lib: lib)
+            _addPlaylists(lib: lib)
+            //_addArtists(lib: lib)
             
             if(IS_DEBUG_MODE) {
                 /*let theStr = "music"
@@ -482,50 +482,48 @@ extension ViewController: NSSearchFieldDelegate {
         //thePlaylistsSearchField.sendAction(thePlaylistsSearchField.action, to: thePlaylistsSearchField.target)
         let thePredicate = NSPredicate(format: "%K CONTAINS[cd] %@", "name", str)
         
+        var theSearchFields = [[Node]]()
+        switch theSegmentedControl.selectedSegment {
+        case TreeMode.playlists.rawValue:
+            if let thePersonalPlaylistsGroup = _thePlaylistsGroup!.filter({$0.id == iTunesModel.PlaylistsGroupID.allPlaylists.rawValue}).first {
+                if let thePersonalPlaylists = thePersonalPlaylistsGroup.children {
+                    theSearchFields.append(thePersonalPlaylists)
+                }
+            }
+        case TreeMode.artists.rawValue:
+            //if let theArtistsGroup = _theArtistsGroup?.filter({})
+            print("artists")
+        default:
+            print("")
+        }
         
-        
-        if let thePersonalPlaylistsGroup = _thePlaylistsGroup!.filter({$0.id == iTunesModel.PlaylistsGroupID.allPlaylists.rawValue}).first {
-            if let thePersonalPlaylists = thePersonalPlaylistsGroup.children {
-                let theFlattenNodes = iTunesModel.getFlattenNodesTree(nodes: thePersonalPlaylists)
-                
-                _resetSearch(nodes: theFlattenNodes)
-                
-                if str.count > 0 {
-                    let theSearchResults = theFlattenNodes.filter({ $0.name.lowercased().contains(str.lowercased()) })
-                    for theNode in theSearchResults {
-                        //print("V&G_Project___controlTextDidChange : ", thePersonalPlaylist.name)
-                        //thePersonalPlaylist.predicate = thePredicate
-                        
-                        
-                        //print(thePersonalPlaylist.name, "----------")
-                        /*if thePlaylist.children.count > 0 {
-                            let theResult = thePlaylist.children.flatMap({$0.name})
-                            //dump(theResult)
-                            //let theResult: [Playlist] = thePersonalPlaylist.children.flatten().compactMap { $0 }
-                            //let theNames = theResult.map({$0.name})
-                            //print(theResult)
-                        }*/
-                        
-                        
-                        if !theNode.isLeaf() {
+        for theSearchField in theSearchFields {
+            let theFlattenNodes = iTunesModel.getFlattenNodesTree(nodes: theSearchField)
+            _resetSearch(nodes: theFlattenNodes)
+            if str.count > 0 {
+                let theSearchResults = theFlattenNodes.filter({ $0.name.lowercased().contains(str.lowercased()) })
+                for theNode in theSearchResults {
+                    if let theNodeChildren = theNode.children {
+                        if theNodeChildren.count > 0 {
                             theNode.isSearched = true
                         }
                     }
-                    theTreeController.content = theSearchResults
-                } else {
-                    _resetTree()
                 }
+                theTreeController.content = theSearchResults
+            } else {
+                _resetTree()
             }
         }
+        
     }
     
     private func _resetSearch(nodes: [Node]) {
-        /*let theIsSearchedPlaylists = nodes.filter({ $0.isSearched })
+        let theIsSearchedPlaylists = nodes.filter({ $0.isSearched })
         
         for theIsSearchedPlaylist in theIsSearchedPlaylists {
             theIsSearchedPlaylist.isSearched = false
             print("V&G_Project__resetSearch : ", theIsSearchedPlaylist.isSearched, theIsSearchedPlaylist.name)
-        }*/
+        }
     }
     
     private func _resetTree() {

@@ -237,8 +237,36 @@ class Artist: ITNode {
     }*/
     
     @objc override func isLeaf() -> Bool {
-        return false
+        var hasChildren: Bool = false
+        if let theChildren = children {
+            if theChildren.count > 0 {
+                hasChildren = true
+            }
+        }
+        var theBool = true
+        if !isSearched && hasChildren {
+            theBool = false
+        }
+        //print("V&G_FW___isLeaf : ", name, "isFolder", isFolder, "isSeached", isSearched)
+        return theBool
+        
+        //return false
     }
+    
+    /*@objc override func isLeaf() -> Bool {
+        var hasChildren: Bool = false
+        if let theChildren = children {
+            if theChildren.count > 0 {
+                hasChildren = true
+            }
+        }
+        var theBool = true
+        if isFolder && !isSearched && hasChildren {
+            theBool = false
+        }
+        //print("V&G_FW___isLeaf : ", name, "isFolder", isFolder, "isSeached", isSearched)
+        return theBool
+    }*/
     
     /*init(theITArtist: ITLibArtist) {
         if let theName = theITArtist.name {

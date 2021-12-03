@@ -30,7 +30,7 @@ class ViewController: BaseProjectViewController {
     
     private var _lib: ITLibrary?
     private var _thePlaylistsGroup: [NodeGroup]?
-    private var _theArtistsGroup: [NodeGroup]?
+    private var _artistsGroup: [NodeGroup]?
     //private var _theArtistsTree: [Artist]?
     
     private var _theFormResult: [String: Any]?
@@ -97,9 +97,9 @@ class ViewController: BaseProjectViewController {
             //_addArtists(lib: lib)
             
             if(IS_DEBUG_MODE) {
-                /*let theStr = "music"
-                theSearchField.stringValue = theStr
-                _search(str: theStr)*/
+                let theStr = "mortal"
+                //theSearchField.stringValue = theStr
+                //_search(str: theStr)
             }
             
             //thePlaylistsSearchField.bind(.predicate, to: theTreeController, withKeyPath: NSBindingName.filterPredicate.rawValue, options: [.predicateFormat: "(name contains[cd] $value)"])
@@ -162,13 +162,13 @@ class ViewController: BaseProjectViewController {
             self._onArtistTreeLoading(notification: notification)
         }
         
-        
-        //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot")})
-        //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot" || $0.artist?.name == nil)})
-        
-        if _theArtistsGroup == nil {
-            let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
+        if _artistsGroup == nil {
+            //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
             //let theITTracksNoCompilation = lib.allMediaItems.filter({ $0.mediaKind == .kindSong && !$0.album.isCompilation })
+            
+            //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot")})
+            let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot" || $0.artist?.name == nil)})
+            
             let theITTracksCompilations = lib.allMediaItems.filter({ $0.mediaKind == .kindSong && $0.album.isCompilation })
             
             let theArtistsTree = iTunesModel.getArtistsTree(ITTracks: theITTracks)
@@ -176,9 +176,9 @@ class ViewController: BaseProjectViewController {
             var theITNodesList = [[ITNode]]()
             theITNodesList.append(theArtistsTree)
             theITNodesList.append(theCompilationsTree)
-            _theArtistsGroup = iTunesModel.getArtistsGroups(ITNodesList: theITNodesList)
+            _artistsGroup = iTunesModel.getArtistsGroups(ITNodesList: theITNodesList)
         }
-        theTreeController.content = _theArtistsGroup
+        theTreeController.content = _artistsGroup
         theSegmentedControl.selectedSegment = 1
         _resetTree()
         NotificationCenter.default.removeObserver(artistTreeLoadingObserver)
@@ -398,19 +398,21 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     }
     
     func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        print("V&G_Project___outlineView : ", self) // TODO
+        //print("V&G_Project___outlineView : ", self) // TODO
         if let item = item as? NSTreeNode {
-            if item.representedObject is NodeGroup {
+            let theObject = item.representedObject
+            if theObject is NodeGroup {
                 return true
-            } else if item.representedObject is Playlist {
-                let thePlaylist  = item.representedObject as! Playlist
-                print("V&G_Project___outlineView : ", "theSearchField.stringValue.count", theSearchField.stringValue.count)
+            } else if theObject is Playlist {
+                let thePlaylist  = theObject as! Playlist
+                //print("V&G_Project___outlineView : ", "theSearchField.stringValue.count", theSearchField.stringValue.count)
                 if thePlaylist.isFolder && (thePlaylist.children!.count > 0) && (theSearchField.stringValue.count == 0) {
                     return true
                 }else{
                     return false
                 }
-            } else if item.representedObject is Artist {
+            } else if theObject is Artist {
+                let theArtist = theObject as! Artist
                 return true
             }
         }
@@ -469,16 +471,28 @@ extension ViewController: NSSearchFieldDelegate {
     
     func searchFieldDidEndSearching(_ sender: NSSearchField) {
         print("V&G_Project___TrackListView searchFieldDidEndSearching : ", self)
-        _resetTree()
+        //_resetTree()
     }
     
     func controlTextDidChange(_ obj: Notification) {
         let theTextField = obj.object as! NSTextField
         let theStr = theTextField.stringValue
-        _search(str: theStr)
+        print("V&G_Project___controlTextDidChange  : ", theStr.count)
+        if theStr.count > 0 {
+            _search(str: theStr)
+        } else {
+            _resetTree()
+        }
     }
     
     private func _search(str: String) {
+        if str.count == 0 {
+            _resetTree()
+            return
+        }
+        
+        _resetSearch()
+        
         //thePlaylistsSearchField.sendAction(thePlaylistsSearchField.action, to: thePlaylistsSearchField.target)
         let thePredicate = NSPredicate(format: "%K CONTAINS[cd] %@", "name", str)
         
@@ -491,47 +505,59 @@ extension ViewController: NSSearchFieldDelegate {
                 }
             }
         case TreeMode.artists.rawValue:
-            //if let theArtistsGroup = _theArtistsGroup?.filter({})
+            if let theArtistsGroup = _artistsGroup {
+                for theGroup in theArtistsGroup {
+                    if let theChildren = theGroup.children {
+                        theSearchFields.append(theChildren)
+                    }
+                }
+            }
             print("artists")
         default:
             print("")
         }
         
+        var theSearchResults = [Node]()
         for theSearchField in theSearchFields {
             let theFlattenNodes = iTunesModel.getFlattenNodesTree(nodes: theSearchField)
-            _resetSearch(nodes: theFlattenNodes)
-            if str.count > 0 {
-                let theSearchResults = theFlattenNodes.filter({ $0.name.lowercased().contains(str.lowercased()) })
-                for theNode in theSearchResults {
-                    if let theNodeChildren = theNode.children {
-                        if theNodeChildren.count > 0 {
-                            theNode.isSearched = true
-                        }
+            //_resetSearch(nodes: theFlattenNodes)
+            let theSearch = theFlattenNodes.filter({ $0.name.lowercased().contains(str.lowercased()) })
+            for theNode in theSearch {
+                theSearchResults.append(theNode)
+                if let theNodeChildren = theNode.children {
+                    if theNodeChildren.count > 0 {
+                        theNode.isSearched = true
                     }
                 }
-                theTreeController.content = theSearchResults
-            } else {
-                _resetTree()
             }
         }
         
+        theTreeController.content = theSearchResults
+        
     }
     
-    private func _resetSearch(nodes: [Node]) {
-        let theIsSearchedPlaylists = nodes.filter({ $0.isSearched })
+    private func _resetSearch() { // TODO
+        let theNodesSearched = theTreeController.content as! [Node]
+        dump(theNodesSearched.map({ $0.name }))
+        for theNodeSearched in theNodesSearched {
+            theNodeSearched.isSearched = false
+        }
         
-        for theIsSearchedPlaylist in theIsSearchedPlaylists {
+        /*let theNodesSearched = nodes.filter({ $0.isSearched })
+        
+        for theIsSearchedPlaylist in theNodesSearched {
             theIsSearchedPlaylist.isSearched = false
             print("V&G_Project__resetSearch : ", theIsSearchedPlaylist.isSearched, theIsSearchedPlaylist.name)
-        }
+        }*/
     }
     
     private func _resetTree() {
+        _resetSearch()
         switch theSegmentedControl.selectedSegment {
         case TreeMode.playlists.rawValue:
             theTreeController.content = _thePlaylistsGroup
         case TreeMode.artists.rawValue:
-            theTreeController.content = _theArtistsGroup
+            theTreeController.content = _artistsGroup
         default:
             theTreeController.content = _thePlaylistsGroup
         }

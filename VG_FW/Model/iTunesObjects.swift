@@ -8,7 +8,7 @@
 import Foundation
 import iTunesLibrary
 
-class PlaylistGroup: NSObject {
+/*class PlaylistGroup: NSObject {
     
     @objc dynamic var name: String?
     @objc dynamic var children: [Playlist] = [Playlist]()
@@ -23,23 +23,74 @@ class PlaylistGroup: NSObject {
         self.isAllPlaylists = isAllPlaylists
     }
     
-}
+}*/
 
-class ITNodeBase: NSObject {
+class NodeGroup: Node {
+    
+    //@objc dynamic var name: String?
+    //@objc dynamic var children: [Playlist] = [Playlist]()
+    //private var _nodeGroupObject
+    //var isAllPlaylists: Bool = false
+    private var _id: Int
+    
+    @objc override func isLeaf() -> Bool {
+        return false
+    }
+    
+    init(name: String, id: Int) {
+        self._id = id
+        super.init()        
+        super.name = name
+    }
+    
+    var id: Int {
+        get {
+            return _id
+        }
+    }
     
 }
 
-class Playlist: ITNodeBase {
-    
+class Node: NSObject {
     @objc dynamic var name: String = ""
+    @objc dynamic var count: Int = 0
+    @objc dynamic var children: [Node]?
+    var isSearched: Bool = false
+    
+    @objc func isLeaf() -> Bool {
+        return false
+    }
+    
+}
+
+class ITNode: Node {
+    
+    private var _ITObject: NSObject
+    
+    init(ITObject: NSObject) {
+        _ITObject = ITObject
+    }
+    
+    var ITObject: NSObject {
+        get {
+            return _ITObject
+        }
+    }
+    
+}
+
+class Playlist: ITNode {
+    
+    //@objc dynamic var name: String = ""
     @objc dynamic var isFolder: Bool = false
     @objc dynamic var isSmart: Bool = false
-    @objc dynamic var count: Int = 0
-    @objc dynamic var id: NSNumber?
+    //@objc dynamic var count: Int = 0
+    //@objc dynamic var id: NSNumber?
     var kind: ITLibPlaylistKind?
-    @objc dynamic var children: [Playlist]?
-    private(set) var theITPlaylist: ITLibPlaylist
-    var isSearched: Bool = false
+    //@objc dynamic var children: [Playlist]?
+    //private(set) var theITPlaylist: ITLibPlaylist
+    
+    private var _ITPlaylist: ITLibPlaylist
     
     //typealias Element = Playlist
     
@@ -54,6 +105,14 @@ class Playlist: ITNodeBase {
             _propagatePredicatesAndRefilterChildren()
         }
     }*/
+    
+    var theITPlaylist: ITLibPlaylist {
+        get {
+            return _ITPlaylist
+        }
+    }
+    
+    
     
     var duration: Int {
         get {
@@ -81,7 +140,7 @@ class Playlist: ITNodeBase {
         }
     }
     
-    @objc func isLeaf() -> Bool {
+    @objc override func isLeaf() -> Bool {
         var hasChildren: Bool = false
         if let theChildren = children {
             if theChildren.count > 0 {
@@ -98,7 +157,7 @@ class Playlist: ITNodeBase {
     
     //@objc private(set) dynamic var isLeaf: Bool = true
     
-    init(thePlaylist: ITLibPlaylist) {
+    /*init(thePlaylist: ITLibPlaylist) {
         self.name = thePlaylist.name
         self.id = thePlaylist.persistentID
         self.kind = thePlaylist.kind
@@ -109,7 +168,26 @@ class Playlist: ITNodeBase {
         if isFolder {
             children = [Playlist]()
         }
+    }*/
+    
+    override init(ITObject: NSObject) {
+        _ITPlaylist = ITObject as! ITLibPlaylist
+        super.init(ITObject: ITObject)
+        
+        super.name = _ITPlaylist.name
+        self.isFolder = _ITPlaylist.kind == .folder
+        self.isSmart = kind == .smart
+        if theITPlaylist.kind == .folder {
+            children = [Playlist]()
+        }
+        
+        /*self.theITPlaylist = ITObject as! ITLibPlaylist
+        super.name = theITPlaylist.name
+        if theITPlaylist.kind == .folder {
+            children = [Playlist]()
+        }*/
     }
+    
     
 //    @objc private(set) dynamic var filteredChildren: [Playlist] = [] {
 //            didSet {
@@ -146,30 +224,40 @@ class Playlist: ITNodeBase {
     }*/
 }
 
-class Artist: ITNodeBase {
+class Artist: ITNode {
     
-    @objc dynamic var name: String = ""
-    var albums: [Album] = [Album]()
+    //@objc dynamic var name: String = ""
+    //var albums: [Album] = [Album]()
     private var _ITArtist: ITLibArtist
     
-    @objc dynamic var children: [Album] {
+    /*@objc dynamic var children: [Album] {
         get {
             return albums
         }
-    }
+    }*/
     
-    @objc func isLeaf() -> Bool {
+    @objc override func isLeaf() -> Bool {
         return false
     }
     
-    init(theITArtist: ITLibArtist) {
+    /*init(theITArtist: ITLibArtist) {
         if let theName = theITArtist.name {
             self.name = theName
         }
         self._ITArtist = theITArtist
+    }*/
+    
+    override init(ITObject: NSObject) {
+        _ITArtist = ITObject as! ITLibArtist
+        super.init(ITObject: ITObject)
+        
+        if let theArtistName = _ITArtist.name {
+            super.name = theArtistName
+        }
+        children = [Album]()
     }
     
-    func getAlbum(by name: String) -> Album? {
+    /*func getAlbum(by name: String) -> Album? {
         for album in albums {
             let theAlbumName = album.name
             if name == theAlbumName {
@@ -177,28 +265,12 @@ class Artist: ITNodeBase {
             }
         }
         return nil
-    }
-    
-    /*func getITTracks(ITArtistTracks: [ITLibMediaItem]) -> [ITLibMediaItem] {
-        let theITTracks = [ITLibMediaItem]()
-        for album in albums {
-            //let theArtistAlbums = Dictionary(grouping: theAlbumsTracks, by: { $0.album.title?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
-            let theITTracksAlbumDic = Dictionary(grouping: ITArtistTracks, by: { $0.album.persistentID })
-            print("V&G_Project___getITTracks : ", theITTracksAlbumDic, theITTracksAlbumDic.count)
-            print("-----------------")
-        }
-        return theITTracks
-    }*/
-    
-    /*func getITTracks() -> [ITLibMediaItem] {
-        let theTracks = getTracks()
-        let theITTracks = theTracks.map({$0.theITTrack})
-        return theITTracks
     }*/
     
     func getTracks() -> [Track] {
         var theTrack = [Track]()
-        for album in albums {
+        let theAlbums = children as! [Album]
+        for album in theAlbums {
             for track in album.tracks {
                 theTrack.append(track)
             }
@@ -208,7 +280,8 @@ class Artist: ITNodeBase {
     
     func getITTracks() -> [ITLibMediaItem] {
         var theITTracks = [ITLibMediaItem]()
-        for album in albums {
+        let theAlbums = children as! [Album]
+        for album in theAlbums {
             for ITTrack in album.ITTracks {
                 theITTracks.append(ITTrack)
             }
@@ -238,22 +311,32 @@ class Artist: ITNodeBase {
     
 }
 
-class Album: ITNodeBase {
+class Album: ITNode {
     
-    @objc dynamic var name = ""
+    //@objc dynamic var name = ""
     @objc dynamic var tracks = [Track]()
     var ITTracks = [ITLibMediaItem]()
-    private var _ITAlbum: ITLibAlbum?
+    private var _ITAlbum: ITLibAlbum
     
-    @objc func isLeaf() -> Bool {
+    @objc override func isLeaf() -> Bool {
         return true
     }
     
-    init(theITAlbum: ITLibAlbum){
+    /*init(theITAlbum: ITLibAlbum){
         if let theName = theITAlbum.title {
             self.name = theName
         }
         self._ITAlbum = theITAlbum
+    }*/
+    
+    override init(ITObject: NSObject) {
+        _ITAlbum = ITObject as! ITLibAlbum
+        super.init(ITObject: ITObject)
+        
+        if let theAlbumName = _ITAlbum.title {
+            super.name = theAlbumName
+        }
+        //children = [Track]()
     }
     
     /*func getITTracks() -> [ITLibMediaItem] {
@@ -262,7 +345,7 @@ class Album: ITNodeBase {
     
     var ITAlbum: ITLibAlbum {
         get {
-            return _ITAlbum!
+            return _ITAlbum
         }
     }
     
@@ -288,17 +371,17 @@ class Album: ITNodeBase {
     
 }
 
-class Track: NSObject {
+class Track: ITNode {
     
     @objc dynamic var artist: String = ""
-    @objc dynamic var name: String = ""
+    //@objc dynamic var name: String = ""
     @objc dynamic var album: String = ""
     @objc dynamic var duration: Int = 0
     @objc dynamic var size: UInt64 = 0
     @objc dynamic var location: URL?
-    private(set) var theITTrack: ITLibMediaItem
+    private var _theITTrack: ITLibMediaItem
     
-    init(theITTrack: ITLibMediaItem) {
+    /*init(theITTrack: ITLibMediaItem) {
         self.artist = iTunesModel.getArtistName(theITTrack: theITTrack)
         self.name = theITTrack.title
         if let theAlbumName = theITTrack.album.title {
@@ -308,6 +391,23 @@ class Track: NSObject {
         self.size = theITTrack.fileSize
         self.location = theITTrack.location
         self.theITTrack = theITTrack
+    }*/
+    
+    override init(ITObject: NSObject) {
+        _theITTrack = ITObject as! ITLibMediaItem
+        super.init(ITObject: ITObject)
+        
+        /*if let theTrackName = _theITTrack.title {
+            super.name = theTrackName
+        }*/
+        super.name = _theITTrack.title
+        //children = [Track]()
+    }
+    
+    var ITTrack: ITLibMediaItem {
+        get {
+            return _theITTrack
+        }
     }
     
 }
@@ -368,21 +468,26 @@ class iTunesModel {
     
     ////////////////// PLAYLISTS //////////////////
     
-    static func getPlaylistsGroups(thePlaylists: [Playlist]) -> [PlaylistGroup] {
-        var thePlaylistsGroups = [PlaylistGroup]()
-        let theLibraryGroup : PlaylistGroup = PlaylistGroup(name: "Bibliothèque")
-        let theAllPlaylistsGroup: PlaylistGroup = PlaylistGroup(name: "Toutes les playlists perso", isAllPlaylists: true)
-        thePlaylistsGroups.append(theLibraryGroup)
-        thePlaylistsGroups.append(theAllPlaylistsGroup)
-        theAllPlaylistsGroup.children = thePlaylists.filter({ $0.theITPlaylist.distinguishedKind == .kindNone })
-        theLibraryGroup.children = thePlaylists.filter({ $0.theITPlaylist.distinguishedKind == .kindMusic })
-        return thePlaylistsGroups
+    enum PlaylistsGroupID: Int {
+        case library = 0
+        case allPlaylists = 1
+    }
+    
+    static func getPlaylistsGroups(playlists: [Playlist]) -> [NodeGroup] {
+        var thePlaylistsGroup = [NodeGroup]()
+        let theLibraryGroup : NodeGroup = NodeGroup(name: "Bibliothèque", id: PlaylistsGroupID.library.rawValue)
+        let theAllPlaylistsGroup: NodeGroup = NodeGroup(name: "Toutes les playlists perso", id: PlaylistsGroupID.allPlaylists.rawValue)
+        thePlaylistsGroup.append(theLibraryGroup)
+        thePlaylistsGroup.append(theAllPlaylistsGroup)
+        theAllPlaylistsGroup.children = playlists.filter({ $0.theITPlaylist.distinguishedKind == .kindNone })
+        theLibraryGroup.children = playlists.filter({ $0.theITPlaylist.distinguishedKind == .kindMusic })
+        return thePlaylistsGroup
     }
     
     static func getPlaylistsTree(theLevelITPlaylists: [ITLibPlaylist], theITPlaylists: [ITLibPlaylist]) -> [Playlist] {
         var thePlaylistsTree = [Playlist]()
         for theITPlaylist in theLevelITPlaylists {
-            let thePlaylist = Playlist(thePlaylist: theITPlaylist) // a NSObject with the isLeaf bool and children array to show the tree in a NSOutlineView
+            let thePlaylist = Playlist(ITObject: theITPlaylist) // a NSObject with the isLeaf bool and children array to show the tree in a NSOutlineView
             if theITPlaylist.kind == .folder {
                 let theChildrenPlaylists = theITPlaylists.filter({ $0.parentID == theITPlaylist.persistentID })
                 thePlaylist.children = getPlaylistsTree(theLevelITPlaylists: theChildrenPlaylists, theITPlaylists: theITPlaylists)
@@ -392,35 +497,74 @@ class iTunesModel {
         return thePlaylistsTree
     }
     
-    static func getFlattenPlaylistsTree(theList: [Playlist], isIndent: Bool = true, theSeparator: String = "   ", theLevel: Int = 0) -> [Playlist] {
-        var theFinalList = [Playlist]()
-        for thePlaylist in theList {
-            if let thePlaylist = thePlaylist as? Playlist {
+    /*static func getFlattenPlaylistsTree(playlists: [Playlist], isIndent: Bool = false, separator: String = "   ", level: Int = 0) -> [Playlist] {
+        var theFlattenPlaylists = [Playlist]()
+        for thePlaylist in playlists {
+            if isIndent && level > 0 { // to avoid the while useless in the first level
                 let thePlaylistName = thePlaylist.name
                 var theIdent = ""
                 var i = 0
-                while i < theLevel {
-                    theIdent = theIdent + theSeparator
+                while i < level {
+                    theIdent = theIdent + separator
                     i += 1
                 }
-                if isIndent {
-                    theIdent += " "
-                }
                 thePlaylist.name = theIdent + thePlaylistName
-                theFinalList.append(thePlaylist)
-                if thePlaylist.isFolder {
-                    let children = thePlaylist.children
-                    let result = getFlattenPlaylistsTree(theList: children!, isIndent: isIndent, theSeparator: theSeparator, theLevel: theLevel + 1)
-                    for i in result {
-                        theFinalList.append(i)
-                    }
+            }
+            theFlattenPlaylists.append(thePlaylist)
+            if thePlaylist.theITPlaylist.kind == .folder {
+                theFlattenPlaylists.append(contentsOf: getFlattenPlaylistsTree(playlists: (thePlaylist.children! as? [Playlist])!, isIndent: isIndent, separator: separator, level: level + 1))
+            }
+        }
+        return theFlattenPlaylists
+    }*/
+    
+    static func getFlattenNodesTree(nodes: [Node], isIndent: Bool = false, separator: String = "   ", level: Int = 0) -> [Node] {
+        var theFlattenNodes = [Node]()
+        for theNode in nodes {
+            if isIndent && level > 0 { // to avoid the while useless in the first level
+                let theNodeName = theNode.name
+                var theIdent = ""
+                var i = 0
+                while i < level {
+                    theIdent = theIdent + separator
+                    i += 1
+                }
+                theNode.name = theIdent + theNodeName
+            }
+            theFlattenNodes.append(theNode)
+            if let theChildren = theNode.children {
+                if theChildren.count > 0 {
+                    theFlattenNodes.append(contentsOf: getFlattenNodesTree(nodes: theChildren, isIndent: isIndent, separator: separator, level: level + 1))
                 }
             }
         }
-        return theFinalList
+        return theFlattenNodes
     }
     
     ////////////////// ARTISTS //////////////////
+    
+    enum ArtistsGroupID: Int {
+        case allArtists = 0
+        case compilation = 1
+    }
+    
+    static func getArtistsGroups(ITNodesList: [[ITNode]]) -> [NodeGroup] {
+        var theArtistsGroup = [NodeGroup]()
+        let theAllArtistsGroup : NodeGroup = NodeGroup(name: "Tous les artistes", id: ArtistsGroupID.allArtists.rawValue)
+        let theCompilationsGroup: NodeGroup = NodeGroup(name: "Compilation", id: ArtistsGroupID.compilation.rawValue)
+        
+        if let theArtistsTree = ITNodesList.first {
+            theAllArtistsGroup.children = theArtistsTree.map({$0})
+        }
+        if ITNodesList[1] != nil {
+            theCompilationsGroup.children = ITNodesList[1].map({$0})
+        }
+        theArtistsGroup.append(theAllArtistsGroup)
+        theArtistsGroup.append(theCompilationsGroup)
+        /*theAllPlaylistsGroup.children = ITNodes.filter({ $0.theITPlaylist.distinguishedKind == .kindNone })
+        theAllArtistsGroup.children = ITNodes.filter({ $0.theITPlaylist.distinguishedKind == .kindMusic })*/
+        return theArtistsGroup
+    }
     
     static func getAllArtistNames(theITTracks: [ITLibMediaItem]) -> [String] {
         var theArtistsList: [String] = [String]()
@@ -439,46 +583,69 @@ class iTunesModel {
         return theArtistsList
     }
     
-    static func getArtistsTree(theITTracks: [ITLibMediaItem], parseTracks: Bool = true) -> [Artist] {
-        let theTracksByArtist = Dictionary(grouping: theITTracks, by: { $0.artist?.name?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
+    static func getArtistsTree(ITTracks: [ITLibMediaItem], parseTracks: Bool = true) -> [Artist] {
+        let theTracksByArtist = Dictionary(grouping: ITTracks, by: { $0.artist?.name?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
+        let theCompilations = Dictionary(grouping: ITTracks, by: { $0.album.title })
         
         var theArtistsTree = [Artist]()
         for(artistKey, tracksByArtist) in theTracksByArtist {
-            let theAlbumsTracks = tracksByArtist.map{ $0 }
-            let theITArtist = theAlbumsTracks.first?.artist
-            let theArtist = Artist(theITArtist: theITArtist!)
+            let theITAlbumsTracks = tracksByArtist.map{ $0 }
+            let theITArtist = theITAlbumsTracks.first?.artist
+            let theArtist = Artist(ITObject: theITArtist!)
             
-            /*print("theArtist >>>", theArtist.name)
-            print("/////////")*/
+            theArtist.children?.append(contentsOf: getAlbumsTree(ITTracks: theITAlbumsTracks, parseTracks: parseTracks))
             
-            let theArtistAlbums = Dictionary(grouping: theAlbumsTracks, by: { $0.album.title?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
-            //print(theArtistAlbums.count, "album(s)")
-            for (albumID, tracksAlbum) in theArtistAlbums {
-                let theTracksAlbum = tracksAlbum.map { $0 }.sorted(by: { $0.trackNumber < $1.trackNumber })
-                let theITAlbum = theTracksAlbum.first?.album
-                let theAlbum = Album(theITAlbum: theITAlbum!)
-                theAlbum.ITTracks = theTracksAlbum
-                //print(theAlbum.name)
-                
-                //print(theTracksAlbum.first?.album.title, "(" + String(theTracksAlbum.count), "track(s))")
-                //print("++++")
+            /*let theGroupedITArtistAlbums = Dictionary(grouping: theITAlbumsTracks, by: { $0.album.title?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
+            for (albumID, tracksAlbum) in theGroupedITArtistAlbums {
+                let theITTracksAlbum = tracksAlbum.map { $0 }.sorted(by: { $0.trackNumber < $1.trackNumber })
+                let theITAlbum = theITTracksAlbum.first?.album
+                let theAlbum = Album(ITObject: theITAlbum!)
+                theAlbum.ITTracks = theITTracksAlbum
                 
                 if parseTracks {
-                    for track in theTracksAlbum {
+                    for track in theITTracksAlbum {
                         //print(track.title)
-                        let theTrack = Track(theITTrack: track)
+                        let theTrack = Track(ITObject: track)
                         theAlbum.tracks.append(theTrack)
                     }
                 }
-                //print("***************")
                 
-                theArtist.albums.append(theAlbum)
-            }
+                theArtist.children?.append(theAlbum)
+            }*/
             
             theArtistsTree.append(theArtist)
-            //print("---------------------------------------------------------------------------------------------------")
         }
         return theArtistsTree
+    }
+    
+    static func getAlbumsTree(ITTracks: [ITLibMediaItem], parseTracks: Bool = true) -> [Album] {
+        var theAlbums = [Album]()
+        
+        let theITAlbums = Dictionary(grouping: ITTracks, by: { $0.album.title?.lowercased() ?? "--" } ).sorted(by: { $0.key.localizedStandardCompare($1.key) == .orderedAscending })
+        
+        for (albumID, tracksAlbum) in theITAlbums {
+            let theITTracksAlbum = tracksAlbum.map { $0 }.sorted(by: { $0.trackNumber < $1.trackNumber })
+            let theITAlbum = theITTracksAlbum.first?.album
+            let theAlbum = Album(ITObject: theITAlbum!)
+            theAlbum.ITTracks = theITTracksAlbum
+            //print(theAlbum.name)
+            
+            //print(theTracksAlbum.first?.album.title, "(" + String(theTracksAlbum.count), "track(s))")
+            //print("++++")
+            
+            if parseTracks {
+                for ITTrack in theITTracksAlbum {
+                    //print(track.title)
+                    let theTrack = Track(ITObject: ITTrack)
+                    theAlbum.tracks.append(theTrack)
+                }
+            }
+            //print("***************")
+            
+            theAlbums.append(theAlbum)
+        }
+        
+        return theAlbums
     }
     
     public static func getiTunesTrackTitle(theiTunesTrack: ITLibMediaItem) -> String {
@@ -552,7 +719,7 @@ class iTunesModel {
         var i: Int = 0
         while i < theITTracks.count - 1 {
             let theITTrack = theITTracks[i]
-            let theAlbum: Album = Album(theITAlbum: theITTrack.album)
+            let theAlbum: Album = Album(ITObject: theITTrack.album)
             if let theAlbumTitle = theITTrack.album.title {
                 let theSearch = theITTracks.filter({$0.album.title?.lowercased() == theAlbumTitle.lowercased()})
                 
@@ -645,7 +812,7 @@ class iTunesModel {
         let theCount = theITTracksSorted.count - 1
         for i in 0...theCount {
             let theITTrack = theITTracksSorted[i]
-            let theTrack: Track = Track(theITTrack: theITTrack)
+            let theTrack: Track = Track(ITObject: theITTrack)
             theTracks.append(theTrack)
             print("V&G_FW___getTracksFromITTracks : ", i, theCount)
         }

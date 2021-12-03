@@ -3,36 +3,24 @@ import iTunesLibrary
 
 do {
     let lib = try ITLibrary(apiVersion: "1.1")
-    //let theITPlaylists = lib.allPlaylists
     let theITPlaylists = iTunesModel.getMusicPlaylists(lib: lib)
+    print("theITPlaylists.count", theITPlaylists.count)
     
-    /*let theFolderITPlaylists = theITPlaylists.filter({ $0.kind == .folder })
-    print(theFolderITPlaylists.count)*/
     let theRootITPlaylists = theITPlaylists.filter({ $0.parentID == nil })
     
-    let thePlaylistsTree: [Playlist] = getPlaylistsTree(theLevelITPlaylists: theRootITPlaylists, theITPlaylists: theITPlaylists)
-    //dump(thePlaylistsTree)
-    /*for thePlaylist in thePlaylistsTree {
-        dump(thePlaylist)
-        print("-------------------------")
-    }*/
+    let thePlaylistsTree: [Playlist] = iTunesModel.getPlaylistsTree(theLevelITPlaylists: theRootITPlaylists, theITPlaylists: theITPlaylists)
     
-    let thePlaylistsTreeCopy = thePlaylistsTree.map({ $0 })
-    let theFlattenPlaylists: [Playlist] = flattenPlaylists(playlists: thePlaylistsTreeCopy, isIndent : true, separator: "   ")
+    let theFlattenPlaylists: [Playlist] = iTunesModel.getFlattenNodesTree(nodes: thePlaylistsTree, isIndent: true) as! [Playlist]
     let theFlattenPlaylistsNames = theFlattenPlaylists.map({$0.name})
     
-    let thePlaylistsTreeNames = thePlaylistsTree.map({ $0.name })
-    dump(thePlaylistsTree)
-    //print(theFlattenPlaylists.count)
-    //dump(theFlattenPlaylits)
-    //let theFlattenPlaylistNames = theFlattenPlaylits.map({$0.name})
-    //dump(theFlattenPlaylistNames)
+    print("theFlattenPlaylistsNames.count", theFlattenPlaylistsNames.count)
+    dump(theFlattenPlaylistsNames)
     
 } catch let error {
     print("V&G_Project___buildView : ", error)
 }
 
-func flattenPlaylists(playlists: [Playlist], isIndent: Bool = false, separator: String = "   ", level: Int = 0) -> [Playlist] {
+/*func flattenPlaylists(playlists: [Playlist], isIndent: Bool = false, separator: String = "   ", level: Int = 0) -> [Playlist] {
     var theFlattenPlaylists = [Playlist]()
     for thePlaylist in playlists {
         if isIndent && level > 0 { // to avoid the while useless in the first level
@@ -51,9 +39,9 @@ func flattenPlaylists(playlists: [Playlist], isIndent: Bool = false, separator: 
         }
     }
     return theFlattenPlaylists
-}
+}*/
 
-func flattenArray(_ array: [Any]) -> [Any] {
+/*func flattenArray(_ array: [Any]) -> [Any] {
     var result = [Any]()
     for element in array {
         //print(type(of: element))
@@ -66,9 +54,9 @@ func flattenArray(_ array: [Any]) -> [Any] {
         }
     }
     return result
-}
+}*/
 
-func getPlaylistsTree(theLevelITPlaylists: [ITLibPlaylist], theITPlaylists: [ITLibPlaylist]) -> [Playlist] {
+/*func getPlaylistsTree(theLevelITPlaylists: [ITLibPlaylist], theITPlaylists: [ITLibPlaylist]) -> [Playlist] {
     var thePlaylistsTree = [Playlist]()
     var theNewITPlaylists = theITPlaylists
     for theITPlaylist in theLevelITPlaylists {
@@ -83,18 +71,16 @@ func getPlaylistsTree(theLevelITPlaylists: [ITLibPlaylist], theITPlaylists: [ITL
             thePlaylist.children = getPlaylistsTree(theLevelITPlaylists: theChildrenPlaylists, theITPlaylists: theNewITPlaylists)
         }
         
-        //print(theNewITPlaylists.count)
-        
         thePlaylistsTree.append(thePlaylist)
     }
     return thePlaylistsTree
-}
+}*/
 
-func getITPlaylistChildren(theFolderITPlaylist: ITLibPlaylist, theITPlaylists: [ITLibPlaylist]) -> [ITLibPlaylist] {
+/*func getITPlaylistChildren(theFolderITPlaylist: ITLibPlaylist, theITPlaylists: [ITLibPlaylist]) -> [ITLibPlaylist] {
     //var theChildrenPlaylists = [ITLibPlaylist]()
     let theChildrenITPlaylists = theITPlaylists.filter({ $0.parentID == theFolderITPlaylist.persistentID })
     /*for theChildITPlaylist in theChildrenITPlaylists {
         theChildrenPlaylists.append(theChildITPlaylist)
     }*/
     return theChildrenITPlaylists
-}
+}*/

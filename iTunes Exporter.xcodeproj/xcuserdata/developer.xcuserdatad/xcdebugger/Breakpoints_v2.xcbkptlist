@@ -49,10 +49,10 @@
             timestampString = "576786118.586723"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
-            landmarkName = "init(theITTrack:)"
-            landmarkType = "7">
+            startingLineNumber = "392"
+            endingLineNumber = "392"
+            landmarkName = "Track"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -129,8 +129,8 @@
             filePath = "VG_FW/Model/iTunesObjects.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "Playlist"
             landmarkType = "3">
          </BreakpointContent>
@@ -225,10 +225,74 @@
             filePath = "VG_FW/Model/iTunesObjects.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
             landmarkName = "isLeaf()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E8D794C3-5A2E-4EC6-B859-0D6BEC6970B8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iTunes Exporter/Controller/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
+            landmarkName = "_addArtists(lib:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B954D9A2-4607-4E58-AFC6-CA8EEFF4074C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "VG_FW/Model/iTunesObjects.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "557"
+            endingLineNumber = "557"
+            landmarkName = "getArtistsGroups(ITNodesList:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B954D9A2-4607-4E58-AFC6-CA8EEFF4074C - fcca924e096cfb40"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static iTunes_Exporter.iTunesModel.getArtistsGroups(ITNodesList: Swift.Array&lt;Swift.Array&lt;iTunes_Exporter.ITNode&gt;&gt;) -&gt; Swift.Array&lt;iTunes_Exporter.NodeGroup&gt;"
+                  moduleName = "iTunes Exporter"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/developer/SynologyDrive/Documents/XCode/iTunes_Exporter/VG_FW/Model/iTunesObjects.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "558"
+                  endingLineNumber = "558"
+                  offsetFromSymbolStart = "532">
+               </Location>
+               <Location
+                  uuid = "B954D9A2-4607-4E58-AFC6-CA8EEFF4074C - 3a54d9ce80ae9b3b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (iTunes_Exporter.ITNode) -&gt; iTunes_Exporter.Node in static iTunes_Exporter.iTunesModel.getArtistsGroups(ITNodesList: Swift.Array&lt;Swift.Array&lt;iTunes_Exporter.ITNode&gt;&gt;) -&gt; Swift.Array&lt;iTunes_Exporter.NodeGroup&gt;"
+                  moduleName = "iTunes Exporter"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/developer/SynologyDrive/Documents/XCode/iTunes_Exporter/VG_FW/Model/iTunesObjects.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "558"
+                  endingLineNumber = "558"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

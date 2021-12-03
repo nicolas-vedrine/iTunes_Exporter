@@ -63,6 +63,7 @@
 		8B3CCB33221B15AA00BD7EC1 /* AppInfosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfosView.swift; sourceTree = "<group>"; };
 		8B3CCB36221B418400BD7EC1 /* NSSearchFieldFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSSearchFieldFilterCell.swift; sourceTree = "<group>"; };
 		8B3CCB3A221B5AA300BD7EC1 /* DurationValueTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationValueTransformer.swift; sourceTree = "<group>"; };
+		8B413ABD275A8D41003B9D39 /* TestAlbumsTree.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = TestAlbumsTree.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8B43834C2215FA490040D2EB /* VGBaseNSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGBaseNSView.swift; sourceTree = "<group>"; };
 		8B43835022160C7D0040D2EB /* VGLoadableNib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VGLoadableNib.swift; sourceTree = "<group>"; };
 		8B43835222175ECB0040D2EB /* NotificationNameExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationNameExtension.swift; sourceTree = "<group>"; };
@@ -220,6 +221,7 @@
 				8BCE6B9C27550B17000EE381 /* TestPlaylistsTree.playground */,
 				8BCE6BA0275699B3000EE381 /* TestDurationFormatter.playground */,
 				8BCE6BA327590AA7000EE381 /* TestFlattenArray.playground */,
+				8B413ABD275A8D41003B9D39 /* TestAlbumsTree.playground */,
 			);
 			path = Playground;
 			sourceTree = "<group>";

@@ -107,7 +107,7 @@ class ExportController: BaseProjectViewController {
     }
     
     private func _getSourcePath(theTrack: Track) -> String {
-        let theITTrack: ITLibMediaItem = theTrack.theITTrack
+        let theITTrack: ITLibMediaItem = theTrack.ITTrack
         let theSourceURL: URL = theITTrack.location!
         return theSourceURL.path
     }

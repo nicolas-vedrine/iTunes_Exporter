@@ -434,27 +434,25 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
         if let theNode = outlineView.item(atRow: selectedIndex) as? NSTreeNode {
             //3
             let theNodeObject = theNode.representedObject
+            let theITSortKind = ITSortKind.artistAndThenAlbum
             if let thePlaylist = theNodeObject as? Playlist {
-                let theITTracks = thePlaylist.theITPlaylist.items
-                let theITSortKind = ITSortKind.artistAndThenAlbum
+                let theITTracks = thePlaylist.ITPlaylist.items
                 let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
                 self.thePlaylistTracksListView.tracks = theITTracksSorted
                 self.theAppInfosView.setDuration(duration: thePlaylist.duration)
-                self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
+                self.theAppInfosView.setCountItems(countItems: thePlaylist.ITPlaylist.items.count)
                 self.theAppInfosView.setName(name: thePlaylist.name)
                 self.theAppInfosView.setSize(size: thePlaylist.size)
             } else if let theArtist = theNodeObject as? Artist {
-                //let theITArtistTracks = _lib!.allMediaItems.filter({$0.mediaKind == .kindSong && $0.artist?.name?.lowercased() == theArtist.name.lowercased()})
-                //print(theArtist.getITTracks(ITArtistTracks: theITArtistTracks))
                 let theITTracks = theArtist.getITTracks()
-                self.thePlaylistTracksListView.tracks = theITTracks
+                self.thePlaylistTracksListView.tracks = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
                 self.theAppInfosView.setDuration(duration: theArtist.duration)
                 self.theAppInfosView.setCountItems(countItems: theITTracks.count)
                 self.theAppInfosView.setName(name: theArtist.name)
                 self.theAppInfosView.setSize(size: theArtist.size)
             } else if let theAlbum = theNodeObject as? Album {
                 let theITTracks = theAlbum.ITTracks
-                self.thePlaylistTracksListView.tracks = theITTracks
+                self.thePlaylistTracksListView.tracks = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
                 self.theAppInfosView.setDuration(duration: theAlbum.duration)
                 self.theAppInfosView.setCountItems(countItems: theITTracks.count)
                 self.theAppInfosView.setSize(size: theAlbum.size)
@@ -538,17 +536,9 @@ extension ViewController: NSSearchFieldDelegate {
     
     private func _resetSearch() { // TODO
         let theNodesSearched = theTreeController.content as! [Node]
-        dump(theNodesSearched.map({ $0.name }))
         for theNodeSearched in theNodesSearched {
             theNodeSearched.isSearched = false
         }
-        
-        /*let theNodesSearched = nodes.filter({ $0.isSearched })
-        
-        for theIsSearchedPlaylist in theNodesSearched {
-            theIsSearchedPlaylist.isSearched = false
-            print("V&G_Project__resetSearch : ", theIsSearchedPlaylist.isSearched, theIsSearchedPlaylist.name)
-        }*/
     }
     
     private func _resetTree() {

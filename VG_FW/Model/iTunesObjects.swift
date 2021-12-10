@@ -8,29 +8,8 @@
 import Foundation
 import iTunesLibrary
 
-/*class PlaylistGroup: NSObject {
-    
-    @objc dynamic var name: String?
-    @objc dynamic var children: [Playlist] = [Playlist]()
-    var isAllPlaylists: Bool = false
-    
-    @objc func isLeaf() -> Bool {
-        return false
-    }
-    
-    init(name: String, isAllPlaylists: Bool = false) {
-        self.name = name
-        self.isAllPlaylists = isAllPlaylists
-    }
-    
-}*/
-
 class NodeGroup: Node {
     
-    //@objc dynamic var name: String?
-    //@objc dynamic var children: [Playlist] = [Playlist]()
-    //private var _nodeGroupObject
-    //var isAllPlaylists: Bool = false
     private var _id: Int
     
     @objc override func isLeaf() -> Bool {
@@ -81,43 +60,22 @@ class ITNode: Node {
 
 class Playlist: ITNode {
     
-    //@objc dynamic var name: String = ""
     @objc dynamic var isFolder: Bool = false
     @objc dynamic var isSmart: Bool = false
-    //@objc dynamic var count: Int = 0
-    //@objc dynamic var id: NSNumber?
     var kind: ITLibPlaylistKind?
-    //@objc dynamic var children: [Playlist]?
-    //private(set) var theITPlaylist: ITLibPlaylist
     
     private var _ITPlaylist: ITLibPlaylist
     
-    //typealias Element = Playlist
-    
-    /*var predicate: NSPredicate? {
-        didSet {
-            _propagatePredicatesAndRefilterChildren()
-        }
-    }
-    
-    @objc dynamic var children: [Playlist] = [] {
-        didSet {
-            _propagatePredicatesAndRefilterChildren()
-        }
-    }*/
-    
-    var theITPlaylist: ITLibPlaylist {
+    var ITPlaylist: ITLibPlaylist {
         get {
             return _ITPlaylist
         }
     }
     
-    
-    
     var duration: Int {
         get {
             var duration: Int = 0
-            for theITTrack in theITPlaylist.items {
+            for theITTrack in ITPlaylist.items {
                 duration += theITTrack.totalTime / 1000
             }
             return duration
@@ -126,17 +84,17 @@ class Playlist: ITNode {
     
     var size: UInt64 {
         get {
-            var size: UInt64 = 0
-            for theITTrack in theITPlaylist.items {
-                size += theITTrack.fileSize
+            var theSize: UInt64 = 0
+            for theITTrack in ITPlaylist.items {
+                theSize += theITTrack.fileSize
             }
-            return size
+            return theSize
         }
     }
     
     var tracks: [Track] {
         get {
-            return iTunesModel.getTracksFromITTracks(theITTracks: theITPlaylist.items)
+            return iTunesModel.getTracksFromITTracks(theITTracks: ITPlaylist.items)
         }
     }
     
@@ -151,24 +109,8 @@ class Playlist: ITNode {
         if isFolder && !isSearched && hasChildren {
             theBool = false
         }
-        //print("V&G_FW___isLeaf : ", name, "isFolder", isFolder, "isSeached", isSearched)
         return theBool
     }
-    
-    //@objc private(set) dynamic var isLeaf: Bool = true
-    
-    /*init(thePlaylist: ITLibPlaylist) {
-        self.name = thePlaylist.name
-        self.id = thePlaylist.persistentID
-        self.kind = thePlaylist.kind
-        self.isFolder = thePlaylist.kind == .folder
-        self.count = thePlaylist.items.count
-        self.isSmart = kind == .smart
-        self.theITPlaylist = thePlaylist
-        if isFolder {
-            children = [Playlist]()
-        }
-    }*/
     
     override init(ITObject: NSObject) {
         _ITPlaylist = ITObject as! ITLibPlaylist
@@ -177,64 +119,15 @@ class Playlist: ITNode {
         super.name = _ITPlaylist.name
         self.isFolder = _ITPlaylist.kind == .folder
         self.isSmart = kind == .smart
-        if theITPlaylist.kind == .folder {
+        if ITPlaylist.kind == .folder {
             children = [Playlist]()
         }
-        
-        /*self.theITPlaylist = ITObject as! ITLibPlaylist
-        super.name = theITPlaylist.name
-        if theITPlaylist.kind == .folder {
-            children = [Playlist]()
-        }*/
     }
-    
-    
-//    @objc private(set) dynamic var filteredChildren: [Playlist] = [] {
-//            didSet {
-//                count = filteredChildren.count
-//                isLeaf = filteredChildren.isEmpty
-//                //print("V&G_Project___filteredChildren : ", count)
-//                //dump(filteredChildren.map({$0.name}))
-//            }
-//        }
-    
-    /*private func _propagatePredicatesAndRefilterChildren() {
-        // Propagate the predicate down the child nodes in case either
-        // the predicate or the children array changed.
-        children.forEach { $0.predicate = predicate }
-        
-        // Determine the matching leaf nodes.
-        let newChildren: [Playlist]
-        
-        if let predicate = predicate {
-            newChildren = children.compactMap { child -> Playlist? in
-                if child.isLeaf, !predicate.evaluate(with: child) {
-                    return nil
-                }
-                return child
-            }
-        } else {
-            newChildren = children
-        }
-        
-        // Only actually update the children if the count varies.
-        if newChildren.count != filteredChildren.count {
-            filteredChildren = newChildren
-        }
-    }*/
 }
 
 class Artist: ITNode {
     
-    //@objc dynamic var name: String = ""
-    //var albums: [Album] = [Album]()
     private var _ITArtist: ITLibArtist
-    
-    /*@objc dynamic var children: [Album] {
-        get {
-            return albums
-        }
-    }*/
     
     @objc override func isLeaf() -> Bool {
         var hasChildren: Bool = false
@@ -507,8 +400,8 @@ class iTunesModel {
         let theAllPlaylistsGroup: NodeGroup = NodeGroup(name: "Toutes les playlists perso", id: PlaylistsGroupID.allPlaylists.rawValue)
         thePlaylistsGroup.append(theLibraryGroup)
         thePlaylistsGroup.append(theAllPlaylistsGroup)
-        theAllPlaylistsGroup.children = playlists.filter({ $0.theITPlaylist.distinguishedKind == .kindNone })
-        theLibraryGroup.children = playlists.filter({ $0.theITPlaylist.distinguishedKind == .kindMusic })
+        theAllPlaylistsGroup.children = playlists.filter({ $0.ITPlaylist.distinguishedKind == .kindNone })
+        theLibraryGroup.children = playlists.filter({ $0.ITPlaylist.distinguishedKind == .kindMusic })
         return thePlaylistsGroup
     }
     

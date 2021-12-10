@@ -12,6 +12,8 @@ protocol VGLoadableNib {
     var contentView: NSView! { get }
 }
 
+
+
 extension VGLoadableNib where Self: NSView {
     
     func loadViewFromNib() {
@@ -28,4 +30,5 @@ extension VGLoadableNib where Self: NSView {
             addConstraint(NSLayoutConstraint(item: firstItem as Any, attribute: constraint.firstAttribute, relatedBy: constraint.relation, toItem: secondItem, attribute: constraint.secondAttribute, multiplier: constraint.multiplier, constant: constraint.constant))
         }
     }
+    
 }

@@ -25,6 +25,10 @@ class VGBaseNSView: NSView {
         buildView()
     }
     
+    /*@objc init(int: Int) {
+            super.init()
+        }*/
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         

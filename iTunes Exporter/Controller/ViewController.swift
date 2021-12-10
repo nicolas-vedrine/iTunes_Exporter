@@ -9,7 +9,7 @@
 import Cocoa
 import iTunesLibrary
 
-class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutlineViewDelegate {
+class ViewController: BaseProjectViewController {
     
     @IBOutlet weak var theSegmentedControl: NSSegmentedControl!
     @IBOutlet weak var theAddedTracksListView: TrackListView!
@@ -21,15 +21,17 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     @IBOutlet weak var theStatutInfosLabel: NSTextField!
     @IBOutlet weak var theAppInfosView: AppInfosView!
     @IBOutlet weak var theMenuBox: NSBox!
+    @IBOutlet weak var theSearchField: NSSearchField!
     
-//    lazy var exportController: NSViewController = {
-//        return self.storyboard!.instantiateController(withIdentifier: "ExportController")
-//            as! NSViewController
-//    }()
+    //    lazy var exportController: NSViewController = {
+    //        return self.storyboard!.instantiateController(withIdentifier: "ExportController")
+    //            as! NSViewController
+    //    }()
     
     private var _lib: ITLibrary?
-    private var _thePlaylistsGroups: [PlaylistGroup]?
-    private var _theArtistsTree: [Artist]?
+    private var _thePlaylistsGroup: [NodeGroup]?
+    private var _artistsGroup: [NodeGroup]?
+    //private var _theArtistsTree: [Artist]?
     
     private var _theFormResult: [String: Any]?
     private var _theCopyFilesOperationQueue: FileOperationQueue?
@@ -38,7 +40,7 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         do {
             _lib = try ITLibrary(apiVersion: "1.0")
             
-            _buildTracks()
+            _buildColumns()
             _addData()
         } catch let error {
             print("V&G_Project___buildView : ", error)
@@ -67,26 +69,25 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         let theTracks: [ITLibMediaItem] = notification.object as! [ITLibMediaItem]
         switch notification.name {
         case Notification.Name.TRACKS_ADDED:
-            //theAddedTracksListView.setTracks(theTracks: theTracks, add: true)
             theAddedTracksListView.tracks = theTracks
         case Notification.Name.TRACKS_DELETED:
             print("V&G_FW____onTracksAddedDeleted : ", self)
         default:
             print("V&G_FW____onTracksAddedDeleted : ", self)
         }
-        _updateStatutInfos(theTracks: theTracks)
+        _updateStatutInfos()
     }
     
-    private func _updateStatutInfos(theTracks: [ITLibMediaItem]? = nil) {
+    private func _updateStatutInfos() {
         theStatutInfosLabel.stringValue = "Pas d'éléments dans la file d'attente."
-        if let theTracks = theTracks {
-            if theTracks.count > 0 {
-                let statutInfos = iTunesModel.getStatutInfos(theTracks: theTracks)
-                var theStr = statutInfos.count.toFormattedNumber() + " morceaux mis en file, "
-                theStr += "durée totale " + Int(statutInfos.duration / 1000).toFormattedDuration() + ", "
-                theStr += statutInfos.size.toMegaBytes()
-                theStatutInfosLabel.stringValue = theStr
-            }
+        let theAddedTracks: [ITLibMediaItem] = theAddedTracksListView.tracks as! [ITLibMediaItem]
+        let theCount: Int = theAddedTracks.count
+        if theCount > 0 {
+            let statutInfos = iTunesModel.getStatutInfos(theTracks: theAddedTracks)
+            var theStr = theAddedTracks.count.toFormattedNumber() + " morceaux mis en file, "
+            theStr += "durée totale " + Int(statutInfos.duration / 1000).toFormattedDuration(unitsStyle: .abbreviated) + ", "
+            theStr += statutInfos.size.toMegaBytes()
+            theStatutInfosLabel.stringValue = theStr
         }
     }
     
@@ -94,10 +95,18 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         if let lib = _lib {
             _addPlaylists(lib: lib)
             //_addArtists(lib: lib)
+            
+            if(IS_DEBUG_MODE) {
+                let theStr = "mortal"
+                //theSearchField.stringValue = theStr
+                //_search(str: theStr)
+            }
+            
+            //thePlaylistsSearchField.bind(.predicate, to: theTreeController, withKeyPath: NSBindingName.filterPredicate.rawValue, options: [.predicateFormat: "(name contains[cd] $value)"])
         }
     }
     
-    private func _buildTracks() {
+    private func _buildColumns() {
         let trackNumber = ColumnsListStruct(title: "Track Number", id: TableColumnID.trackNumberTableColumnID)
         let title = ColumnsListStruct(title: "Title", id: TableColumnID.titleTableColumnID)
         let artist = ColumnsListStruct(title: "Artist", id: TableColumnID.artistTableColumnID)
@@ -111,31 +120,40 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
     }
     
     private func _addPlaylists(lib: ITLibrary) {
-        let playlists = iTunesModel.getMusicPlaylists(lib: lib)
-        let thePlaylistsTree = iTunesModel.getPlaylistsTree(theITPlaylists: playlists, theLenght: playlists.count)
-        if _thePlaylistsGroups == nil {
-            _thePlaylistsGroups = iTunesModel.getPlaylistsGroups(thePlaylists: thePlaylistsTree)
+        let theITPlaylists = iTunesModel.getMusicPlaylists(lib: lib)
+        let theRootITPlaylists = theITPlaylists.filter({ $0.parentID == nil })
+        let thePlaylistsTree = iTunesModel.getPlaylistsTree(theLevelITPlaylists: theRootITPlaylists, theITPlaylists: theITPlaylists)
+        if _thePlaylistsGroup == nil {
+            _thePlaylistsGroup = iTunesModel.getPlaylistsGroups(playlists: thePlaylistsTree)
         }
-        theTreeController.content = _thePlaylistsGroups
-        //let item = theOutlineView.
-        self.theOutlineView.expandItem(nil, expandChildren: true)
-        theSegmentedControl.selectedSegment = 0
+        _resetTree()
+        //theSegmentedControl.selectedSegment = 0
         
+        theSearchField.target = self
+        if #available(macOS 10.11, *) {
+            theSearchField.delegate = self
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        // remplissage auto de tableaux
         if IS_DEBUG_MODE {
-            let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
-            let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isDistinguishedKind: true, theSeparator: "")
+            /*let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
+            let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isIndent: false, theSeparator: "")
             let theMusicBoxPlaylists = theFlattenPlaylist.filter({($0.name?.lowercased().contains("music box"))!})
             let thePlaylistTest = theMusicBoxPlaylists[0]
             thePlaylistTracksListView.tracks = thePlaylistTest.theITPlaylist.items
             
             let thePlaylistTestTracks: [ITLibMediaItem] = (thePlaylistTracksListView.tracks! as? [ITLibMediaItem])!
-            let theRandomInt = Int.random(in: 0..<thePlaylistTestTracks.count - 1)
+            let thePlaylistTestTracksShuffled = thePlaylistTestTracks.shuffled()
+            //let theRandomInt = Int.random(in: 0..<thePlaylistTestTracks.count - 1)
+            let theRandomInt = Int.random(in: 2..<10)
             var theTracksToAdd: [ITLibMediaItem] = [ITLibMediaItem]()
             for n in 0...theRandomInt {
-                let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracks[n]
+                let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracksShuffled[n]
                 theTracksToAdd.append(theTrackToAdd)
             }
-            theAddedTracksListView.tracks = theTracksToAdd
+            theAddedTracksListView.tracks = theTracksToAdd*/
         }
     }
     
@@ -144,20 +162,30 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
             self._onArtistTreeLoading(notification: notification)
         }
         
-        let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
-        //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot")})
-        if _theArtistsTree == nil {
-            _theArtistsTree = iTunesModel.getArtistsTree(theITTracks: theITTracks, theLenght: theITTracks.count)
-            //let theArtistsName = iTunesModel.getAllArtistNames(theITTracks: theITTracks)
-            //theTreeController.content = theArtistsName
+        if _artistsGroup == nil {
+            //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
+            //let theITTracksNoCompilation = lib.allMediaItems.filter({ $0.mediaKind == .kindSong && !$0.album.isCompilation })
+            
+            //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot")})
+            let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot" || $0.artist?.name == nil)})
+            
+            let theITTracksCompilations = lib.allMediaItems.filter({ $0.mediaKind == .kindSong && $0.album.isCompilation })
+            
+            let theArtistsTree = iTunesModel.getArtistsTree(ITTracks: theITTracks)
+            let theCompilationsTree = iTunesModel.getAlbumsTree(ITTracks: theITTracksCompilations)
+            var theITNodesList = [[ITNode]]()
+            theITNodesList.append(theArtistsTree)
+            theITNodesList.append(theCompilationsTree)
+            _artistsGroup = iTunesModel.getArtistsGroups(ITNodesList: theITNodesList)
         }
+        theTreeController.content = _artistsGroup
         theSegmentedControl.selectedSegment = 1
+        _resetTree()
         NotificationCenter.default.removeObserver(artistTreeLoadingObserver)
     }
     
     private func _onArtistTreeLoading(notification: Notification) {
         let artistTreeObject = notification.object as! ArtistTreeObject
-        //print("V&G_Project___<#name#> : ", artistTreeObject.track?.artist)
         theAppInfosView.setProgress(current: Double(artistTreeObject.current!), total: Double(artistTreeObject.total!))
     }
     
@@ -170,11 +198,11 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         }
         return theSearch
     }
-
-
+    
+    
     override var representedObject: Any? {
         didSet {
-        // Update the view, if already loaded.
+            // Update the view, if already loaded.
         }
     }
     
@@ -182,17 +210,20 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         let theSegmentedControl = sender as! NSSegmentedControl
         print("V&G_FW___theSeg : ", theSegmentedControl.selectedSegment)
         if let lib = _lib {
-            if theSegmentedControl.selectedSegment == 0 {
+            switch theSegmentedControl.selectedSegment {
+            case TreeMode.playlists.rawValue:
                 _addPlaylists(lib: lib)
-            } else {
+            case TreeMode.artists.rawValue:
                 _addArtists(lib: lib)
+            default:
+                _addPlaylists(lib: lib)
             }
         }
     }
     
     @IBAction func exportAction(_ sender: Any) {
         let theExportButton: NSButton = sender as! NSButton
-        if theAppInfosView.state == AppInfosViewState.playListInfo.rawValue {
+        if theAppInfosView.state == AppInfosViewState.playlistInfo.rawValue {
             theExportButton.state = NSControl.StateValue.off
             if theAddedTracksListView.tracks!.count > 0 {
                 self.performSegue(withIdentifier: NSStoryboardSegue.EXPORT_SEGUE, sender: self)
@@ -200,7 +231,7 @@ class ViewController: BaseProjectViewController, NSOutlineViewDataSource, NSOutl
         } else {
             _theCopyFilesOperationQueue?.cancelAllOperations()
             theExportButton.state = NSControl.StateValue.off
-            theAppInfosView.state = AppInfosViewState.playListInfo.rawValue
+            theAppInfosView.state = AppInfosViewState.playlistInfo.rawValue
         }
     }
     
@@ -255,7 +286,7 @@ extension ViewController {
     
     private func _reset() {
         self.theExportButton.state = NSControl.StateValue.off
-        self.theAppInfosView.state = AppInfosViewState.playListInfo.rawValue
+        self.theAppInfosView.state = AppInfosViewState.playlistInfo.rawValue
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -273,7 +304,7 @@ extension ViewController {
             
             switch key {
             case Operation.FINISHED:
-                print("V&G_Project___observeValue Operation.FINISHED : ", self, theCopyFileOperation.index, theCopyFileOperation.srcPath)
+                print("V&G_Project___observeValue Operation.FINISHED : ", self, theCopyFileOperation.index!, theCopyFileOperation.srcPath)
                 DispatchQueue.main.async { [unowned self] in
                     if !(self._theCopyFilesOperationQueue?.isCancelled)! {
                         self.theAppInfosView.setProgress(current: Double(current), total: total)
@@ -346,48 +377,42 @@ extension ViewController {
     
 }
 
-extension ViewController {
-    
-    func isHeader(item: Any) -> Bool {
-        if let item = item as? NSTreeNode {
-            return !(item.representedObject is Playlist)
-        } else {
-            return !(item is Playlist)
-        }
-    }
+extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
-        //print("V&G_Project___<#name#> : ", isHeader(item: item))
         var cellID:String
-        let treeNode = item as! NSTreeNode
-        if isHeader(item: item) {
-            cellID = "HeaderCell"
-            let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self)
-            return cell
-        } else {
+        let theTreeNode = item as! NSTreeNode
+        let theTreeNodeObject = theTreeNode.representedObject as! NSObject
+        if theTreeNodeObject is ITNode {
             cellID = "DataCell"
-            let pl = treeNode.representedObject as! Playlist
-            let cell: PlaylistTableCellView = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self) as! PlaylistTableCellView
-            cell.buildCell(thePlaylist: pl)
-            return cell
+            let theCell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self) as! TreeTableCellView
+            theCell.buildCell(node: theTreeNodeObject)
+            return theCell
+        } else {
+            cellID = "HeaderCell"
+            let theCell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellID), owner: self)
+            return theCell
         }
+        
+        return nil
     }
     
     func outlineView(_ outlineView: NSOutlineView, shouldExpandItem item: Any) -> Bool {
-        print("V&G_FW___<#name#> : ", item)
-        
+        //print("V&G_Project___outlineView : ", self) // TODO
         if let item = item as? NSTreeNode {
-            if item.representedObject is PlaylistGroup {
+            let theObject = item.representedObject
+            if theObject is NodeGroup {
                 return true
-            } else if item.representedObject is Playlist {
-                let thePlaylist  = item.representedObject as! Playlist
-                if thePlaylist.isFolder && (thePlaylist.children?.count)! > 0 {
+            } else if theObject is Playlist {
+                let thePlaylist  = theObject as! Playlist
+                //print("V&G_Project___outlineView : ", "theSearchField.stringValue.count", theSearchField.stringValue.count)
+                if thePlaylist.isFolder && (thePlaylist.children!.count > 0) && (theSearchField.stringValue.count == 0) {
                     return true
                 }else{
                     return false
                 }
-            } else if item.representedObject is Artist {
-                //let theArtist = item.representedObject as! Artist
+            } else if theObject is Artist {
+                let theArtist = theObject as! Artist
                 return true
             }
         }
@@ -396,7 +421,7 @@ extension ViewController {
     
     
     func outlineView(_ outlineView: NSOutlineView, isGroupItem item: Any) -> Bool {
-        return item is PlaylistGroup
+        return item is NodeGroup
     }
     
     func outlineViewSelectionDidChange(_ notification: Notification) {
@@ -408,18 +433,125 @@ extension ViewController {
         let selectedIndex = outlineView.selectedRow
         if let theNode = outlineView.item(atRow: selectedIndex) as? NSTreeNode {
             //3
-            if let thePlaylist = theNode.representedObject as? Playlist {
-                let theITTracks = thePlaylist.theITPlaylist.items
-                let theITSortKind = ITSortKind.artistAndThenAlbum
+            let theNodeObject = theNode.representedObject
+            let theITSortKind = ITSortKind.artistAndThenAlbum
+            if let thePlaylist = theNodeObject as? Playlist {
+                let theITTracks = thePlaylist.ITPlaylist.items
                 let theITTracksSorted = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
                 self.thePlaylistTracksListView.tracks = theITTracksSorted
-                //print("V&G_Project___outlineViewSelectionDidChange : ", self, thePlaylistTracksListView.tracks)
-                self.theAppInfosView.setPlaylistDuration(duration: thePlaylist.duration)
-                self.theAppInfosView.setCountItems(countItems: thePlaylist.count)
-                self.theAppInfosView.setPlaylistName(playlistName: thePlaylist.name!)
+                self.theAppInfosView.setDuration(duration: thePlaylist.duration)
+                self.theAppInfosView.setCountItems(countItems: thePlaylist.ITPlaylist.items.count)
+                self.theAppInfosView.setName(name: thePlaylist.name)
                 self.theAppInfosView.setSize(size: thePlaylist.size)
+            } else if let theArtist = theNodeObject as? Artist {
+                let theITTracks = theArtist.getITTracks()
+                self.thePlaylistTracksListView.tracks = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
+                self.theAppInfosView.setDuration(duration: theArtist.duration)
+                self.theAppInfosView.setCountItems(countItems: theITTracks.count)
+                self.theAppInfosView.setName(name: theArtist.name)
+                self.theAppInfosView.setSize(size: theArtist.size)
+            } else if let theAlbum = theNodeObject as? Album {
+                let theITTracks = theAlbum.ITTracks
+                self.thePlaylistTracksListView.tracks = theITTracks.sorted(by: {iTunesModel.sortITTrack(ITTrack1: $0, ITTrack2: $1, kind: theITSortKind)})
+                self.theAppInfosView.setDuration(duration: theAlbum.duration)
+                self.theAppInfosView.setCountItems(countItems: theITTracks.count)
+                self.theAppInfosView.setSize(size: theAlbum.size)
             }
         }
+    }
+    
+}
+
+extension ViewController: NSSearchFieldDelegate {
+    func searchFieldDidStartSearching(_ sender: NSSearchField) {
+        print("V&G_Project___TrackListView searchFieldDidStartSearching : ", self)
+    }
+    
+    func searchFieldDidEndSearching(_ sender: NSSearchField) {
+        print("V&G_Project___TrackListView searchFieldDidEndSearching : ", self)
+        //_resetTree()
+    }
+    
+    func controlTextDidChange(_ obj: Notification) {
+        let theTextField = obj.object as! NSTextField
+        let theStr = theTextField.stringValue
+        print("V&G_Project___controlTextDidChange  : ", theStr.count)
+        if theStr.count > 0 {
+            _search(str: theStr)
+        } else {
+            _resetTree()
+        }
+    }
+    
+    private func _search(str: String) {
+        if str.count == 0 {
+            _resetTree()
+            return
+        }
+        
+        _resetSearch()
+        
+        //thePlaylistsSearchField.sendAction(thePlaylistsSearchField.action, to: thePlaylistsSearchField.target)
+        let thePredicate = NSPredicate(format: "%K CONTAINS[cd] %@", "name", str)
+        
+        var theSearchFields = [[Node]]()
+        switch theSegmentedControl.selectedSegment {
+        case TreeMode.playlists.rawValue:
+            if let thePersonalPlaylistsGroup = _thePlaylistsGroup!.filter({$0.id == iTunesModel.PlaylistsGroupID.allPlaylists.rawValue}).first {
+                if let thePersonalPlaylists = thePersonalPlaylistsGroup.children {
+                    theSearchFields.append(thePersonalPlaylists)
+                }
+            }
+        case TreeMode.artists.rawValue:
+            if let theArtistsGroup = _artistsGroup {
+                for theGroup in theArtistsGroup {
+                    if let theChildren = theGroup.children {
+                        theSearchFields.append(theChildren)
+                    }
+                }
+            }
+            print("artists")
+        default:
+            print("")
+        }
+        
+        var theSearchResults = [Node]()
+        for theSearchField in theSearchFields {
+            let theFlattenNodes = iTunesModel.getFlattenNodesTree(nodes: theSearchField)
+            //_resetSearch(nodes: theFlattenNodes)
+            let theSearch = theFlattenNodes.filter({ $0.name.lowercased().contains(str.lowercased()) })
+            for theNode in theSearch {
+                theSearchResults.append(theNode)
+                if let theNodeChildren = theNode.children {
+                    if theNodeChildren.count > 0 {
+                        theNode.isSearched = true
+                    }
+                }
+            }
+        }
+        
+        theTreeController.content = theSearchResults
+        
+    }
+    
+    private func _resetSearch() { // TODO
+        let theNodesSearched = theTreeController.content as! [Node]
+        for theNodeSearched in theNodesSearched {
+            theNodeSearched.isSearched = false
+        }
+    }
+    
+    private func _resetTree() {
+        _resetSearch()
+        switch theSegmentedControl.selectedSegment {
+        case TreeMode.playlists.rawValue:
+            theTreeController.content = _thePlaylistsGroup
+        case TreeMode.artists.rawValue:
+            theTreeController.content = _artistsGroup
+        default:
+            theTreeController.content = _thePlaylistsGroup
+        }
+        self.theOutlineView.expandItem(nil, expandChildren: true)
     }
     
 }
@@ -459,4 +591,10 @@ extension ViewController: NSUserNotificationCenterDelegate {
         print("V&G_Project___didDeliver : ", self, notification)
     }
     
+}
+
+enum TreeMode: Int {
+    case playlists = 0
+    case artists = 1
+    case albums = 2
 }

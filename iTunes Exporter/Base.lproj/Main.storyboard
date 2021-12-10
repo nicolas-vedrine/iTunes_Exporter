@@ -1057,7 +1057,7 @@ Gw
                                                                                             <outlet property="textField" destination="gBP-qZ-lHk" id="Nt4-gQ-cFx"/>
                                                                                         </connections>
                                                                                     </tableCellView>
-                                                                                    <tableCellView identifier="DataCell" id="Gee-Yl-ODs" customClass="PlaylistTableCellView" customModule="iTunes_Exporter" customModuleProvider="target">
+                                                                                    <tableCellView identifier="DataCell" id="Gee-Yl-ODs" customClass="TreeTableCellView" customModule="iTunes_Exporter" customModuleProvider="target">
                                                                                         <rect key="frame" x="11" y="20" width="260" height="17"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
@@ -1225,6 +1225,7 @@ Gw
                         <outlet property="theMenuBox" destination="6s2-0n-rA2" id="wpL-N4-Pmq"/>
                         <outlet property="theOutlineView" destination="2sP-yT-sX9" id="PQv-Za-NZD"/>
                         <outlet property="thePlaylistTracksListView" destination="9eL-LK-PaA" id="dfw-FH-QXh"/>
+                        <outlet property="theSearchField" destination="6Pw-WH-KcD" id="oPv-Cv-bb1"/>
                         <outlet property="theSegmentedControl" destination="4dH-wi-ukD" id="NDK-hR-F34"/>
                         <outlet property="theStatutInfosLabel" destination="o4I-J4-uTV" id="cuP-2r-rNu"/>
                         <outlet property="theTreeController" destination="s0B-Ql-wGv" id="Ayn-n3-IIv"/>

@@ -18,7 +18,6 @@ class ExportController: BaseProjectViewController {
     @IBOutlet weak var theFileNameComboBoxFormView: VGComboBoxFormView!
     @IBOutlet weak var theIfAlreadyExistsComboBoxFormView: VGComboBoxFormView!
     
-    //private var _theTracks: [ITLibMediaItem]?
     private var _theFilesSize: UInt64 = 0
     
     var onValidateForm: ((_ formResult: [String: Any]) -> ())?
@@ -108,7 +107,7 @@ class ExportController: BaseProjectViewController {
     }
     
     private func _getSourcePath(theTrack: Track) -> String {
-        let theITTrack: ITLibMediaItem = theTrack.theITTrack
+        let theITTrack: ITLibMediaItem = theTrack.ITTrack
         let theSourceURL: URL = theITTrack.location!
         return theSourceURL.path
     }

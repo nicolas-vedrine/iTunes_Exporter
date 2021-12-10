@@ -11,28 +11,8 @@ import iTunesLibrary
 
 class iTunesTracksListView: VGBaseTracksListView {
     
-    //internal var theiTunesTracks: [ITLibMediaItem]?
-    
-    /*override func draw(_ dirtyRect: NSRect) {
-     super.draw(dirtyRect)
-     
-     // Drawing code here.
-     }*/
-    
     override func _onTableViewDoubleClick(_ sender: AnyObject) {
         print("V&G_FW___TableViewDoubleClick iTunes : ", self)
-    }
-    
-    override var tracks: [NSObject]? {
-        set {
-            super.tracks = newValue
-        }
-        get {
-            guard let tracks = theDatas else {
-                return nil
-            }
-            return tracks as! [ITLibMediaItem]
-        }
     }
     
 }
@@ -40,8 +20,10 @@ class iTunesTracksListView: VGBaseTracksListView {
 extension iTunesTracksListView {
     
     override func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        if let tracks: [ITLibMediaItem] = tracks as? [ITLibMediaItem] {
-            let item = tracks[row]
+        
+        if let theArrayCollection: NSArrayController = arrayController {
+            let theTracks = theArrayCollection.arrangedObjects as! [ITLibMediaItem]
+            let theTrack = theTracks[row]
             let cellIdentifier: String = "TracksListCellID"
             var text: String = ""
             
@@ -49,16 +31,17 @@ extension iTunesTracksListView {
             case TableColumnID.trackNumberTableColumnID.rawValue:
                 text = String(row + 1)
             case TableColumnID.titleTableColumnID.rawValue:
-                text = getTrackTitle(theTrack: item)
+                text = getTrackTitle(theTrack: theTrack)
             case TableColumnID.artistTableColumnID.rawValue:
-                text = iTunesModel.getArtistName(theITTrack: item)
+                text = iTunesModel.getArtistName(theITTrack: theTrack)
+               // text = (theTrack.artist?.name)!
             case TableColumnID.albumTableColumnID.rawValue:
-                text = iTunesModel.getAlbumTitle(theITTrack: item)
+                text = iTunesModel.getAlbumTitle(theITTrack: theTrack)
+                //text = theTrack.album.title!
             case TableColumnID.locationTableColumnID.rawValue:
-                text = item.location?.path ?? ""
-            //text  = item.
+                text = theTrack.location?.path ?? ""
             case TableColumnID.totalTimeTableColumnID.rawValue:
-                text = getTotalTime(theTrack: item)
+                text = getTotalTime(theTrack: theTrack)
             default:
                 text = ""
             }
@@ -67,8 +50,7 @@ extension iTunesTracksListView {
                 cell.textField!.stringValue = text
                 return cell
             }
-        }
-        
+        }        
         
         print("V&G_FW___viewFor tableColumn : ", self, "no TitleCellID is present !")
         
@@ -82,7 +64,7 @@ extension iTunesTracksListView {
     
     override func getTotalTime(theTrack: NSObject) -> String {
         let theiTunesTrack: ITLibMediaItem = theTrack as! ITLibMediaItem
-        return Int(theiTunesTrack.totalTime / 1000).toFormattedDuration()
+        return Int(theiTunesTrack.totalTime / 1000).toTrackDurationFormat()
     }
     
 }

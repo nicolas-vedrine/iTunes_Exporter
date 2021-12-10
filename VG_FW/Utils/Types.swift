@@ -126,14 +126,28 @@ extension Int {
         return sTime
     }*/
     
-    func toFormattedDuration() -> String {
+    func toFormattedDuration(unitsStyle: DateComponentsFormatter.UnitsStyle = .positional) -> String {
         let duration: TimeInterval = TimeInterval(self) // 701429
+        var calendar = Calendar.current
+        let locale = String(Locale.preferredLanguages[0].prefix(2))
+        calendar.locale = Locale(identifier: locale)
         let durationFormatter = DateComponentsFormatter()
-        durationFormatter.unitsStyle = .positional
+        durationFormatter.calendar = calendar
+        durationFormatter.unitsStyle = unitsStyle
         durationFormatter.allowedUnits = [.day, .hour, .minute, .second ]
         durationFormatter.zeroFormattingBehavior = [ .dropMiddle ]
         let formattedDuration = durationFormatter.string(from: duration)
         return formattedDuration!
+    }
+    
+    func toTrackDurationFormat() -> String {
+        let duration: TimeInterval = TimeInterval(self)
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .positional
+        formatter.zeroFormattingBehavior = .pad
+        return formatter.string(from: duration)!
+            .replacingOccurrences(of: #"^00[:.]0?|^0"#, with: "", options: .regularExpression)
     }
     
     func toFormattedNumber() -> String {
@@ -226,6 +240,36 @@ enum DateFormatType: String {
     
 }
 
+extension Array {
+    
+    /*func flatten<T>(_ index: Int = 0) -> [T] {
+        guard index < self.count else {
+            return []
+        }
+        
+        var flatten: [T] = []
+        
+        if let itemArr = self[index] as? [T] {
+            flatten += itemArr.flatten()
+        } else if let element = self[index] as? T {
+            flatten.append(element)
+        }
+        return flatten + self.flatten(index + 1)
+    }*/
+    
+    func flatten(_ array: [Any]) -> [Any] {
+        var result = [Any]()
+        for element in array {
+            if let element = element as? [Any] {
+                result.append(contentsOf: flatten(element))
+            } else {
+                result.append(element)
+            }
+        }
+        return result
+    }
+    
+}
 
 extension NSArrayController {
     

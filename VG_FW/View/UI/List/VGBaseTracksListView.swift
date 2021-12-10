@@ -12,7 +12,7 @@ import iTunesLibrary
 class VGBaseTracksListView: VGBaseNSView {
     
     var tracksListTableView: NSTableView!
-    //internal var theTracks: [NSObject]?
+    var arrayController: NSArrayController!
     
     internal func initView() {
         removeColumns()
@@ -26,46 +26,66 @@ class VGBaseTracksListView: VGBaseNSView {
         
         tracksListTableView.target = self
         tracksListTableView.doubleAction = #selector(_onTableViewDoubleClick(_:))
+        
+        arrayController = NSArrayController()
+        
+        tracksListTableView.bind(.content, to: arrayController, withKeyPath: "arrangedObjects", options: nil)
     }
     
     @objc func _onTableViewDoubleClick(_ sender: AnyObject) {
         print("V&G_FW____onTableViewDoubleClick : ", self)
     }
     
-    /*override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-        
-        // Drawing code here.
-    }*/
+    override func keyDown(with event: NSEvent) {
+        super.keyDown(with: event)
+        print("V&G_FW___keyDown : ", event.keyCode)
+        if event.keyCode == 117 {
+            let theIndexSet = self.tracksListTableView.selectedRowIndexes
+            removeTracks(theIndexesToRemove: theIndexSet)
+        }
+    }
     
     var tracks: [NSObject]? {
         set {
             datas = newValue
-            //theTracks = theDatas as? [NSObject]
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
-                self!.tracksListTableView.reloadData()
+            arrayController.removeAll()
+            for theTrack in datas as! [NSObject] {
+                arrayController.addObject(theTrack)
             }
-            //tracksListTableView.reloadData()
         }
         get {
-            if let tracks: [NSObject] = datas as? [NSObject] {
-                return tracks
+            if let theArrayCollection: NSArrayController = arrayController {
+                let theTracks = theArrayCollection.arrangedObjects as! [NSObject]
+                return theTracks
             }
             return nil
         }
     }
     
+    // récupération de la selection de piste. doit être dans un tableau récupéré à partir de la selection dans la tableView puis on cherche dans le arrayController
     var selectedTracks: [NSObject]? {
         get {
-            if let theTracks = tracks {
-                var theSelectedTracks = [NSObject]()
-                let theIndexSet = self.tracksListTableView.selectedRowIndexes
-                for theIndex in theIndexSet {
-                    theSelectedTracks.append(theTracks[theIndex])
+            if tracksListTableView.selectedRowIndexes.count > 0 {
+                var selectedTracks: [NSObject] = [NSObject]()
+                let selectedIndexes: IndexSet = tracksListTableView.selectedRowIndexes
+                let theTracks: [NSObject] = arrayController.arrangedObjects as! [NSObject]
+                for theIndex in selectedIndexes {
+                    let theTrack = theTracks[theIndex]
+                    selectedTracks.append(theTrack)
                 }
-                return theSelectedTracks
+                return selectedTracks
             }
             return nil
+        }
+    }
+    
+    func removeTracks(theIndexesToRemove: IndexSet) {
+        if tracksListTableView.selectedRowIndexes.count > 0 {
+            let theSelectedTracks: [NSObject] = selectedTracks!
+            arrayController.remove(atArrangedObjectIndexes: theIndexesToRemove)
+            let theTracks = arrayController.arrangedObjects as! [NSObject]
+            print("V&G_FW___removeTracks : ", theTracks.count)
+            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)
         }
     }
     
@@ -101,17 +121,14 @@ extension VGBaseTracksListView: NSTableViewDataSource {
 extension VGBaseTracksListView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        
-        if let tracks = tracks {
+        if tracks != nil {
             let cellIdentifier: String = "TracksListCellID"
-            let item = tracks[row]
             let text = "text : " + String(row + 1)
             if let cell: NSTableCellView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: nil) as? NSTableCellView {
                 cell.textField!.stringValue = text
                 return cell
             }
-        }
-        
+        }        
         return nil
     }
     

@@ -43,7 +43,6 @@ import Cocoa
             let secureCell:NSSecureTextFieldCell = cell as! NSSecureTextFieldCell
             secureCell.echosBullets = true
         }
-        print("V&G_FW___<#name#> : ", isSecure)
         return cell
     }
     

@@ -140,33 +140,8 @@ class Artist: ITNode {
         if !isSearched && hasChildren {
             theBool = false
         }
-        //print("V&G_FW___isLeaf : ", name, "isFolder", isFolder, "isSeached", isSearched)
         return theBool
-        
-        //return false
     }
-    
-    /*@objc override func isLeaf() -> Bool {
-        var hasChildren: Bool = false
-        if let theChildren = children {
-            if theChildren.count > 0 {
-                hasChildren = true
-            }
-        }
-        var theBool = true
-        if isFolder && !isSearched && hasChildren {
-            theBool = false
-        }
-        //print("V&G_FW___isLeaf : ", name, "isFolder", isFolder, "isSeached", isSearched)
-        return theBool
-    }*/
-    
-    /*init(theITArtist: ITLibArtist) {
-        if let theName = theITArtist.name {
-            self.name = theName
-        }
-        self._ITArtist = theITArtist
-    }*/
     
     override init(ITObject: NSObject) {
         _ITArtist = ITObject as! ITLibArtist
@@ -177,16 +152,6 @@ class Artist: ITNode {
         }
         children = [Album]()
     }
-    
-    /*func getAlbum(by name: String) -> Album? {
-        for album in albums {
-            let theAlbumName = album.name
-            if name == theAlbumName {
-                return album
-            }
-        }
-        return nil
-    }*/
     
     func getTracks() -> [Track] {
         var theTrack = [Track]()
@@ -243,13 +208,6 @@ class Album: ITNode {
         return true
     }
     
-    /*init(theITAlbum: ITLibAlbum){
-        if let theName = theITAlbum.title {
-            self.name = theName
-        }
-        self._ITAlbum = theITAlbum
-    }*/
-    
     override init(ITObject: NSObject) {
         _ITAlbum = ITObject as! ITLibAlbum
         super.init(ITObject: ITObject)
@@ -257,12 +215,7 @@ class Album: ITNode {
         if let theAlbumName = _ITAlbum.title {
             super.name = theAlbumName
         }
-        //children = [Track]()
     }
-    
-    /*func getITTracks() -> [ITLibMediaItem] {
-        return tracks.map({ $0.theITTrack })
-    }*/
     
     var ITAlbum: ITLibAlbum {
         get {
@@ -294,25 +247,12 @@ class Album: ITNode {
 
 class Track: ITNode {
     
-    @objc dynamic var artist: String = ""
-    //@objc dynamic var name: String = ""
-    @objc dynamic var album: String = ""
-    @objc dynamic var duration: Int = 0
-    @objc dynamic var size: UInt64 = 0
-    @objc dynamic var location: URL?
+    //@objc dynamic var artist: String = ""
+    //@objc dynamic var album: String = ""
+    //@objc dynamic var duration: Int = 0
+    //@objc dynamic var size: UInt64 = 0
+    //@objc dynamic var location: URL?
     private var _theITTrack: ITLibMediaItem
-    
-    /*init(theITTrack: ITLibMediaItem) {
-        self.artist = iTunesModel.getArtistName(theITTrack: theITTrack)
-        self.name = theITTrack.title
-        if let theAlbumName = theITTrack.album.title {
-            self.album = theAlbumName
-        }
-        self.duration = theITTrack.totalTime
-        self.size = theITTrack.fileSize
-        self.location = theITTrack.location
-        self.theITTrack = theITTrack
-    }*/
     
     override init(ITObject: NSObject) {
         _theITTrack = ITObject as! ITLibMediaItem

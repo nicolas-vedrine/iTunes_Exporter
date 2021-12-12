@@ -21,10 +21,15 @@ import Cocoa
     
     public static var exportingStatus: String = "Exporting..."
     
+    private var _playlistElements = [NSView]()
+    private var _exportElements = [NSView]()
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         loadViewFromNib()
+        
+        _initElements()
         
         if nItemsLabel != nil {
             setName(name: "Sélectionnez une playlist...", isPlaceHolder: true)
@@ -77,6 +82,12 @@ import Cocoa
         statusLabel.stringValue = theStatus
     }
     
+    private func _initElements() {
+        _playlistElements.append(nItemsLabel)
+        _playlistElements.append(durationLabel)
+        //_playlistElements
+    }
+    
     override var state: String {
         set {
             theState = newValue
@@ -90,7 +101,6 @@ import Cocoa
                 statusLabel.isHidden = true
                 progressBar.isHidden = true
             case AppInfosViewState.exporting.rawValue:
-                //print("V&G_Project___<#name#> : ", self)
                 nItemsLabel.isHidden = true
                 durationLabel.isHidden = true
                 playlistNameLabel.isHidden = true

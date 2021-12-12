@@ -25,6 +25,16 @@ import Cocoa
         // Drawing code here.
     }
     
+    override var isEnabled: Bool {
+        set {
+            _isEnabled = newValue
+            addDeleteButton.isEnabled = _isEnabled
+        }
+        get {
+            return _isEnabled
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -184,18 +194,15 @@ import Cocoa
     }
     
     @IBAction func addDeleteAction(_ sender: Any) {
-        switch _trackListType {
-        case TrackListType.add.rawValue:
+        if _trackListType == TrackListType.add.rawValue {
             _addTracksAction()
-        case TrackListType.delete.rawValue:
+        } else {
             _deleteTracksAction()
-        default:
-            _addTracksAction()
         }
     }
     
     private func _addTracksAction() {
-        if tracksListTableView.selectedRowIndexes.count > 0 {
+        if tracksListTableView.selectedRowIndexes.count > 0 && _isEnabled {
             NotificationCenter.default.post(name: .TRACKS_ADDED, object: selectedTracks)
         }
     }
@@ -206,6 +213,10 @@ import Cocoa
     }    
     
     private func _filterTracks(str: String) {
+        if str.count == 0 {
+            resetFilter()
+            return
+        }
         var thePredicates = [NSPredicate]()
         let theArtistPredicate = NSPredicate(format: FilterType.format, FilterType.artistField, str)
         let theTitlePredicate = NSPredicate(format: FilterType.format, FilterType.titleField, str)
@@ -227,6 +238,11 @@ import Cocoa
         arrayController.filterPredicate = theCompoundPredicate
         
         print("V&G_Project____filterTracks : ", arrayController.filterPredicate?.predicateFormat)
+    }
+    
+    func resetFilter() {
+        searchField.stringValue = ""
+        arrayController.filterPredicate = nil
     }
     
     
@@ -255,9 +271,8 @@ extension TrackListView: NSSearchFieldDelegate {
     }
     
     func searchFieldDidEndSearching(_ sender: NSSearchField) {
-        print("V&G_Project___TrackListView searchFieldDidEndSearching : ", self)
-        //arrayController.filterPredicate = nil
-        _filterTracks(str: "")
+        print("V&G_Project___TrackListView searchFieldDidEndSearching : ", self, sender.stringValue)
+        //_filterTracks(str: "") no need to call the func because it is already called in the controlTextDidChange
     }
     
     func controlTextDidChange(_ obj: Notification) {
@@ -265,8 +280,6 @@ extension TrackListView: NSSearchFieldDelegate {
         let theStr = theTextField.stringValue
         let theTracks: [NSObject] = arrayController.arrangedObjects as! [NSObject]
         _filterTracks(str: theStr)
-        print("V&G_Project___controlTextDidChange : ", theTracks.count)
-        //searchField.sendAction(searchField.action, to: searchField.target)
     }
 }
 

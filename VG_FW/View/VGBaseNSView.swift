@@ -12,6 +12,7 @@ class VGBaseNSView: NSView {
     
     internal var theState: String?
     internal var theDatas: Any?
+    internal var _isEnabled: Bool = true
     
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
@@ -24,10 +25,6 @@ class VGBaseNSView: NSView {
         
         buildView()
     }
-    
-    /*@objc init(int: Int) {
-            super.init()
-        }*/
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -57,6 +54,15 @@ class VGBaseNSView: NSView {
                 return theDatas
             }
             return nil
+        }
+    }
+    
+    var isEnabled: Bool {
+        set {
+            _isEnabled = newValue
+        }
+        get {
+            return _isEnabled
         }
     }
     

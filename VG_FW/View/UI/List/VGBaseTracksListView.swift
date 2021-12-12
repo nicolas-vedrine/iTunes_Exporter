@@ -80,12 +80,14 @@ class VGBaseTracksListView: VGBaseNSView {
     }
     
     func removeTracks(theIndexesToRemove: IndexSet) {
-        if tracksListTableView.selectedRowIndexes.count > 0 {
-            let theSelectedTracks: [NSObject] = selectedTracks!
-            arrayController.remove(atArrangedObjectIndexes: theIndexesToRemove)
-            let theTracks = arrayController.arrangedObjects as! [NSObject]
-            print("V&G_FW___removeTracks : ", theTracks.count)
-            NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)
+        if _isEnabled {
+            if tracksListTableView.selectedRowIndexes.count > 0 {
+                let theSelectedTracks: [NSObject] = selectedTracks!
+                arrayController.remove(atArrangedObjectIndexes: theIndexesToRemove)
+                let theTracks = arrayController.arrangedObjects as! [NSObject]
+                print("V&G_FW___removeTracks : ", theTracks.count)
+                NotificationCenter.default.post(name: .TRACKS_DELETED, object: theSelectedTracks)
+            }
         }
     }
     

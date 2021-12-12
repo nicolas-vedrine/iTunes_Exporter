@@ -41,6 +41,8 @@ class ViewController: BaseProjectViewController {
             _lib = try ITLibrary(apiVersion: "1.0")
             
             _buildColumns()
+            theOutlineView.delegate = self
+            theOutlineView.autosaveExpandedItems = true
             _addData()
         } catch let error {
             print("V&G_Project___buildView : ", error)
@@ -138,22 +140,22 @@ class ViewController: BaseProjectViewController {
         
         // remplissage auto de tableaux
         if IS_DEBUG_MODE {
-            /*let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
-            let theFlattenPlaylist = iTunesModel.getFlattenPlaylistsTree(theList: thePlaylistsTreeCopy, isIndent: false, theSeparator: "")
-            let theMusicBoxPlaylists = theFlattenPlaylist.filter({($0.name?.lowercased().contains("music box"))!})
+            //let thePlaylistsTreeCopy: [Playlist] = NSArray(array: thePlaylistsTree, copyItems: false) as! [Playlist]
+            let theFlattenPlaylist = iTunesModel.getFlattenNodesTree(nodes: thePlaylistsTree) as! [Playlist]
+            let theMusicBoxPlaylists = theFlattenPlaylist.filter({($0.name.lowercased().contains("music box"))})
             let thePlaylistTest = theMusicBoxPlaylists[0]
-            thePlaylistTracksListView.tracks = thePlaylistTest.theITPlaylist.items
+            thePlaylistTracksListView.tracks = thePlaylistTest.ITPlaylist.items
             
             let thePlaylistTestTracks: [ITLibMediaItem] = (thePlaylistTracksListView.tracks! as? [ITLibMediaItem])!
             let thePlaylistTestTracksShuffled = thePlaylistTestTracks.shuffled()
             //let theRandomInt = Int.random(in: 0..<thePlaylistTestTracks.count - 1)
-            let theRandomInt = Int.random(in: 2..<10)
+            let theRandomInt = Int.random(in: 100..<200)
             var theTracksToAdd: [ITLibMediaItem] = [ITLibMediaItem]()
             for n in 0...theRandomInt {
                 let theTrackToAdd: ITLibMediaItem = thePlaylistTestTracksShuffled[n]
                 theTracksToAdd.append(theTrackToAdd)
             }
-            theAddedTracksListView.tracks = theTracksToAdd*/
+            theAddedTracksListView.tracks = theTracksToAdd
         }
     }
     
@@ -163,11 +165,11 @@ class ViewController: BaseProjectViewController {
         }
         
         if _artistsGroup == nil {
-            //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
+            let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
             //let theITTracksNoCompilation = lib.allMediaItems.filter({ $0.mediaKind == .kindSong && !$0.album.isCompilation })
             
             //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot")})
-            let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot" || $0.artist?.name == nil)})
+            //let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong && ($0.artist?.name?.lowercased() == "disturbed" || $0.artist?.name?.lowercased() == "iron maiden" || $0.artist?.name?.lowercased() == "metallica" || $0.artist?.name?.lowercased() == "queen" || $0.artist?.name?.lowercased() == "slipknot" || $0.artist?.name == nil)})
             
             let theITTracksCompilations = lib.allMediaItems.filter({ $0.mediaKind == .kindSong && $0.album.isCompilation })
             
@@ -225,6 +227,7 @@ class ViewController: BaseProjectViewController {
         let theExportButton: NSButton = sender as! NSButton
         if theAppInfosView.state == AppInfosViewState.playlistInfo.rawValue {
             theExportButton.state = NSControl.StateValue.off
+            theAddedTracksListView.resetFilter()
             if theAddedTracksListView.tracks!.count > 0 {
                 self.performSegue(withIdentifier: NSStoryboardSegue.EXPORT_SEGUE, sender: self)
             }
@@ -249,6 +252,7 @@ class ViewController: BaseProjectViewController {
     
     private func _exportFiles(formResult: [String: Any]) {
         print("V&G_Project____exportFiles : ", formResult)
+        (thePlaylistTracksListView.isEnabled, theAddedTracksListView.isEnabled) = (false, false) // actions are disabled
         _theCopyFilesOperationQueue = FileOperationQueue()
         _theCopyFilesOperationQueue?.isSuspended = true
         _theCopyFilesOperationQueue?.name = "exportFiles"
@@ -379,6 +383,19 @@ extension ViewController {
 
 extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
     
+    /*func outlineView(_ outlineView: NSOutlineView, itemForPersistentObject object: Any) -> Any? {
+        guard let uriAsString = object as? String,
+            let uri = URL(string: uriAsString) else { return nil }
+
+            if let psc = self.managedObjectContext.persistentStoreCoordinator,
+                let moID = psc.managedObjectID(forURIRepresentation: uri),
+                let group = self.managedObjectContext.object(with: moID) as? MyGroupEntity,
+                let nodes = self.expensesTreeController.arrangedObjects.children {
+                return self.findNode(for: group, in: nodes)
+            }
+            return nil
+    }*/
+    
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
         var cellID:String
         let theTreeNode = item as! NSTreeNode
@@ -433,6 +450,8 @@ extension ViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
         let selectedIndex = outlineView.selectedRow
         if let theNode = outlineView.item(atRow: selectedIndex) as? NSTreeNode {
             //3
+            thePlaylistTracksListView.resetFilter() // reset the filter if a search has been done
+            
             let theNodeObject = theNode.representedObject
             let theITSortKind = ITSortKind.artistAndThenAlbum
             if let thePlaylist = theNodeObject as? Playlist {

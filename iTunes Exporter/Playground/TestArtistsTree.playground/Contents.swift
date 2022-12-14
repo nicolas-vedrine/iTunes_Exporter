@@ -2,6 +2,7 @@ import Cocoa
 import iTunesLibrary
 
 do {
+    //print("V&G_Project___  : ", self)
     let lib = try ITLibrary(apiVersion: "1.1")
     let theITTracks = lib.allMediaItems.filter({$0.mediaKind == .kindSong})
     let theITTracksNoCompilation = lib.allMediaItems.filter({ $0.mediaKind == .kindSong && !$0.album.isCompilation })

@@ -28,6 +28,7 @@
 		8B7DC666221DEA15004856F7 /* ExportController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC665221DEA15004856F7 /* ExportController.swift */; };
 		8B7DC668221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */; };
 		8B7DC66B221DFA3D004856F7 /* BaseProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */; };
+		8B9391E2294A68E900FD8FF3 /* iTunesObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9391E1294A68E900FD8FF3 /* iTunesObjects.swift */; };
 		8BAE61E122527B07007C13FE /* VGBrowsePathFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAE61DA22527B07007C13FE /* VGBrowsePathFormView.swift */; };
 		8BAE61E222527B07007C13FE /* VGComboBoxFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAE61DB22527B07007C13FE /* VGComboBoxFormView.xib */; };
 		8BAE61E322527B07007C13FE /* VGBrowsePathFormView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BAE61DC22527B07007C13FE /* VGBrowsePathFormView.xib */; };
@@ -77,6 +78,7 @@
 		8B7DC667221DF5BC004856F7 /* StoryboardSegueIdentifierExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryboardSegueIdentifierExtension.swift; sourceTree = "<group>"; };
 		8B7DC66A221DFA3D004856F7 /* BaseProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProjectViewController.swift; sourceTree = "<group>"; };
 		8B896000274FC87B0033ABFA /* TestArtistsTree.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = TestArtistsTree.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		8B9391E1294A68E900FD8FF3 /* iTunesObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesObjects.swift; sourceTree = "<group>"; };
 		8BAE61DA22527B07007C13FE /* VGBrowsePathFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VGBrowsePathFormView.swift; sourceTree = "<group>"; };
 		8BAE61DB22527B07007C13FE /* VGComboBoxFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGComboBoxFormView.xib; sourceTree = "<group>"; };
 		8BAE61DC22527B07007C13FE /* VGBrowsePathFormView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VGBrowsePathFormView.xib; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 		8BE2D77221FB74F900E12848 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				8B9391E1294A68E900FD8FF3 /* iTunesObjects.swift */,
 				8B6F3D7D2242F87C00286C86 /* DataSources.swift */,
 			);
 			path = Model;
@@ -454,6 +457,7 @@
 				8BFDB41C2240444D008E8FED /* Types.swift in Sources */,
 				8BAE61E122527B07007C13FE /* VGBrowsePathFormView.swift in Sources */,
 				8BAE61ED22527CE2007C13FE /* VGOperation.swift in Sources */,
+				8B9391E2294A68E900FD8FF3 /* iTunesObjects.swift in Sources */,
 				8B0DD5DC2215C1A400146683 /* TrackListView.swift in Sources */,
 				8B43834D2215FA490040D2EB /* VGBaseNSView.swift in Sources */,
 				8BE2D77821FB751F00E12848 /* PlaylistImageCell.swift in Sources */,

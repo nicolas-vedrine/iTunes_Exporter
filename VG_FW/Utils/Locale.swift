@@ -11,14 +11,14 @@ import Foundation
 extension Locale {
     
     static public func getLocale() -> String {
-        var localeString: String?
-        let languageCode = NSLocale.current.languageCode
-        if languageCode != LanguageCode.fr.rawValue && languageCode != LanguageCode.en.rawValue && languageCode != LanguageCode.es.rawValue {
-            localeString = LanguageCode.fr.rawValue
-        } else {
-            return Locale.current.languageCode!
-        }
-        return localeString!
+        var localeString: String = "fr"
+//        let languageCode = NSLocale.current.languageCode
+//        if languageCode != LanguageCode.fr.rawValue && languageCode != LanguageCode.en.rawValue && languageCode != LanguageCode.es.rawValue {
+//            localeString = LanguageCode.fr.rawValue
+//        } else {
+//            return Locale.current.languageCode!
+//        }
+        return localeString
     }
     
 }
